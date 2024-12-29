@@ -15,7 +15,6 @@ return new class extends Migration
         Schema::create('states', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('slug', 120);
             $table->string('short_code', 20)->nullable();
             $table->bigInteger('country_id');
             $table->tinyInteger('status')->nullable()->default(VisibilityStatus::ACTIVE->value);
