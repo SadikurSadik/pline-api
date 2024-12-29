@@ -58,7 +58,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'locations' => 'array',
-            'role_id' => \App\Enums\Enums\Role::class,
+            'role_id' => \App\Enums\Role::class,
         ];
     }
 

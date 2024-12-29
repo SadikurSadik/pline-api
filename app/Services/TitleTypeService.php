@@ -3,32 +3,28 @@
 namespace App\Services;
 
 use App\Enums\VisibilityStatus;
-use App\Filters\FilterByCountry;
 use App\Filters\FilterByName;
-use App\Filters\FilterByState;
 use App\Filters\FilterByStatus;
-use App\Models\Port;
+use App\Models\TitleType;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 
-class PortService
+class TitleTypeService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Port::query();
+        $query = TitleType::query();
 
         return app(FilterPipelineService::class)->apply($query, [
-            FilterByName::class,
-            FilterByCountry::class,
-            FilterByState::class,
             FilterByStatus::class,
+            FilterByName::class,
         ], $filters);
     }
 
     public function getById(int $id)
     {
-        return Port::find($id);
+        return TitleType::find($id);
     }
 
     public function store(array $data)
@@ -45,17 +41,17 @@ class PortService
     {
         $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
             VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
-        $port = Port::findOrNew($id);
-        $port->fill($data);
-        $port->save();
+        $titleType = TitleType::findOrNew($id);
+        $titleType->fill($data);
+        $titleType->save();
 
-        return $port;
+        return $titleType;
     }
 
     public function destroy(int $id): void
     {
-        $port = Port::findOrFail($id);
+        $titleType = TitleType::findOrFail($id);
 
-        $port->delete();
+        $titleType->delete();
     }
 }
