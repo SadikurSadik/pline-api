@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\StateController;
@@ -20,6 +21,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('states/export-excel', [StateController::class, 'exportExcel']);
     Route::apiResource('states', StateController::class);
+
+    Route::get('cities/export-excel', [CityController::class, 'exportExcel']);
+    Route::apiResource('cities', CityController::class);
     /* setting related endpoints */
 
     /* notification related endpoints */
