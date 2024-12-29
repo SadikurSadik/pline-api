@@ -2,31 +2,31 @@
 
 namespace App\Services;
 
-use App\Enums\VisibilityStatus;
+use App\Filters\FilterByCountry;
 use App\Filters\FilterByName;
 use App\Filters\FilterByShortCode;
 use App\Filters\FilterByStatus;
-use App\Models\Country;
+use App\Models\State;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Arr;
 
-class CountryService
+class StateService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Country::query();
+        $query = State::query()->with('country');
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByName::class,
-            FilterByStatus::class,
+            FilterByCountry::class,
             FilterByShortCode::class,
+            FilterByStatus::class,
         ], $filters);
     }
 
     public function getById(int $id)
     {
-        return Country::find($id);
+        return State::with('country')->find($id);
     }
 
     public function store(array $data)
@@ -41,19 +41,17 @@ class CountryService
 
     private function save(array $data, ?int $id = null)
     {
-        $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
-            VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
-        $country = Country::findOrNew($id);
-        $country->fill($data);
-        $country->save();
+        $state = State::findOrNew($id);
+        $state->fill($data);
+        $state->save();
 
-        return $country;
+        return $state;
     }
 
     public function destroy(int $id): void
     {
-        $country = Country::findOrFail($id);
+        $state = State::findOrFail($id);
 
-        $country->delete();
+        $state->delete();
     }
 }

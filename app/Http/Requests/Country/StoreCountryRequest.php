@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests\Country;
 
-use App\Enums\VisibilityStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Enum;
 
 class StoreCountryRequest extends FormRequest
 {

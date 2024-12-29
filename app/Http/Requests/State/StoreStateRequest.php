@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Country;
+namespace App\Http\Requests\State;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateCountryRequest extends FormRequest
+class StoreStateRequest extends FormRequest
 {
     public function rules(): array
     {
@@ -13,13 +13,14 @@ class UpdateCountryRequest extends FormRequest
             'name' => [
                 'required',
                 'max:200',
-                Rule::unique('countries')->whereNull('deleted_at')->ignore($this->route()->country),
+                Rule::unique('states')->whereNull('deleted_at'),
             ],
             'short_code' => [
                 'nullable',
-                Rule::unique('countries')->where('deleted_at')->ignore($this->route()->country),
+                Rule::unique('states')->where('deleted_at'),
             ],
-            'status' => ['required', 'boolean'],
+            'country_id' => 'required|integer',
+            'status' => 'required|boolean',
         ];
     }
 }

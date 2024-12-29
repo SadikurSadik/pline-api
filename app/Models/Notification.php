@@ -30,6 +30,6 @@ class Notification extends Model
 
     public function seen_users()
     {
-        return $this->hasMany( NotificationSeen::class );
+        return $this->hasMany(NotificationSeen::class);
     }
 }
