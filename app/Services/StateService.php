@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\VisibilityStatus;
 use App\Filters\FilterByCountry;
 use App\Filters\FilterByName;
 use App\Filters\FilterByShortCode;
@@ -9,6 +10,7 @@ use App\Filters\FilterByStatus;
 use App\Models\State;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 
 class StateService
 {
@@ -41,6 +43,8 @@ class StateService
 
     private function save(array $data, ?int $id = null)
     {
+        $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
+            VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $state = State::findOrNew($id);
         $state->fill($data);
         $state->save();
