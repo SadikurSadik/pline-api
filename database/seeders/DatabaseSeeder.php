@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             StateSeeder::class,
             CitySeeder::class,
             LocationSeeder::class,
+            PortSeeder::class,
         ]);
     }
 }
