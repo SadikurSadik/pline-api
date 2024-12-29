@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('profile_photo', 200)->nullable();
             $table->string('device_token', 200)->nullable();
+            $table->string('refresh_token', 200)->nullable();
+            $table->timestamp('refresh_token_expire_at')->nullable();
             $table->string('locations', 200)->nullable();
             $table->tinyInteger('status')->default(1);
             $table->rememberToken();

@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasPermissions;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes, HasPermissions;
+    use HasApiTokens, HasFactory, HasPermissions, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +31,8 @@ class User extends Authenticatable
         'password',
         'profile_photo',
         'device_token',
+        'refresh_token',
+        'refresh_token_expire_at',
         'locations',
         'status',
     ];
@@ -55,6 +58,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'locations' => 'array',
+            'role_id' => \App\Enums\Enums\Role::class,
         ];
     }
 
