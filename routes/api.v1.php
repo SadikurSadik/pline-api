@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\StateController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('cities/export-excel', [CityController::class, 'exportExcel']);
     Route::apiResource('cities', CityController::class);
+
+    Route::get('locations/export-excel', [LocationController::class, 'exportExcel']);
+    Route::apiResource('locations', LocationController::class);
     /* setting related endpoints */
 
     /* notification related endpoints */
