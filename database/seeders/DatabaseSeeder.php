@@ -28,7 +28,6 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('secret'),
             ]
         );
-        User::factory(10)->create();
 
         $this->call([
             ModuleSeeder::class,
@@ -41,5 +40,7 @@ class DatabaseSeeder extends Seeder
             PortSeeder::class,
             TitleTypeSeeder::class,
         ]);
+
+        User::factory(10)->create();
     }
 }

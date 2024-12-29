@@ -6,8 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class UserResource extends JsonResource
+class UserDetailResource extends JsonResource
 {
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
     public function toArray(Request $request): array
     {
         return [
@@ -15,7 +20,10 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'username' => $this->username,
             'email' => $this->email,
+            'profile_photo' => $this->getProfilePhoto($this->profile_photo),
+            'role_id' => $this->role_id->value,
             'role_name' => $this->role_id->name,
+            'status' => $this->status->value,
             'status_name' => $this->status->getLabel(),
         ];
     }

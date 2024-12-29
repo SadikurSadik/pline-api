@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\VisibilityStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -58,6 +59,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'locations' => 'array',
+            'status' => VisibilityStatus::class,
             'role_id' => \App\Enums\Role::class,
         ];
     }
@@ -67,11 +69,9 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function assignRole(string $roleName): void
+    public function syncRolePermissions(): void
     {
-        $role = Role::findByName($roleName);
-        $this->update(['role_id' => $role->id]);
-        $this->syncPermissions($role->getAllPermissions());
+        $this->syncPermissions($this->role->getAllPermissions());
     }
 
     public function hasRole(string $roleName): bool
