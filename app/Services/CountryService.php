@@ -42,10 +42,9 @@ class CountryService
 
     private function save(array $data, ?int $id = null)
     {
+        $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ? VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $country = Country::findOrNew($id);
         $country->fill($data);
-        $country->slug = Str::slug( $country->name );
-        $country->status = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ? VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $country->save();
 
         return $country;
