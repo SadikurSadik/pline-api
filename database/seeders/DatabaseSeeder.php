@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $adminUser = User::updateOrCreate(
+        User::updateOrCreate(
             ['email' => 'developer@plineshipping.com'],
             [
                 'role_id' => Role::OWNER->value,
@@ -28,5 +28,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
         User::factory(10)->create();
+
+        $this->call([
+            CountrySeeder::class,
+        ]);
     }
 }

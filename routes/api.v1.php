@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CountryController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -10,4 +11,9 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
+
+    /* setting related endpoints */
+    Route::get('countries/export-excel', [CountryController::class, 'exportExcel']);
+    Route::apiResource('countries', CountryController::class);
+    /* setting related endpoints */
 });
