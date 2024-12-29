@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('short_code', 20)->nullable();
             $table->bigInteger('country_id');
             $table->tinyInteger('status')->nullable()->default(VisibilityStatus::ACTIVE->value);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
