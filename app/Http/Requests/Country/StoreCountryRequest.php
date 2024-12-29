@@ -21,7 +21,7 @@ class StoreCountryRequest extends FormRequest
                 'nullable',
                 Rule::unique('countries')->where('deleted_at'),
             ],
-            'status' => ['nullable', new Enum(VisibilityStatus::class)],
+            'status' => ['required', 'boolean'],
         ];
     }
 }

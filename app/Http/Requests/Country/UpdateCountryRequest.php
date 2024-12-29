@@ -20,7 +20,7 @@ class UpdateCountryRequest extends FormRequest
                 'nullable',
                 Rule::unique('countries')->where('deleted_at')->ignore($this->route()->country),
             ],
-            'status' => ['nullable', Rule::in(VisibilityStatus::ACTIVE->value, VisibilityStatus::INACTIVE->value)],
+            'status' => ['required', 'boolean'],
         ];
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Services;
 
+use App\Enums\VisibilityStatus;
 use App\Filters\FilterByName;
 use App\Filters\FilterByShortCode;
 use App\Filters\FilterByStatus;
 use App\Models\Country;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class CountryService
 {
@@ -41,6 +44,8 @@ class CountryService
     {
         $country = Country::findOrNew($id);
         $country->fill($data);
+        $country->slug = Str::slug( $country->name );
+        $country->status = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ? VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $country->save();
 
         return $country;

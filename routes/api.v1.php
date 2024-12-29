@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -16,4 +17,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('countries/export-excel', [CountryController::class, 'exportExcel']);
     Route::apiResource('countries', CountryController::class);
     /* setting related endpoints */
+
+    /* notification related endpoints */
+    Route::apiResource('notifications', NotificationController::class);
+    /* notification related endpoints */
 });
