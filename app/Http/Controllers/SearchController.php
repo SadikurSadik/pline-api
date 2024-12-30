@@ -86,7 +86,7 @@ class SearchController extends Controller
         return response()->json(['data' => $query->limit(20)->get()]);
     }
 
-    public function searchRole(Request $request): JsonResponse
+    public function searchRole(Request $request)
     {
         $query = Role::select([
             'id',
