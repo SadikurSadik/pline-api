@@ -55,7 +55,7 @@ class CustomerController extends Controller
 
     public function nextCustomerId(): JsonResponse
     {
-        return successResponse('', ['customer_id' => $this->service->getNextCustomerId()]);
+        return successResponse('', 200, ['customer_id' => $this->service->getNextCustomerId()]);
     }
 
     public function exportExcel(Request $request): BinaryFileResponse
