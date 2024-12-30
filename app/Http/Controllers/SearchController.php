@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Enums\VisibilityStatus;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Customer;
 use App\Models\Location;
 use App\Models\Port;
 use App\Models\State;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 class SearchController extends Controller
@@ -108,5 +110,19 @@ class SearchController extends Controller
         }
 
         return $query->get();
+    }
+
+    public function searchCustomer(Request $request)
+    {
+        $query = Customer::select([
+            DB::raw('user_id as id'),
+            'name',
+        ]);
+
+        if (! empty($request->search)) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
+        return $query->limit(20)->get();
     }
 }
