@@ -48,7 +48,7 @@ class SearchController extends Controller
 
     public function searchCity(Request $request): JsonResponse
     {
-        $query = City::select(['id', 'name', ])
+        $query = City::select(['id', 'name'])
             ->where('status', VisibilityStatus::ACTIVE);
 
         if (! empty($request->state_id)) {
@@ -64,7 +64,7 @@ class SearchController extends Controller
 
     public function searchLocation(Request $request): JsonResponse
     {
-        $query = Location::select(['id', 'name', ])
+        $query = Location::select(['id', 'name'])
             ->where('status', VisibilityStatus::ACTIVE);
 
         return response()->json(['data' => $query->limit(20)->get()]);
@@ -72,7 +72,7 @@ class SearchController extends Controller
 
     public function searchPort(Request $request): JsonResponse
     {
-        $query = Port::select(['id', 'name', ])
+        $query = Port::select(['id', 'name'])
             ->where('status', VisibilityStatus::ACTIVE);
 
         if (! empty($request->country_id)) {

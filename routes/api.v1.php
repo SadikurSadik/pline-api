@@ -6,6 +6,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PortController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\TitleTypeController;
@@ -41,12 +42,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('users/export-excel', [UserController::class, 'exportExcel']);
     Route::apiResource('users', UserController::class);
+
+    Route::apiResource('roles', RoleController::class)->except('store', 'destroy');
     /* setting related endpoints */
 
     /* notification related endpoints */
     Route::apiResource('notifications', NotificationController::class);
     /* notification related endpoints */
-
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {

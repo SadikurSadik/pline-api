@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\VisibilityStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Permission\Models\Permission;
 
 class Module extends Model
 {
@@ -17,5 +19,10 @@ class Module extends Model
         return [
             'status' => VisibilityStatus::class,
         ];
+    }
+
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class);
     }
 }
