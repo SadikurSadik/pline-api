@@ -34,7 +34,7 @@ class RoleController extends Controller
 
     public function update($id, UpdateRoleRequest $request): JsonResponse
     {
-        $this->update($id, $request->validated());
+        $this->service->update($id, $request->validated());
 
         return successResponse(__('Role updated Successfully.'));
     }
