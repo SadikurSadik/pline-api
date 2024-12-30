@@ -6,9 +6,11 @@ use App\Exports\UsersExport;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserDetailResource;
+use App\Http\Resources\User\UserPermissionResource;
 use App\Http\Resources\User\UserResource;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Maatwebsite\Excel\Facades\Excel;
@@ -51,6 +53,25 @@ class UserController extends Controller
         $this->service->destroy($id);
 
         return successResponse(__('User deleted Successfully.'));
+    }
+
+    public function permissions($id): UserPermissionResource
+    {
+        $user = $this->service->getById($id);
+
+        return new UserPermissionResource($user);
+    }
+
+    public function updatePermissions($id, Request $request): JsonResponse
+    {
+        $request->validate([
+            'permissions' => ['required', 'array', 'min:1'],
+            'permissions.*' => 'required|integer',
+        ]);
+
+        $this->service->updatePermissions($id, $request->permissions);
+
+        return successResponse(__('Permissions updated successfully.'));
     }
 
     public function exportExcel(Request $request): BinaryFileResponse

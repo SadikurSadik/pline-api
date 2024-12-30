@@ -40,6 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('title-types/export-excel', [TitleTypeController::class, 'exportExcel']);
     Route::apiResource('title-types', TitleTypeController::class);
 
+    Route::put('users/{id}/permissions', [UserController::class, 'updatePermissions']);
+    Route::get('users/{id}/permissions', [UserController::class, 'permissions']);
     Route::get('users/export-excel', [UserController::class, 'exportExcel']);
     Route::apiResource('users', UserController::class);
 
