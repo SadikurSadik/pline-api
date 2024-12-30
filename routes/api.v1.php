@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PortController;
@@ -51,6 +52,11 @@ Route::middleware('auth:sanctum')->group(function () {
     /* notification related endpoints */
     Route::apiResource('notifications', NotificationController::class);
     /* notification related endpoints */
+
+    /* customer related endpoints */
+    Route::get('customers/export-excel', [CustomerController::class, 'exportExcel']);
+    Route::apiResource('customers', CustomerController::class);
+    /* customer related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {

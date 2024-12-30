@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -42,5 +43,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory(10)->create();
+        Customer::factory(10)->create();
     }
 }
