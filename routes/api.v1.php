@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\ClearanceRateController;
 use App\Http\Controllers\ConsigneeController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
@@ -66,6 +67,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('consignees/export-excel', [ConsigneeController::class, 'exportExcel']);
     Route::apiResource('consignees', ConsigneeController::class);
     /* consignee related endpoints */
+
+    /* Clearance rate related endpoints */
+    Route::apiResource('clearance-rates', ClearanceRateController::class)->only('index', 'store');
+    /* Clearance rate related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {

@@ -18,6 +18,7 @@ class ConsigneeFactory extends Factory
     public function definition(): array
     {
         $city = City::with('state.country')->inRandomOrder()->first();
+
         return [
             'customer_user_id' => fake()->numberBetween(12, 21),
             'name' => fake()->name,
