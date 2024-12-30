@@ -21,6 +21,7 @@ class UserDetailResource extends JsonResource
             'username' => $this->username,
             'email' => $this->email,
             'profile_photo' => $this->getProfilePhoto($this->profile_photo),
+            'role' => $this->role_id->value,
             'role_id' => $this->role_id->value,
             'role_name' => $this->role_id->name,
             'status' => $this->status->value,
