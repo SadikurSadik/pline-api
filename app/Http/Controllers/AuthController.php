@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\VisibilityStatus;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\User\UserDetailResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -38,7 +39,7 @@ class AuthController extends Controller
             'access_token' => $accessToken,
             'refresh_token' => $user->refresh_token,
             'token_type' => 'Bearer',
-            'user' => new UserResource($user),
+            'user' => new UserDetailResource($user),
             'permissions' => $this->getUserPermissions($user),
         ]);
     }
@@ -65,7 +66,7 @@ class AuthController extends Controller
             'access_token' => $accessToken,
             'refresh_token' => $request->refresh_token,
             'token_type' => 'Bearer',
-            'user' => new UserResource($user),
+            'user' => new UserDetailResource($user),
             'permissions' => $this->getUserPermissions($user),
         ]);
     }
