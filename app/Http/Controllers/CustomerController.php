@@ -12,7 +12,6 @@ use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -67,7 +66,7 @@ class CustomerController extends Controller
         ]);
 
         try {
-             $upload = $fileStorage->upload($request->file, 'uploads/customers/documents/');
+            $upload = $fileStorage->upload($request->file, 'uploads/customers/documents/');
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
@@ -90,7 +89,7 @@ class CustomerController extends Controller
         ]);
 
         try {
-             $upload = $fileStorage->uploadPhoto($request->file, 'uploads/customers/photos/', null, 100);
+            $upload = $fileStorage->uploadPhoto($request->file, 'uploads/customers/photos/', null, 100);
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);

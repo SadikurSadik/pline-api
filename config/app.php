@@ -54,7 +54,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'media_url' => env('APP_MEDIA_URL','http://localhost:8000/storage/' ),
+    'media_url' => env('APP_MEDIA_URL', 'http://localhost:8000/storage/'),
 
     /*
     |--------------------------------------------------------------------------

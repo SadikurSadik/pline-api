@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\ConsigneeController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\LocationController;
@@ -60,6 +61,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('customers/upload-profile-photo', [CustomerController::class, 'uploadProfilePhoto']);
     Route::apiResource('customers', CustomerController::class);
     /* customer related endpoints */
+
+    /* consignee related endpoints */
+    Route::get('consignees/export-excel', [ConsigneeController::class, 'exportExcel']);
+    Route::apiResource('consignees', ConsigneeController::class);
+    /* consignee related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {

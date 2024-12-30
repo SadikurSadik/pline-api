@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
+use App\Models\Consignee;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -44,5 +45,6 @@ class DatabaseSeeder extends Seeder
 
         User::factory(10)->create();
         Customer::factory(10)->create();
+        Consignee::factory(10)->create();
     }
 }
