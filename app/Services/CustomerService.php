@@ -73,4 +73,9 @@ class CustomerService
 
         $customer->delete();
     }
+
+    public function getNextCustomerId()
+    {
+        return (Customer::max('customer_id') ?? 2025000) + 1;
+    }
 }

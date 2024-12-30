@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\CountriesExport;
 use App\Exports\CustomersExport;
 use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
@@ -52,6 +51,11 @@ class CustomerController extends Controller
         $this->service->destroy($id);
 
         return successResponse(__('Customer deleted Successfully.'));
+    }
+
+    public function nextCustomerId(): JsonResponse
+    {
+        return successResponse('', ['customer_id' => $this->service->getNextCustomerId()]);
     }
 
     public function exportExcel(Request $request): BinaryFileResponse

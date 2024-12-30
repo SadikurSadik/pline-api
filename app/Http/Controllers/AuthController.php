@@ -76,7 +76,7 @@ class AuthController extends Controller
         return new UserResource(auth()->user());
     }
 
-    private function getUserPermissions(User $user):array|\stdClass
+    private function getUserPermissions(User $user): array|\stdClass
     {
         $permissions = $user->getAllPermissions()->pluck('id', 'name')->toArray();
 

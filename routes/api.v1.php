@@ -54,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* notification related endpoints */
 
     /* customer related endpoints */
+    Route::get('customers/next-customer-id', [CustomerController::class, 'nextCustomerId']);
     Route::get('customers/export-excel', [CustomerController::class, 'exportExcel']);
     Route::apiResource('customers', CustomerController::class);
     /* customer related endpoints */
