@@ -8,9 +8,11 @@ use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\Customer\CustomerDetailResource;
 use App\Http\Resources\Customer\CustomerResource;
 use App\Services\CustomerService;
+use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -56,6 +58,52 @@ class CustomerController extends Controller
     public function nextCustomerId(): JsonResponse
     {
         return successResponse('', 200, ['customer_id' => $this->service->getNextCustomerId()]);
+    }
+
+    public function uploadDocument(Request $request, FileManagerService $fileStorage): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ]);
+
+        try {
+             $upload = $fileStorage->upload($request->file, 'uploads/customers/documents/');
+
+            if (! $upload) {
+                return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
+            }
+
+            return response()->json(['success' => true, 'url' => $upload]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to upload profile file.',
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function uploadProfilePhoto(Request $request, FileManagerService $fileStorage): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        try {
+             $upload = $fileStorage->uploadPhoto($request->file, 'uploads/customers/photos/', null, 100);
+
+            if (! $upload) {
+                return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
+            }
+
+            return response()->json(['success' => true, 'url' => $upload]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to upload profile file.',
+                'error' => $e->getMessage(),
+            ], 400);
+        }
     }
 
     public function exportExcel(Request $request): BinaryFileResponse

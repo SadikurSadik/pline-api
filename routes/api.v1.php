@@ -56,6 +56,8 @@ Route::middleware('auth:sanctum')->group(function () {
     /* customer related endpoints */
     Route::get('customers/next-customer-id', [CustomerController::class, 'nextCustomerId']);
     Route::get('customers/export-excel', [CustomerController::class, 'exportExcel']);
+    Route::post('customers/upload-document', [CustomerController::class, 'uploadDocument']);
+    Route::post('customers/upload-profile-photo', [CustomerController::class, 'uploadProfilePhoto']);
     Route::apiResource('customers', CustomerController::class);
     /* customer related endpoints */
 

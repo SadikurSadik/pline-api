@@ -32,9 +32,21 @@ if (! function_exists('unauthorizedResponse')) {
     }
 }
 
-if (! function_exists('relativeUrl')) {
-    function relativeUrl($url): array|string
+if (! function_exists('getRelativeUrl')) {
+    function getRelativeUrl($url): string
     {
-        return str_replace(config('asset_url'), '', $url);
+        return str_replace(config('app.media_url'), '', $url);
+    }
+}
+
+if (! function_exists('endsWith')) {
+    function endsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if (! $length) {
+            return true;
+        }
+
+        return substr($haystack, -$length) === $needle;
     }
 }
