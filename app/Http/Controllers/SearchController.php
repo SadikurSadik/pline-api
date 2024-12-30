@@ -67,6 +67,10 @@ class SearchController extends Controller
         $query = Location::select(['id', 'name'])
             ->where('status', VisibilityStatus::ACTIVE);
 
+        if (! empty($request->search)) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
         return response()->json(['data' => $query->limit(20)->get()]);
     }
 
@@ -81,6 +85,10 @@ class SearchController extends Controller
 
         if (! empty($request->state_id)) {
             $query->where('state_id', $request->state_id);
+        }
+
+        if (! empty($request->search)) {
+            $query->where('name', 'like', "%{$request->search}%");
         }
 
         return response()->json(['data' => $query->limit(20)->get()]);
