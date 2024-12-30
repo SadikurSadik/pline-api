@@ -6,6 +6,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PortController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\TitleTypeController;
 use App\Http\Controllers\UserController;
@@ -45,4 +46,17 @@ Route::middleware('auth:sanctum')->group(function () {
     /* notification related endpoints */
     Route::apiResource('notifications', NotificationController::class);
     /* notification related endpoints */
+
+
+    Route::prefix('search')->controller(SearchController::class)
+        ->group(function (): void {
+            Route::get('countries', 'searchCountry');
+            Route::get('states', 'searchState');
+            Route::get('cities', 'searchCity');
+            Route::get('locations', 'searchLocation');
+            Route::get('ports', 'searchPort');
+            Route::get('roles', 'searchRole');
+            Route::get('customers', 'searchCustomer');
+            Route::get('title-types', 'searchTitleType');
+        });
 });
