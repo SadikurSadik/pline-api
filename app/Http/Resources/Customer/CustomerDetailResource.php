@@ -21,6 +21,7 @@ class CustomerDetailResource extends JsonResource
             'customer_id' => $this->customer_id,
             'name' => $this->name,
             'company_name' => $this->company_name,
+            'user_id' => $this->user_id,
             'username' => $this->user?->username,
             'profile_photo' => $this->getProfilePhoto($this->user?->profile_photo),
             'email' => $this->user?->email,
