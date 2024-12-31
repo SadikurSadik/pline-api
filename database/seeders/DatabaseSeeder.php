@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             TitleTypeSeeder::class,
             SystemSettingSeeder::class,
             TowingRateSeeder::class,
+            ShippingRateSeeder::class,
         ]);
 
         User::factory(10)->create();
