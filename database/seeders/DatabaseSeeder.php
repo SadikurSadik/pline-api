@@ -41,6 +41,8 @@ class DatabaseSeeder extends Seeder
             LocationSeeder::class,
             PortSeeder::class,
             TitleTypeSeeder::class,
+            SystemSettingSeeder::class,
+            TowingRateSeeder::class,
         ]);
 
         User::factory(10)->create();
