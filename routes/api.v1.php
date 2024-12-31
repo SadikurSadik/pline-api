@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /* Dashboard related routes */
     Route::get('status-overview', [DashboardController::class, 'statusOverview']);
-
+    Route::get('monthly-sales', [DashboardController::class, 'monthlySales']);
     /* Dashboard related routes */
 
     /* setting related endpoints */
