@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Models\Consignee;
 use App\Models\Customer;
 use App\Models\User;
+use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -51,5 +52,6 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         Customer::factory(10)->create();
         Consignee::factory(10)->create();
+        Vehicle::factory(50)->create();
     }
 }

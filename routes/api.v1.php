@@ -16,6 +16,7 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\TitleTypeController;
 use App\Http\Controllers\TowingRateController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -79,6 +80,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('clearance-rates', ClearanceRateController::class)->only('index', 'store');
     /* pricing related endpoints */
+
+    /* vehicles related endpoints */
+    Route::get('vehicles/{id}/all-photos', [VehicleController::class, 'allPhotos']);
+    Route::post('vehicles/{id}/add-more-photos', [VehicleController::class, 'addMorePhotos']);
+    Route::get('vehicles/{id}/download-photos', [VehicleController::class, 'downloadVehiclePhotos']);
+    Route::get('vehicles/{id}/download-document', [VehicleController::class, 'downloadVehicleDocuments']);
+    Route::post('vehicles/upload-document', [VehicleController::class, 'uploadDocument']);
+    Route::post('vehicles/upload-photo', [VehicleController::class, 'uploadPhoto']);
+    Route::get('vehicle/export-excel', [VehicleController::class, 'exportExcel']);
+    Route::apiResource('vehicles', VehicleController::class);
+    /* vehicles related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
