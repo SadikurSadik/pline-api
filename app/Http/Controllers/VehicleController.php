@@ -16,7 +16,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -67,17 +66,17 @@ class VehicleController extends Controller
     public function uploadPhoto(Request $request): JsonResponse
     {
         $request->validate([
-            'photo' => 'required|image',
+            'file' => 'required|image',
         ]);
 
         try {
-            $upload = app(FileManagerService::class)->uploadPhoto(file_get_contents($request->file), 'uploads/brands/', null, 100);
+            $upload = app(FileManagerService::class)->uploadPhotoWithThumbnail(file_get_contents($request->file), 'uploads/vehicle/photos');
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
             }
 
-            return response()->json(['success' => true, 'url' => Storage::url($upload)]);
+            return response()->json(['success' => true, 'url' => $upload]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -90,17 +89,17 @@ class VehicleController extends Controller
     public function uploadDocument(Request $request): JsonResponse
     {
         $request->validate([
-            'document' => 'required',
+            'file' => 'required',
         ]);
 
         try {
-            $upload = app(FileManagerService::class)->uploadPhoto(file_get_contents($request->file), 'uploads/brands/', null, 100);
+            $upload = app(FileManagerService::class)->upload($request->file, 'uploads/vehicle/documents');
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
             }
 
-            return response()->json(['success' => true, 'url' => Storage::url($upload)]);
+            return response()->json(['success' => true, 'url' => $upload]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
