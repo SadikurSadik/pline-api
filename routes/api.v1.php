@@ -11,6 +11,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\ShippingRateController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\TitleTypeController;
 use App\Http\Controllers\TowingRateController;
@@ -72,6 +73,9 @@ Route::middleware('auth:sanctum')->group(function () {
     /* pricing related endpoints */
     Route::get('towing-rates/export-excel', [TowingRateController::class, 'exportExcel']);
     Route::apiResource('towing-rates', TowingRateController::class);
+
+    Route::get('shipping-rates/export-excel', [ShippingRateController::class, 'exportExcel']);
+    Route::apiResource('shipping-rates', ShippingRateController::class);
 
     Route::apiResource('clearance-rates', ClearanceRateController::class)->only('index', 'store');
     /* pricing related endpoints */
