@@ -46,7 +46,7 @@ class FileManagerService
             $fileName = Str::random(10).time().'.jpg';
         }
 
-        $image = ImageManager::imagick()->read($file);
+        $image = ImageManager::gd()->read($file);
 
         if (! endsWith($path, '/')) {
             $path .= '/';
@@ -66,7 +66,7 @@ class FileManagerService
             $fileName = Str::random(10).time().'.jpg';
         }
 
-        $image = ImageManager::imagick()->read($file);
+        $image = ImageManager::gd()->read($file);
         $originalImage = clone $image;
 
         if (! endsWith($path, '/')) {
@@ -83,7 +83,7 @@ class FileManagerService
         $originalImage->scale(null, $height)->toJpeg();
         Storage::put($path.'thumb-'.$fileName, $originalImage->encode());
 
-        return $path.$fileName;
+        return Storage::url($path.$fileName);
     }
 
     public function downloadAsZip(string $zipPath, $files): JsonResponse|BinaryFileResponse
