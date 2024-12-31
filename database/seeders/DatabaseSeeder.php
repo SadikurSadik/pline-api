@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::updateOrCreate(
+        $adminUser = User::updateOrCreate(
             ['email' => 'developer@plineshipping.com'],
             [
                 'role_id' => Role::OWNER->value,
@@ -45,6 +45,8 @@ class DatabaseSeeder extends Seeder
             TowingRateSeeder::class,
             ShippingRateSeeder::class,
         ]);
+
+        $adminUser->syncRolePermissions();
 
         User::factory(10)->create();
         Customer::factory(10)->create();
