@@ -95,6 +95,26 @@ class VehicleService
         $vehicle->fill($data);
         $vehicle->save();
 
+        foreach (VehiclePhotoType::cases() as $vehiclePhotoType) {
+            if (! empty($data['file_urls'][$vehiclePhotoType->getKeyName()])) {
+                $this->saveVehiclePhoto(
+                    $data['file_urls'][$vehiclePhotoType->getKeyName()],
+                    $vehicle->id,
+                    $vehiclePhotoType->value
+                );
+            }
+        }
+
+        foreach (VehicleDocumentType::cases() as $vehicleDocumentType) {
+            if (! empty($data['file_urls'][$vehicleDocumentType->getKeyName()])) {
+                $this->saveVehicleDocument(
+                    $data['file_urls'][$vehicleDocumentType->getKeyName()],
+                    $vehicle->id,
+                    $vehicleDocumentType->value
+                );
+            }
+        }
+
         return $vehicle;
     }
 
