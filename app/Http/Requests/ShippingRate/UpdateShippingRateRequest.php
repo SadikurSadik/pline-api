@@ -20,7 +20,7 @@ class UpdateShippingRateRequest extends FormRequest
             'to_country_id' => 'required|integer',
             'to_state_id' => 'required|integer',
             'to_port_id' => 'required|integer',
-            'status' => ['nullable', new Enum(VisibilityStatus::class)],
+            'status' => 'nullable|boolean',
         ];
     }
 

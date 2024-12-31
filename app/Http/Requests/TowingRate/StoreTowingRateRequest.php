@@ -18,7 +18,7 @@ class StoreTowingRateRequest extends FormRequest
             'state_id' => 'required|integer',
             'city_id' => 'required|integer',
             'location_id' => 'required|integer',
-            'status' => ['nullable', new Enum(VisibilityStatus::class)],
+            'status' => 'nullable|boolean',
         ];
     }
 
