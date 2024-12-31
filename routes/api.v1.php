@@ -109,5 +109,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('roles', 'searchRole');
             Route::get('customers', 'searchCustomer');
             Route::get('title-types', 'searchTitleType');
+            Route::get('colors', 'searchColor');
         });
 });
