@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\VisibilityStatus;
 use App\Filters\FilterByCity;
 use App\Filters\FilterByCountry;
 use App\Filters\FilterById;
@@ -15,6 +16,7 @@ use App\Filters\FilterByTowingRateGlobalSearch;
 use App\Models\TowingRate;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 
 class TowingRateService
 {
@@ -63,6 +65,8 @@ class TowingRateService
 
     private function save(array $data, ?int $id = null)
     {
+        $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
+            VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $towingRate = TowingRate::findOrNew($id);
         $towingRate->fill($data);
         $towingRate->save();

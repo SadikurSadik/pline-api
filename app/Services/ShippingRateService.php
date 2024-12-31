@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\VisibilityStatus;
 use App\Filters\FilterByAmount;
 use App\Filters\FilterByAmountGlobalSearch;
 use App\Filters\FilterByFromCountry;
@@ -15,6 +16,7 @@ use App\Filters\FilterByToState;
 use App\Models\ShippingRate;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 
 class ShippingRateService
 {
@@ -67,6 +69,8 @@ class ShippingRateService
 
     private function save(array $data, ?int $id = null)
     {
+        $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
+            VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $shippingRate = ShippingRate::findOrNew($id);
         $shippingRate->fill($data);
         $shippingRate->save();
