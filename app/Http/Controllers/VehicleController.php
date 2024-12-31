@@ -71,7 +71,7 @@ class VehicleController extends Controller
         ]);
 
         try {
-             $upload = app(FileManagerService::class)->uploadPhoto(file_get_contents($request->file), 'uploads/brands/', null, 100);
+            $upload = app(FileManagerService::class)->uploadPhoto(file_get_contents($request->file), 'uploads/brands/', null, 100);
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);

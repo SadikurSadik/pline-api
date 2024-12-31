@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\ShippingRate;
 
-use App\Enums\VisibilityStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
 class UpdateShippingRateRequest extends FormRequest
 {

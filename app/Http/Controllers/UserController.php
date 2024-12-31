@@ -13,8 +13,6 @@ use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -76,14 +74,14 @@ class UserController extends Controller
         return successResponse(__('Permissions updated successfully.'));
     }
 
-    public function changeStatus( $id ): JsonResponse
+    public function changeStatus($id): JsonResponse
     {
         try {
-            $user = $this->service->getById( $id );
-            $this->service->update( $id, [ 'status' => !( $user->status == VisibilityStatus::ACTIVE ) ] );
+            $user = $this->service->getById($id);
+            $this->service->update($id, ['status' => ! ($user->status == VisibilityStatus::ACTIVE)]);
 
-            return successResponse( __('Customer status changed successfully.!' ));
-        } catch ( \Exception $e ) {
+            return successResponse(__('Customer status changed successfully.!'));
+        } catch (\Exception $e) {
             return errorResponse();
         }
     }

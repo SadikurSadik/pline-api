@@ -113,7 +113,6 @@ class Vehicle extends Model
         return $this->belongsTo(TitleType::class);
     }
 
-
     public function yard_photos(): HasMany
     {
         return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::YARD_PHOTO->value);

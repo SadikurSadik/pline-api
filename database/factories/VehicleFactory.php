@@ -27,7 +27,7 @@ class VehicleFactory extends Factory
             'vin_number' => $this->generateVin(),
             'lot_number' => random_int(10000, 999999),
             'value' => random_int(500, 10000),
-            'service_provider' => fake()->randomElement(['NJ', 'SAHIB', 'ATLANTIC', 'NEJOUM', 'MKL', 'CANADA','PGL']),
+            'service_provider' => fake()->randomElement(['NJ', 'SAHIB', 'ATLANTIC', 'NEJOUM', 'MKL', 'CANADA', 'PGL']),
             'auction_name' => fake()->randomElement(['COPART', 'IAAI', 'BROKER', 'AUTOBID MASTER', 'Emirates Auction', 'DEALER']),
             'license_number' => fake()->randomElement(['124740', '125859', '128609', '131574', '133289', '13529', '14852', '150108', '150931', '152131', '154457', '154479', '154825', '15707', '160253', '160360', '162939', '1653032', '168919', '169162', '174046', '174643', '176108', '176328', '177534', '182682', '182849', '190839', '191657']),
             'purchase_date' => fake()->date,
