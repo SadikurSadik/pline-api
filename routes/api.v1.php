@@ -6,6 +6,7 @@ use App\Http\Controllers\ClearanceRateController;
 use App\Http\Controllers\ConsigneeController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PortController;
@@ -26,6 +27,10 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
+
+    /* Dashboard related routes */
+    Route::get( 'status-overview', [ DashboardController::class, 'statusOverview' ] );
+    /* Dashboard related routes */
 
     /* setting related endpoints */
     Route::get('countries/export-excel', [CountryController::class, 'exportExcel']);
