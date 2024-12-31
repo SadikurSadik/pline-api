@@ -56,7 +56,7 @@ class CustomerService
         }
         $user->fill($data);
         $user->role_id = Role::CUSTOMER->value;
-        if(! empty($user->profile_photo)) {
+        if (! empty($user->profile_photo)) {
             $user->profile_photo = getRelativeUrl($user->profile_photo);
         }
         $user->save();
@@ -64,7 +64,7 @@ class CustomerService
 
         $customer->fill($data);
         $customer->user_id = $user->id;
-        if(! empty($customer->documents)) {
+        if (! empty($customer->documents)) {
             $customer->documents = Arr::map($customer->documents, function ($document) {
                 return getRelativeUrl($document);
             });
