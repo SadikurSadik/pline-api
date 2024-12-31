@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\BooleanStatus;
+use App\Enums\VehicleDocumentType;
+use App\Enums\VehiclePhotoType;
 use App\Enums\VehicleStatus;
 use App\Enums\VehicleTowBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -108,6 +111,37 @@ class Vehicle extends Model
     public function title_type(): BelongsTo
     {
         return $this->belongsTo(TitleType::class);
+    }
+
+
+    public function yard_photos(): HasMany
+    {
+        return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::YARD_PHOTO->value);
+    }
+
+    public function auction_photos(): HasMany
+    {
+        return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::AUCTION_PHOTO->value);
+    }
+
+    public function pickup_photos(): HasMany
+    {
+        return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::PICKUP_PHOTO->value);
+    }
+
+    public function arrived_photos(): HasMany
+    {
+        return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::ARRIVED_PHOTO->value);
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(VehicleDocument::class)->where('type', '=', VehicleDocumentType::DOCUMENT->value);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(VehicleDocument::class)->where('type', '=', VehicleDocumentType::INVOICE->value);
     }
 
     protected static function boot(): void

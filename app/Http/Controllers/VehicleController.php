@@ -71,8 +71,7 @@ class VehicleController extends Controller
         ]);
 
         try {
-            // $upload = app(FileManagerService::class)->uploadPhoto(file_get_contents($request->file), 'uploads/brands/', null, 100);
-            $upload = $request->photo->store('uploads/vehicles/photos/'.$request->get('vehicle_id', 'tmp'));
+             $upload = app(FileManagerService::class)->uploadPhoto(file_get_contents($request->file), 'uploads/brands/', null, 100);
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
@@ -95,8 +94,7 @@ class VehicleController extends Controller
         ]);
 
         try {
-            // $upload = app(FileManagerService::class)->uploadPhoto(file_get_contents($request->file), 'uploads/brands/', null, 100);
-            $upload = $request->document->store('uploads/vehicles/documents/'.$request->get('vehicle_id', 'tmp'));
+            $upload = app(FileManagerService::class)->uploadPhoto(file_get_contents($request->file), 'uploads/brands/', null, 100);
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
