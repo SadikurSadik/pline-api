@@ -24,8 +24,8 @@ class ConsigneeFactory extends Factory
             'name' => fake()->name,
             'phone' => fake()->phoneNumber,
             'address' => fake()->address,
-            'country_id' => $city->state->country->id,
-            'state_id' => $city->state->id,
+            'country_id' => $city->state?->country_id,
+            'state_id' => $city->state?->id,
             'city_id' => $city->id,
         ];
     }
