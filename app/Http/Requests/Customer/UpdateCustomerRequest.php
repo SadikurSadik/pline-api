@@ -28,6 +28,7 @@ class UpdateCustomerRequest extends FormRequest
             ],
             'password' => 'required|min:6|max:12',
             'trn' => 'nullable|max:20',
+            'category' => ['required', Rule::in(['A', 'B'])],
             'profile_photo' => 'nullable|url',
             'address' => 'nullable|max:500',
             'country_id' => 'nullable|integer',
