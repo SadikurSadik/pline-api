@@ -13,6 +13,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\TitleTypeController;
+use App\Http\Controllers\TowingRateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,9 +69,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('consignees', ConsigneeController::class);
     /* consignee related endpoints */
 
-    /* Clearance rate related endpoints */
+    /* pricing related endpoints */
+    Route::get('towing-rates/export-excel', [TowingRateController::class, 'exportExcel']);
+    Route::apiResource('towing-rates', TowingRateController::class);
+
     Route::apiResource('clearance-rates', ClearanceRateController::class)->only('index', 'store');
-    /* Clearance rate related endpoints */
+    /* pricing related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
