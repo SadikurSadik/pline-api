@@ -10,6 +10,7 @@ class ShippingRateDetailResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'amount' => $this->amount,
             'amount_40feet' => $this->amount_40feet,
             'amount_45feet' => $this->amount_45feet,
