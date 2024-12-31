@@ -26,12 +26,16 @@ class UpdateCustomerRequest extends FormRequest
                 'max:200',
                 Rule::unique('users')->whereNull('deleted_at')->ignore($this->user_id),
             ],
-            'password' => 'nullable|min:6|max:12',
-            'address' => 'nullable|max:300',
+            'password' => 'required|min:6|max:12',
+            'trn' => 'nullable|max:20',
+            'profile_photo' => 'nullable|url',
+            'address' => 'nullable|max:500',
             'country_id' => 'nullable|integer',
             'state_id' => 'nullable|integer',
             'city_id' => 'nullable|integer',
             'status' => 'nullable|boolean',
+            'buyer_ids' => 'nullable|array',
+            'documents' => 'nullable|array',
         ];
     }
 }
