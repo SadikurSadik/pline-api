@@ -106,12 +106,12 @@ class ContainerService
 
         Vehicle::query()->whereIn('id', $data['vehicle_ids'])->update(['container_id' => $container->id]);
 
-        foreach (VehiclePhotoType::cases() as $vehiclePhotoType){
-            if (! empty($data['file_urls'][$vehiclePhotoType->getKeyName()])){
+        foreach (ContainerPhotoType::cases() as $photoType){
+            if (! empty($data['file_urls'][$photoType->getKeyName()])){
                 $this->savePhotos(
-                    $data['file_urls'][$vehiclePhotoType->getKeyName()],
+                    $data['file_urls'][$photoType->getKeyName()],
                     $container->id,
-                    $vehiclePhotoType->value
+                    $photoType->value
                 );
             }
         }
