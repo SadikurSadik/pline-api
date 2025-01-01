@@ -132,7 +132,7 @@ class SearchController extends Controller
     public function searchColor(Request $request)
     {
         $query = VehicleColor::select([
-            'id',
+            DB::raw('name as id'),
             'name',
         ]);
         if (! empty($request->search)) {
@@ -140,7 +140,7 @@ class SearchController extends Controller
         }
 
         return $query->orderBy('name', 'ASC')
-            ->limit(50)
+            ->limit(20)
             ->get();
     }
 }
