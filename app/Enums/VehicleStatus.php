@@ -5,25 +5,15 @@ namespace App\Enums;
 enum VehicleStatus: int
 {
     case NEW_PURCHASED = 10;
-
     case NEW_REQUESTED = 11;
-
     case PAID = 15;
-
     case DISPATCHED = 20;
-
     case PICKED_UP = 25;
-
     case ON_HAND = 30;
-
     case READY_TO_LOAD = 40;
-
     case LOADED = 50;
-
     case ON_THE_WAY = 60;
-
     case ARRIVED = 70;
-
     case HANDED_OVER = 80;
 
     case RELISTED = 90;

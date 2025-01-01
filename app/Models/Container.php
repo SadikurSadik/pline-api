@@ -96,4 +96,14 @@ class Container extends Model
     {
         return $this->hasMany(ContainerDocument::class);
     }
+
+    public function houstan_custom_cover_letter(): HasOne
+    {
+        return $this->hasOne(HoustanCustomCoverLetter::class);
+    }
+
+    public function dock_receipt(): HasOne
+    {
+        return $this->hasOne(DockReceipt::class);
+    }
 }

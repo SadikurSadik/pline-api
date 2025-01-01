@@ -56,6 +56,8 @@ class ContainerDetailResource extends JsonResource
             'contact_detail' => $this->contact_detail,
             'vehicle_ids' => $this->vehicles->pluck('id'),
             'vehicles' => VehicleDetailResource::collection($this->vehicles),
+            'dock_receipt' => !empty($this->dock_receipt) ? new DockReceiptResource($this->dock_receipt) : [],
+            'houstan_custom_cover_letter' => !empty($this->houstan_custom_cover_letter) ? new HoustanCustomCoverLetterResource($this->houstan_custom_cover_letter) : [],
             'file_urls' => [
                 'container_photos' => $this->getPhotosProperty($this->container_photos),
                 'empty_container_photos' => $this->getPhotosProperty($this->empty_container_photos),
