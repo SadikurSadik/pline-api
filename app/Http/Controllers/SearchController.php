@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Enums\VisibilityStatus;
 use App\Models\City;
+use App\Models\Condition;
 use App\Models\Country;
 use App\Models\Customer;
+use App\Models\Feature;
 use App\Models\Location;
 use App\Models\Port;
 use App\Models\State;
+use App\Models\VehicleColor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -116,7 +119,9 @@ class SearchController extends Controller
     {
         $query = Customer::select([
             DB::raw('user_id as id'),
+            'customer_id',
             'name',
+            'company_name',
         ]);
 
         if (! empty($request->search)) {
@@ -124,5 +129,33 @@ class SearchController extends Controller
         }
 
         return $query->limit(20)->get();
+    }
+
+    public function searchColor(Request $request)
+    {
+        $query = VehicleColor::select([
+            'id',
+            'name',
+        ]);
+        if (! empty($request->search)) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
+        return $query->orderBy('name', 'ASC')
+            ->limit(20)
+            ->get()
+            ->map( function ( $item ) {
+                return [ 'id' => $item->name, 'name' => $item->name ];
+            } );
+    }
+
+    public function searchVehicleCondition()
+    {
+        return Condition::select('id', 'name')->get();
+    }
+
+    public function searchVehicleFeature()
+    {
+        return Feature::select('id', 'name')->get();
     }
 }

@@ -16,10 +16,13 @@ use App\Filters\FilterByVehicleGlobalSearch;
 use App\Filters\FilterByVinNumber;
 use App\Filters\FilterByYearMakeModel;
 use App\Models\Vehicle;
+use App\Models\VehicleCondition;
 use App\Models\VehicleDocument;
+use App\Models\VehicleFeature;
 use App\Models\VehiclePhoto;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 class VehicleService
@@ -53,6 +56,8 @@ class VehicleService
             'auction_photos',
             'pickup_photos',
             'arrived_photos',
+            'vehicle_conditions',
+            'vehicle_features',
             'documents',
             'invoices',
         ])->find($id);
@@ -94,6 +99,24 @@ class VehicleService
         $vehicle = Vehicle::findOrNew($id);
         $vehicle->fill($data);
         $vehicle->save();
+
+        foreach ( Arr::get( $data, 'vehicle_conditions', [] ) as $key => $value ) {
+            VehicleCondition::updateOrCreate(
+                [ 'vehicle_id' => $vehicle->id, 'condition_id' => $key ],
+                [ 'value' => $value ]
+            );
+        }
+
+        $featureIds = Arr::get( $data, 'vehicle_features', [] );
+        VehicleFeature::where( 'vehicle_id', $vehicle->id )->delete();
+        foreach ( $featureIds as $featureId ) {
+            if ( $featureId ) {
+                VehicleFeature::updateOrCreate(
+                    [ 'vehicle_id' => $vehicle->id, 'feature_id' => $featureId ],
+                    [ 'value' => 1 ]
+                );
+            }
+        }
 
         foreach (VehiclePhotoType::cases() as $vehiclePhotoType) {
             if (! empty($data['file_urls'][$vehiclePhotoType->getKeyName()])) {
