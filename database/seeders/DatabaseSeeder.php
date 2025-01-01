@@ -8,6 +8,8 @@ use App\Models\Container;
 use App\Models\Customer;
 use App\Models\DamageClaim;
 use App\Models\User;
+use App\Models\Vcc;
+use App\Models\VccExitPaper;
 use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -60,5 +62,7 @@ class DatabaseSeeder extends Seeder
         Vehicle::factory(50)->create();
         Container::factory(20)->create();
         DamageClaim::factory(20)->create();
+        Vcc::factory(20)->create();
+        VccExitPaper::factory(20)->create();
     }
 }

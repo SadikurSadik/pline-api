@@ -19,6 +19,7 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\TitleTypeController;
 use App\Http\Controllers\TowingRateController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VccController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 
@@ -120,6 +121,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('damage-claims/export-excel', [DamageClaimController::class, 'exportExcel']);
     Route::apiResource('damage-claims', DamageClaimController::class);
     /* damage claim related endpoints */
+
+    /* vcc related endpoints */
+    Route::apiResource('vccs', VccController::class);
+    /* vcc related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
