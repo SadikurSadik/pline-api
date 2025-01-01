@@ -69,7 +69,7 @@ class ContainerDetailResource extends JsonResource
     private function getThumbnailPhoto($photo): Application|string|UrlGenerator
     {
         if (empty($photo)) {
-            return url('assets/img/car-default-photo.png');
+            return url('images/car-default-photo.png');
         }
 
         return filter_var($photo, FILTER_VALIDATE_URL) === false ? Storage::url($photo) : $photo;
