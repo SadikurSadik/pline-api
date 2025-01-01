@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\ContainerPhotoType;
 use App\Enums\ContainerStatus;
+use App\Enums\VehiclePhotoType;
 use App\Enums\VehicleStatus;
 use App\Filters\FilterByArrivalDate;
 use App\Filters\FilterByBookingNumber;
@@ -22,6 +23,7 @@ use App\Models\Container;
 use App\Models\ContainerDocument;
 use App\Models\ContainerPhoto;
 use App\Models\Vehicle;
+use App\Models\VehiclePhoto;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
@@ -77,8 +79,8 @@ class ContainerService
 
     public function update(int $id, array $data)
     {
-        foreach (ContainerPhotoType::cases() as $containerPhotoType) {
-            if (isset($data['file_urls'][$containerPhotoType->getKeyName()])) {
+        foreach (ContainerPhotoType::cases() as $containerPhotoType){
+            if (isset($data['file_urls'][$containerPhotoType->getKeyName()])){
                 $this->removePhotos(
                     $id,
                     $data['file_urls'][$containerPhotoType->getKeyName()],
@@ -103,6 +105,16 @@ class ContainerService
         $container->save();
 
         Vehicle::query()->whereIn('id', $data['vehicle_ids'])->update(['container_id' => $container->id]);
+
+        foreach (VehiclePhotoType::cases() as $vehiclePhotoType){
+            if (! empty($data['file_urls'][$vehiclePhotoType->getKeyName()])){
+                $this->savePhotos(
+                    $data['file_urls'][$vehiclePhotoType->getKeyName()],
+                    $container->id,
+                    $vehiclePhotoType->value
+                );
+            }
+        }
 
         return $container;
     }
@@ -140,19 +152,19 @@ class ContainerService
     public function savePhotos($photos, $containerId, $type): array
     {
         $newPhotos = [];
-        foreach ($photos as $url) {
+        foreach ($photos as $url){
             $uri = filter_var($url, FILTER_VALIDATE_URL) ? getRelativeUrl($url) : '';
 
-            if ($uri && Storage::exists($uri)) {
+            if ($uri && Storage::exists($uri)){
                 $thumbnailFileName = str_replace(basename($uri), 'thumb-'.basename($uri), $uri);
                 $thumbnail = Storage::exists($thumbnailFileName) ? $thumbnailFileName : $uri;
                 $path = 'uploads/containers/photos/'.$containerId.'/';
 
-                if ($uri !== $path.basename($uri) && Storage::exists($uri)) {
+                if ($uri !== $path.basename($uri) && Storage::exists($uri)){
                     Storage::move($uri, $path.basename($uri));
                 }
 
-                if ($thumbnail !== $uri && $thumbnail !== $path.basename($thumbnail) && Storage::exists($thumbnail)) {
+                if ($thumbnail !== $uri && $thumbnail !== $path.basename($thumbnail) && Storage::exists($thumbnail)){
                     Storage::move($thumbnail, $path.basename($thumbnail));
                 }
 
@@ -171,13 +183,13 @@ class ContainerService
 
     private function saveDocument($documents, $containerId): void
     {
-        foreach ($documents as $url) {
+        foreach ($documents as $url){
             $uri = filter_var($url, FILTER_VALIDATE_URL) ? getRelativeUrl($url) : '';
 
-            if ($uri && Storage::exists($uri)) {
+            if ($uri && Storage::exists($uri)){
                 $path = 'uploads/containers/documents/'.$containerId.'/';
 
-                if ($uri !== $path.basename($uri) && Storage::exists($uri)) {
+                if ($uri !== $path.basename($uri) && Storage::exists($uri)){
                     Storage::move($uri, $path.basename($uri));
                 }
 
