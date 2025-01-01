@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
+use App\Models\CarFax;
 use App\Models\Consignee;
 use App\Models\Container;
 use App\Models\Customer;
@@ -58,5 +59,6 @@ class DatabaseSeeder extends Seeder
         Consignee::factory(10)->create();
         Vehicle::factory(50)->create();
         Container::factory(20)->create();
+        CarFax::factory(20)->create();
     }
 }

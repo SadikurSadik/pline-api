@@ -144,9 +144,9 @@ class SearchController extends Controller
         return $query->orderBy('name', 'ASC')
             ->limit(20)
             ->get()
-            ->map( function ( $item ) {
-                return [ 'id' => $item->name, 'name' => $item->name ];
-            } );
+            ->map(function ($item) {
+                return ['id' => $item->name, 'name' => $item->name];
+            });
     }
 
     public function searchVehicleCondition()
