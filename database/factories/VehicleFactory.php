@@ -53,7 +53,7 @@ class VehicleFactory extends Factory
             'tow_by' => fake()->randomElement([1, 2, 3]),
             'tow_fee' => fake()->randomNumber(3),
             'title_type_id' => random_int(1, 17),
-            'status' => fake()->randomElement([1, 2, 3, 6, 8, 10, 12, 15, 20]),
+            'status' => fake()->randomElement([10, 11, 15, 20, 25, 30]),
         ];
     }
 
