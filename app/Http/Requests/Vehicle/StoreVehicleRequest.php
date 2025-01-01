@@ -23,7 +23,7 @@ class StoreVehicleRequest extends FormRequest
             'make' => 'required|max:150',
             'model' => 'required|max:150',
             'color' => 'required|max:50',
-            'value' => 'required|numeric|min:0',
+            'value' => 'required|numeric|min:0|max:99999999',
             'service_provider' => 'nullable|max:100',
             'auction_name' => 'nullable|max:100',
             'weight' => 'nullable|max:50',
