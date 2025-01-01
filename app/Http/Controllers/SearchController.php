@@ -6,6 +6,7 @@ use App\Enums\VehicleStatus;
 use App\Enums\VisibilityStatus;
 use App\Models\City;
 use App\Models\Condition;
+use App\Models\Consignee;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\Feature;
@@ -176,5 +177,18 @@ class SearchController extends Controller
         }
 
         return $query->limit(20)->get();
+    }
+
+    public function searchConsignee(Request $request)
+    {
+        $query = Consignee::select('id', 'name');
+
+        if (! empty($request->search)) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
+        return $query->orderBy('name', 'ASC')
+            ->limit('20')
+            ->get();
     }
 }
