@@ -147,9 +147,9 @@ class SearchController extends Controller
         return $query->orderBy('name', 'ASC')
             ->limit(20)
             ->get()
-            ->map( function ( $item ) {
-                return [ 'id' => $item->name, 'name' => $item->name ];
-            } );
+            ->map(function ($item) {
+                return ['id' => $item->name, 'name' => $item->name];
+            });
     }
 
     public function searchVehicleCondition()
@@ -164,16 +164,18 @@ class SearchController extends Controller
 
     public function searchVehicle(Request $request)
     {
-        $query = Vehicle::select( 'id', 'vin' )
-            ->where( 'status', VehicleStatus::ON_HAND->value )
-            ->whereNull( 'container_id' );
+        $query = Vehicle::select([
+            'id',
+            DB::raw('vin_number AS name'),
+        ])->where('status', VehicleStatus::ON_HAND->value)
+            ->whereNull('container_id');
 
-        if ( !empty( $filters[ 'exclude_ids' ] ) ) {
-            $query->whereNotIn( 'id', $filters[ 'exclude_ids' ] );
+        if (! empty($filters['exclude_ids'])) {
+            $query->whereNotIn('id', $filters['exclude_ids']);
         }
 
-        if(!empty($vehicle->vin)){
-            $query->where('vin', 'like', "%{$vehicle->vin}%");
+        if (! empty($vehicle->vin)) {
+            $query->where('vin_number', 'like', "%{$vehicle->vin}%");
         }
 
         return $query->limit(20)->get();
