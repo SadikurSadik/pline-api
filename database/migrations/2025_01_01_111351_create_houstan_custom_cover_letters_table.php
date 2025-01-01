@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('houstan_custom_cover_letters', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('export_id');
+            $table->bigInteger('container_id');
             $table->string('vehicle_location', 45)->nullable();
             $table->string('exporter_id', 45)->nullable();
             $table->string('exporter_type_issuer', 45)->nullable();
