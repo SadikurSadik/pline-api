@@ -50,3 +50,29 @@ if (! function_exists('endsWith')) {
         return substr($haystack, -$length) === $needle;
     }
 }
+
+if (! function_exists('trimHostFromUrls')) {
+    /**
+     * Trim the host and base URL from a list of URLs.
+     */
+    function trimHostFromUrls(array $urls, string $baseUrl): array
+    {
+        return array_map(function ($url) use ($baseUrl) {
+            return str_replace($baseUrl, '', $url);
+        }, $urls);
+    }
+}
+
+if (! function_exists('is_customer')) {
+    function is_customer(): bool
+    {
+        return auth()->user()?->role_id == 4;
+    }
+}
+
+if (! function_exists('dateTimeFormat')) {
+    function dateTimeFormat($date): string
+    {
+        return $date ? \Illuminate\Support\Carbon::parse($date)->format('Y-m-d h:i a') : '';
+    }
+}

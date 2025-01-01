@@ -100,20 +100,20 @@ class VehicleService
         $vehicle->fill($data);
         $vehicle->save();
 
-        foreach ( Arr::get( $data, 'vehicle_conditions', [] ) as $key => $value ) {
+        foreach (Arr::get($data, 'vehicle_conditions', []) as $key => $value) {
             VehicleCondition::updateOrCreate(
-                [ 'vehicle_id' => $vehicle->id, 'condition_id' => $key ],
-                [ 'value' => $value ]
+                ['vehicle_id' => $vehicle->id, 'condition_id' => $key],
+                ['value' => $value]
             );
         }
 
-        $featureIds = Arr::get( $data, 'vehicle_features', [] );
-        VehicleFeature::where( 'vehicle_id', $vehicle->id )->delete();
-        foreach ( $featureIds as $featureId ) {
-            if ( $featureId ) {
+        $featureIds = Arr::get($data, 'vehicle_features', []);
+        VehicleFeature::where('vehicle_id', $vehicle->id)->delete();
+        foreach ($featureIds as $featureId) {
+            if ($featureId) {
                 VehicleFeature::updateOrCreate(
-                    [ 'vehicle_id' => $vehicle->id, 'feature_id' => $featureId ],
-                    [ 'value' => 1 ]
+                    ['vehicle_id' => $vehicle->id, 'feature_id' => $featureId],
+                    ['value' => 1]
                 );
             }
         }
