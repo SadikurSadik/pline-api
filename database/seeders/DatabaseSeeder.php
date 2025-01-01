@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\Role;
 use App\Models\Consignee;
+use App\Models\Container;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\Vehicle;
@@ -53,5 +54,6 @@ class DatabaseSeeder extends Seeder
         Customer::factory(10)->create();
         Consignee::factory(10)->create();
         Vehicle::factory(50)->create();
+        Container::factory(20)->create();
     }
 }

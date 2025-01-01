@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ClearanceRateController;
 use App\Http\Controllers\ConsigneeController;
+use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -98,6 +99,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('vehicle/export-excel', [VehicleController::class, 'exportExcel']);
     Route::apiResource('vehicles', VehicleController::class);
     /* vehicles related endpoints */
+
+    /* containers related endpoints */
+    Route::get('containers/{id}/all-photos', [ContainerController::class, 'allPhotos']);
+    Route::post('containers/{id}/add-more-photos', [ContainerController::class, 'addMorePhotos']);
+    Route::get('containers/{id}/download-photos', [ContainerController::class, 'downloadPhotos']);
+    Route::get('containers/{id}/download-document', [ContainerController::class, 'downloadDocuments']);
+    Route::post('containers/upload-document', [ContainerController::class, 'uploadDocument']);
+    Route::post('containers/upload-photo', [ContainerController::class, 'uploadPhoto']);
+    Route::get('container/export-excel', [ContainerController::class, 'exportExcel']);
+    Route::apiResource('containers', ContainerController::class);
+    /* containers related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
