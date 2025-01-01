@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Models\Consignee;
 use App\Models\Container;
 use App\Models\Customer;
+use App\Models\DamageClaim;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
@@ -58,5 +59,6 @@ class DatabaseSeeder extends Seeder
         Consignee::factory(10)->create();
         Vehicle::factory(50)->create();
         Container::factory(20)->create();
+        DamageClaim::factory(20)->create();
     }
 }

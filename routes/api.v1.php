@@ -7,6 +7,7 @@ use App\Http\Controllers\ConsigneeController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DamageClaimController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
@@ -110,6 +111,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('container/export-excel', [ContainerController::class, 'exportExcel']);
     Route::apiResource('containers', ContainerController::class);
     /* containers related endpoints */
+
+    /* damage claim related endpoints */
+    Route::put('damage-claims/{id}/approve', [DamageClaimController::class, 'damageClaimApprove']);
+    Route::put('damage-claims/{id}/reject', [DamageClaimController::class, 'damageClaimReject']);
+    Route::get('damage-claims/{id}/download-photos', [DamageClaimController::class, 'downloadDamageClaimPhotos']);
+    Route::post('damage-claims/upload-photo', [DamageClaimController::class, 'uploadPhoto']);
+    Route::get('damage-claims/export-excel', [DamageClaimController::class, 'exportExcel']);
+    Route::apiResource('damage-claims', DamageClaimController::class);
+    /* damage claim related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
