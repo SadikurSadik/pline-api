@@ -124,5 +124,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('colors', 'searchColor');
             Route::get('conditions', 'searchVehicleCondition');
             Route::get('features', 'searchVehicleFeature');
+            Route::get('vehicles', 'searchVehicle');
         });
 });

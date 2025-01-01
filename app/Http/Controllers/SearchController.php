@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VehicleStatus;
 use App\Enums\VisibilityStatus;
 use App\Models\City;
 use App\Models\Condition;
@@ -11,6 +12,7 @@ use App\Models\Feature;
 use App\Models\Location;
 use App\Models\Port;
 use App\Models\State;
+use App\Models\Vehicle;
 use App\Models\VehicleColor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -157,5 +159,22 @@ class SearchController extends Controller
     public function searchVehicleFeature()
     {
         return Feature::select('id', 'name')->get();
+    }
+
+    public function searchVehicle(Request $request)
+    {
+        $query = Vehicle::select( 'id', 'vin' )
+            ->where( 'status', VehicleStatus::ON_HAND->value )
+            ->whereNull( 'container_id' );
+
+        if ( !empty( $filters[ 'exclude_ids' ] ) ) {
+            $query->whereNotIn( 'id', $filters[ 'exclude_ids' ] );
+        }
+
+        if(!empty($vehicle->vin)){
+            $query->where('vin', 'like', "%{$vehicle->vin}%");
+        }
+
+        return $query->limit(20)->get();
     }
 }
