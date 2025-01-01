@@ -143,6 +143,16 @@ class Vehicle extends Model
         return $this->hasMany(VehicleDocument::class)->where('type', '=', VehicleDocumentType::INVOICE->value);
     }
 
+    public function vehicle_conditions(): HasMany
+    {
+        return $this->hasMany(VehicleCondition::class);
+    }
+
+    public function vehicle_features(): HasMany
+    {
+        return $this->hasMany(VehicleFeature::class);
+    }
+
     protected static function boot(): void
     {
         parent::boot();

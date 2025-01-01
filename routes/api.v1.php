@@ -110,5 +110,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('customers', 'searchCustomer');
             Route::get('title-types', 'searchTitleType');
             Route::get('colors', 'searchColor');
+            Route::get('conditions', 'searchVehicleCondition');
+            Route::get('features', 'searchVehicleFeature');
         });
 });

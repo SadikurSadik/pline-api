@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Enums\VisibilityStatus;
 use App\Models\City;
+use App\Models\Condition;
 use App\Models\Country;
 use App\Models\Customer;
+use App\Models\Feature;
 use App\Models\Location;
 use App\Models\Port;
 use App\Models\State;
@@ -145,5 +147,15 @@ class SearchController extends Controller
             ->map( function ( $item ) {
                 return [ 'id' => $item->name, 'name' => $item->name ];
             } );
+    }
+
+    public function searchVehicleCondition()
+    {
+        return Condition::select('id', 'name')->get();
+    }
+
+    public function searchVehicleFeature()
+    {
+        return Feature::select('id', 'name')->get();
     }
 }

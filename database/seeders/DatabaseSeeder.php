@@ -46,6 +46,8 @@ class DatabaseSeeder extends Seeder
             TowingRateSeeder::class,
             ShippingRateSeeder::class,
             VehicleColorSeeder::class,
+            ConditionSeeder::class,
+            FeatureSeeder::class,
         ]);
 
         $adminUser->syncRolePermissions();

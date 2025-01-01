@@ -69,6 +69,8 @@ class VehicleDetailResource extends JsonResource
             'title_type_name' => data_get($this, 'title_type.name'),
             'status' => $this->status,
             'status_name' => $this->status->getLabel(),
+            'vehicle_conditions' => $this->vehicle_conditions->pluck( 'value', 'condition_id' ),
+            'vehicle_features' => $this->vehicle_features->pluck( 'value', 'condition_id' ),
             'file_urls' => [
                 'yard_photos' => $this->getPhotosProperty($this->yard_photos),
                 'auction_photos' => $this->getPhotosProperty($this->auction_photos),
