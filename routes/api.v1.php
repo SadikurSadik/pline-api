@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CarFaxController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ClearanceRateController;
 use App\Http\Controllers\ConsigneeController;
@@ -110,6 +111,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('container/export-excel', [ContainerController::class, 'exportExcel']);
     Route::apiResource('containers', ContainerController::class);
     /* containers related endpoints */
+
+    /* car faxes related endpoints */
+    Route::get('car-faxes/export-excel', [CarFaxController::class, 'exportExcel']);
+    Route::post('car-faxes/request', [CarFaxController::class, 'carFaxRequest']);
+    Route::apiResource('car-faxes', CarFaxController::class);
+    /* car faxes related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
