@@ -19,6 +19,7 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\TitleTypeController;
 use App\Http\Controllers\TowingRateController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VccController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 
@@ -120,6 +121,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('damage-claims/export-excel', [DamageClaimController::class, 'exportExcel']);
     Route::apiResource('damage-claims', DamageClaimController::class);
     /* damage claim related endpoints */
+
+    /* vcc related endpoints */
+    Route::post('vcc/{id}/hand-over', [VccController::class, 'vccHandOver']);
+    Route::get('vcc-reset/{id}', [VccController::class, 'VccReset']);
+    Route::post('vcc/upload-attachment', [VccController::class, 'uploadVccAttachment']);
+    Route::post('vcc/{id}/store-attachment', [VccController::class, 'storeVccAttachment']);
+    Route::get('vcc/{id}/get-detail-form', [VccController::class, 'getVccDetail']);
+    Route::post('vcc/{id}/store-vcc-detail', [VccController::class, 'storeVccDetail']);
+    Route::get('vcc/export-excel', [VccController::class, 'exportExcel']);
+    Route::apiResource('vccs', VccController::class);
+    /* vcc related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {

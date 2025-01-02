@@ -51,7 +51,6 @@ class Container extends Model
             'status' => ContainerStatus::class,
             'container_type' => ContainerType::class,
             'container_vehicles' => 'array',
-
         ];
     }
 
