@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VccStatus;
 use App\Exports\VccsExport;
 use App\Http\Requests\Vcc\StoreVccAttachmentRequest;
 use App\Http\Requests\Vcc\StoreVccDetailRequest;
@@ -116,7 +117,7 @@ class VccController extends Controller
         }
     }
 
-    public function storeVccAttachment($id, StoreVccAttachmentRequest $request)
+    public function storeVccAttachment($id, StoreVccAttachmentRequest $request): JsonResponse
     {
         $data = $request->only(['vcc_attachment', 'bill_of_entry_attachment', 'other_attachment']);
 
@@ -128,6 +129,41 @@ class VccController extends Controller
             Log::error('store vcc attachment: '.$e->getMessage());
 
             return errorResponse(__('Failed! Something went wrong.'));
+        }
+    }
+
+    public function VccReset($id)
+    {
+        $vcc = $this->service->getById($id);
+
+        if ($vcc && $vcc->status != VccStatus::HANDED_OVER) {
+            return errorResponse(__('VCC not in Handed Over Status.'));
+        }
+
+        try {
+            DB::transaction(function () use ($vcc) {
+                if ($vcc->exit_paper) {
+                    $vcc->exit_paper->delete();
+                }
+                $vcc->update([
+                    'status' => VccStatus::ON_HAND,
+                    'deposit_amount' => null,
+                    'handed_over_to' => null,
+                    'vehicle_registration_type' => null,
+                    'issued_by' => null,
+                    'issued_at' => null,
+                    'handed_over_by' => null,
+                    'handed_over_at' => null,
+                    'vcc_exit_data' => [],
+                ]);
+            });
+
+            return successResponse(__('Success! VCC reset successfully.'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::info($e->getMessage());
+
+            return errorResponse(__('Failed! VCC reset failed.'));
         }
     }
 }
