@@ -39,7 +39,7 @@ class Vcc extends Model
 
     protected $casts = [
         'status' => VccStatus::class,
-        'vehicle_registration_type' => VccRegistrationType::class
+        'vehicle_registration_type' => VccRegistrationType::class,
     ];
 
     public function vehicle(): BelongsTo

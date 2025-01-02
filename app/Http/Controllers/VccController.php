@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Exports\VccsExport;
+use App\Http\Requests\Vcc\StoreVccAttachmentRequest;
 use App\Http\Requests\Vcc\StoreVccDetailRequest;
 use App\Http\Resources\Vcc\GetVccDetailResource;
 use App\Http\Resources\Vcc\VccDetailResource;
 use App\Http\Resources\Vcc\VccResource;
+use App\Services\FileManagerService;
 use App\Services\VccService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -86,6 +88,44 @@ class VccController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('store vcc detail: '.$e->getMessage());
+
+            return errorResponse(__('Failed! Something went wrong.'));
+        }
+    }
+
+    public function uploadVccAttachment(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required',
+        ]);
+
+        try {
+            $upload = app(FileManagerService::class)->upload($request->file, 'uploads/vcc/attachment');
+
+            if (! $upload) {
+                return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
+            }
+
+            return response()->json(['success' => true, 'url' => $upload]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to upload profile file.',
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function storeVccAttachment($id, StoreVccAttachmentRequest $request)
+    {
+        $data = $request->only(['vcc_attachment', 'bill_of_entry_attachment', 'other_attachment']);
+
+        try {
+            $this->service->update($id, $data);
+
+            return successResponse(__('VCC attachment added successfully.'));
+        } catch (\Exception $e) {
+            Log::error('store vcc attachment: '.$e->getMessage());
 
             return errorResponse(__('Failed! Something went wrong.'));
         }
