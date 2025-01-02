@@ -37,6 +37,8 @@ class StoreContainerRequest extends FormRequest
             'export_date' => 'nullable|date',
             'eta_date' => 'nullable|date',
             'contact_detail' => 'nullable|max:300',
+            'special_instruction' => 'nullable|max:300',
+            'bol_note' => 'nullable|max:200',
             'port_of_loading_country_id' => 'required|integer',
             'port_of_loading_state_id' => 'required|integer',
             'port_of_loading_id' => 'required|integer',

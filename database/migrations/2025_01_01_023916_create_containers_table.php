@@ -31,7 +31,10 @@ return new class extends Migration
             $table->date('cut_off_date')->nullable();
             $table->date('export_date')->nullable();
             $table->date('eta_date')->nullable();
+            $table->date('arrival_date')->nullable();
             $table->text('contact_detail')->nullable();
+            $table->text('special_instruction')->nullable();
+            $table->string('bol_note')->nullable();
             $table->integer('port_of_loading_id');
             $table->integer('port_of_discharge_id');
             $table->unsignedTinyInteger('container_type')->nullable();

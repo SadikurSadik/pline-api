@@ -54,6 +54,8 @@ class ContainerDetailResource extends JsonResource
             'destination' => $this->destination,
             'ar_number' => $this->ar_number,
             'contact_detail' => $this->contact_detail,
+            'special_instruction' => $this->special_instruction,
+            'bol_note' => $this->bol_note,
             'vehicle_ids' => $this->vehicles->pluck('id'),
             'vehicles' => VehicleDetailResource::collection($this->vehicles),
             'dock_receipt' => !empty($this->dock_receipt) ? new DockReceiptResource($this->dock_receipt) : new \stdClass,
