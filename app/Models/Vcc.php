@@ -33,7 +33,6 @@ class Vcc extends Model
         'vcc_attachment',
         'bill_of_entry_attachment',
         'other_attachment',
-        'vcc_exit_data',
     ];
 
     protected $casts = [

@@ -80,7 +80,7 @@ class Vehicle extends Model
 
     public function getTitleAttribute(): string
     {
-        return sprintf('%s %s %s', $this->year, $this->make, $this->model);
+        return sprintf('%s %s %s', $this->year, $this->model, $this->color);
     }
 
     public function customer(): HasOne

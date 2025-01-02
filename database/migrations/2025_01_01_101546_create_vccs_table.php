@@ -33,7 +33,6 @@ return new class extends Migration
             $table->string('vcc_attachment', 200)->nullable();
             $table->string('bill_of_entry_attachment', 200)->nullable();
             $table->string('other_attachment', 200)->nullable();
-            $table->text('vcc_exit_data')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
