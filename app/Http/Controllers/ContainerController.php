@@ -120,7 +120,7 @@ class ContainerController extends Controller
     {
         $documents = $this->service->getDocuments($id)->pluck('name');
         $zipFileName = 'container_documents_'.date('Y-m-d').'.zip';
-        $zipPath = storage_path("app/public/uploads/containers/documents/tmp/{$zipFileName}");
+        $zipPath = storage_path("app/public/uploads/containers/documents/{$zipFileName}");
 
         return $fileManagerService->downloadAsZip($zipPath, $documents);
     }
@@ -135,7 +135,7 @@ class ContainerController extends Controller
         try {
             $this->service->savePhotos($request->photos, $id, $request->type);
 
-            return redirect()->back()->with('success', 'Photos added successfully.');
+            return successResponse('Photos added successfully.');
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -153,7 +153,7 @@ class ContainerController extends Controller
         $type = $request->get('type', ContainerPhotoType::CONTAINER_PHOTO->value);
         $photos = $this->service->getPhotos($id, $type)->pluck('name');
         $zipFileName = 'container_photos_'.date('Y-m-d').'.zip';
-        $zipPath = storage_path("app/public/uploads/containers/photos/tmp/{$zipFileName}");
+        $zipPath = storage_path("app/public/uploads/containers/photos/{$zipFileName}");
 
         return $fileManagerService->downloadAsZip($zipPath, $photos);
     }
