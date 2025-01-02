@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\DamageClaim;
 
-use App\Http\Resources\Vehicle\VehicleDetailResource;
+use App\Http\Resources\Vehicle\VehicleResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +13,7 @@ class DamageClaimDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'vehicle' => new VehicleDetailResource($this->vehicle),
+            'vehicle' => new VehicleResource($this->vehicle),
             'customer_user_id' => $this->customer_user_id,
             'customer_name' => $this->customer?->name,
             'claim_amount' => $this->claim_amount,
