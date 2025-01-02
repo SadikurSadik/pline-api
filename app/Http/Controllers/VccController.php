@@ -132,7 +132,7 @@ class VccController extends Controller
         }
     }
 
-    public function VccReset($id)
+    public function VccReset($id): JsonResponse
     {
         $vcc = $this->service->getById($id);
 
@@ -157,6 +157,7 @@ class VccController extends Controller
                     'vcc_exit_data' => [],
                 ]);
             });
+            $this->service->updateContainerBgColor($vcc->container_id);
 
             return successResponse(__('Success! VCC reset successfully.'));
         } catch (\Exception $e) {

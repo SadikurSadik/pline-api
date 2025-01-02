@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\VccRegistrationType;
 use App\Enums\VccStatus;
 use App\Filters\FilterByDeclarationNumber;
 use App\Filters\FilterByHandedOverTo;
@@ -93,5 +94,39 @@ class VccService
             'container_id' => $id,
             'status' => 0,
         ])->get();
+    }
+
+    public function updateContainerBgColor($containerId): void
+    {
+        $colors = [
+            'yellow' => '#FDEB37',
+            'green' => '#34A834',
+            'red' => '#FF474C',
+        ];
+        $colorName = 'yellow';
+
+        $vccs = Vcc::with('exit_paper')
+            ->where(['container_id' => $containerId])
+            ->get();
+
+        if ($vccs->count() > 0 && $vccs->where('vehicle_registration_type', VccRegistrationType::EXIT)->count() === $vccs->count()) {
+            $received = 0;
+            $submitted = 0;
+            $vccs->map(function ($vcc) use (&$received, &$submitted) {
+                if ($vcc->exit_paper && $vcc->exit_paper->status == VccStatus::EXIT_PAPER_SUBMITTED) {
+                    $submitted++;
+                }
+                if ($vcc->exit_paper && $vcc->exit_paper->status == VccStatus::EXIT_PAPER_RECEIVED) {
+                    $received++;
+                }
+            });
+            if ($submitted === $vccs->count()) {
+                $colorName = 'red';
+            } elseif ($received + $submitted >= $vccs->count()) {
+                $colorName = 'green';
+            }
+        }
+
+        Vcc::query()->where('container_id', $containerId)->update(['container_bg_color' => $colors[$colorName]]);
     }
 }

@@ -47,32 +47,32 @@ class ContainerResource extends JsonResource
     {
         $url = '';
         switch ($streamShipLine) {
-            case StreamshipLine::MAERSK:
-            case StreamshipLine::APM_TERMINALS:
+            case StreamshipLine::MAERSK->value:
+            case StreamshipLine::APM_TERMINALS->value:
                 $url = 'https://www.maersk.com/tracking/'.$containerNumber;
                 break;
-            case StreamshipLine::HMM:
+            case StreamshipLine::HMM->value:
                 $url = 'https://www.hmm21.com/cms/business/ebiz/trackTrace/trackTrace/index.jsp?type=1&number='.$containerNumber.'&is_quick=Y&quick_params=';
                 break;
-            case StreamshipLine::MSC:
+            case StreamshipLine::MSC->value:
                 $url = 'http://www.shippingline.org/track/?container='.$containerNumber.'&type=container&line=msc';
                 break;
-            case StreamshipLine::HAPAG_LLOYD:
+            case StreamshipLine::HAPAG_LLOYD->value:
                 $url = 'https://www.hapag-lloyd.com/en/online-business/track/track-by-container-solution.html?container='.$containerNumber;
                 break;
-            case StreamshipLine::YANG_MING:
+            case StreamshipLine::YANG_MING->value:
                 $url = 'https://www.yangming.com/e-service/track_trace/track_trace_cargo_tracking.aspx';
                 break;
-            case StreamshipLine::ONE:
+            case StreamshipLine::ONE->value:
                 $url = 'https://ecomm.one-line.com/ecom/CUP_HOM_3301.do?redir=Y&ctrack-field='.$containerNumber.'&sessLocale=en&trakNoParam='.$containerNumber;
                 break;
-            case StreamshipLine::EVERGREEN:
+            case StreamshipLine::EVERGREEN->value:
                 $url = 'https://ct.shipmentlink.com/servlet/TDB1_CargoTracking.do';
                 break;
-            case StreamshipLine::CMA_CGM:
+            case StreamshipLine::CMA_CGM->value:
                 $url = 'https://www.cma-cgm.com/ebusiness/tracking';
                 break;
-            case StreamshipLine::APL:
+            case StreamshipLine::APL->value:
                 $url = 'https://www.apl.com/ebusiness/tracking/search';
                 break;
         }
