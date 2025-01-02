@@ -25,7 +25,7 @@ class DockReceiptResource extends JsonResource
             'exporting_carrier' => $this->exporting_carrier,
             'final_destination' => $this->final_destination,
             'loading_terminal' => $this->loading_terminal,
-            'container_type' => $this->container_type,
+            'dock_container_type' => $this->dock_container_type,
             'number_of_packages' => $this->number_of_packages,
             'by' => $this->by,
             'date' => $this->date,
