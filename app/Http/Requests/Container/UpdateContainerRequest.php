@@ -54,6 +54,36 @@ class UpdateContainerRequest extends FormRequest
             'file_urls.loading_photos.*' => 'nullable|url',
             'file_urls.loaded_photos.*' => 'nullable|url',
             'file_urls.documents.*' => 'nullable|url',
+
+            // dock receipt
+            'awb_number' => 'nullable|max:50',
+            'export_reference' => 'nullable|max:100',
+            'forwarding_agent' => 'nullable|max:200',
+            'domestic_routing_instructions' => 'nullable|max:250',
+            'pre_carriage_by' => 'nullable|max:100',
+            'place_of_receipt_by_pre_carrier' => 'nullable|max:50',
+            'exporting_carrier' => 'nullable|max:100',
+            'final_destination' => 'nullable|max:100',
+            'loading_terminal' => 'nullable|max:100',
+            'dock_container_type' => 'nullable|max:100',
+            'number_of_packages' => 'nullable|max:100',
+            'by' => 'nullable|max:100',
+            'date' => 'nullable|date',
+            'auto_receiving_date' => 'nullable|date',
+            'auto_cut_off' => 'nullable|date',
+            'vessel_cut_off' => 'nullable|date',
+            'sale_date' => 'nullable|date',
+
+            // houstan custom cover letter
+            'vehicle_location' => 'nullable|max:45',
+            'exporter_id' => 'nullable|max:45',
+            'exporter_type_issuer' => 'nullable|max:45',
+            'transportation_value' => 'nullable|max:45',
+            'exporter_dob' => 'nullable|max:45',
+            'ultimate_consignee_dob' => 'nullable|max:45',
+            'consignee_id' => 'nullable|integer',
+            'notify_party' => 'nullable|integer',
+            'manifest_consignee' => 'nullable|integer',
         ];
     }
 
