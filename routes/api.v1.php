@@ -98,7 +98,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('vehicles/{id}/download-document', [VehicleController::class, 'downloadVehicleDocuments']);
     Route::post('vehicles/upload-document', [VehicleController::class, 'uploadDocument']);
     Route::post('vehicles/upload-photo', [VehicleController::class, 'uploadPhoto']);
-    Route::get('vehicle/export-excel', [VehicleController::class, 'exportExcel']);
+    Route::get('vehicles/export-excel', [VehicleController::class, 'exportExcel']);
     Route::apiResource('vehicles', VehicleController::class);
     /* vehicles related endpoints */
 
@@ -139,5 +139,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('colors', 'searchColor');
             Route::get('conditions', 'searchVehicleCondition');
             Route::get('features', 'searchVehicleFeature');
+            Route::get('vehicles', 'searchVehicle');
+            Route::get('consignees', 'searchConsignee');
         });
 });

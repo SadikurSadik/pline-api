@@ -21,7 +21,7 @@ class Vehicle extends Model
     protected $fillable = [
         'version_number',
         'customer_user_id',
-        'assigned_to',
+        'container_id',
         'export_id',
         'lot_number',
         'vin_number',

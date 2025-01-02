@@ -70,14 +70,14 @@ class ContainerController extends Controller
         return Excel::download(new ContainersExport($request->all()), 'containers.xlsx');
     }
 
-    public function uploadPhoto(Request $request): JsonResponse
+    public function uploadPhoto(Request $request, FileManagerService $fileStorage): JsonResponse
     {
         $request->validate([
             'photo' => 'required|image',
         ]);
 
         try {
-            $upload = $request->photo->store('uploads/containers/photos/'.$request->get('container_id', 'tmp'));
+            $upload = $fileStorage->upload($request->photo, 'uploads/containers/photos/tmp');
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
@@ -93,20 +93,20 @@ class ContainerController extends Controller
         }
     }
 
-    public function uploadDocument(Request $request): JsonResponse
+    public function uploadDocument(Request $request, FileManagerService $fileStorage): JsonResponse
     {
         $request->validate([
-            'document' => 'required',
+            'file' => 'required',
         ]);
 
         try {
-            $upload = $request->document->store('uploads/containers/documents/'.$request->get('container_id', 'tmp'));
+            $upload = $fileStorage->upload($request->file, 'uploads/containers/documents/tmp');
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
             }
 
-            return response()->json(['success' => true, 'url' => Storage::url($upload)]);
+            return response()->json(['success' => true, 'url' => $upload]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
