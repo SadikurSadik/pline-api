@@ -26,6 +26,7 @@ class ContainerDetailResource extends JsonResource
             'export_date' => $this->export_date,
             'eta_date' => $this->eta_date,
             'cut_off_date' => $this->cut_off_date,
+            'arrival_date' => $this->arrival_date,
             'streamship_line' => $this->streamship_line,
             'container_type' => $this->container_type,
             'container_type_name' => $this->container_type?->getLabel(),

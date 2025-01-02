@@ -36,6 +36,7 @@ class UpdateContainerRequest extends FormRequest
             'cut_off_date' => 'nullable|date',
             'export_date' => 'nullable|date',
             'eta_date' => 'nullable|date',
+            'arrival_date' => 'nullable|date',
             'contact_detail' => 'nullable|max:300',
             'special_instruction' => 'nullable|max:300',
             'bol_note' => 'nullable|max:200',
