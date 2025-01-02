@@ -76,3 +76,24 @@ if (! function_exists('dateTimeFormat')) {
         return $date ? \Illuminate\Support\Carbon::parse($date)->format('Y-m-d h:i a') : '';
     }
 }
+
+if (! function_exists('dateFormat')) {
+    function dateFormat($date): string
+    {
+        return $date ? \Illuminate\Support\Carbon::parse($date)->format('Y-m-d') : '';
+    }
+}
+
+if (! function_exists('dateTimeFormat')) {
+    function dateTimeFormat($date): string
+    {
+        return $date ? \Illuminate\Support\Carbon::parse($date)->format('Y-m-d h:i a') : '';
+    }
+}
+
+if (! function_exists('amountFormat')) {
+    function amountFormat($amount): string
+    {
+        return $amount ? number_format($amount, 2) : '';
+    }
+}

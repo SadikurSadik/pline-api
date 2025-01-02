@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\VccsExport;
 use App\Http\Resources\Vcc\VccDetailResource;
 use App\Http\Resources\Vcc\VccResource;
 use App\Services\VccService;
@@ -9,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class VccController extends Controller
 {
@@ -21,7 +24,7 @@ class VccController extends Controller
         return VccResource::collection($data);
     }
 
-    public function show($id)
+    public function show($id): VccDetailResource
     {
         $data = $this->service->getById($id);
 
@@ -39,5 +42,12 @@ class VccController extends Controller
 
             return errorResponse(__('Failed! Something went wrong.'));
         }
+    }
+
+    public function exportExcel(Request $request): BinaryFileResponse
+    {
+        ini_set('memory_limit', '2024M');
+
+        return Excel::download(new VccsExport($request->all()), 'vcc.xlsx');
     }
 }

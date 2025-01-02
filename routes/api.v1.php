@@ -123,6 +123,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* damage claim related endpoints */
 
     /* vcc related endpoints */
+    Route::get('vcc/export-excel', [VccController::class, 'exportExcel']);
     Route::apiResource('vccs', VccController::class);
     /* vcc related endpoints */
 
