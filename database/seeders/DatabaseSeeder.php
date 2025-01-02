@@ -63,6 +63,6 @@ class DatabaseSeeder extends Seeder
         Container::factory(20)->create();
         DamageClaim::factory(20)->create();
         Vcc::factory(20)->create();
-        VccExitPaper::factory(20)->create();
+        //VccExitPaper::factory(20)->create();
     }
 }

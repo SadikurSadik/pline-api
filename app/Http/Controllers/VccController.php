@@ -7,15 +7,12 @@ use App\Http\Requests\Vcc\StoreVccDetailRequest;
 use App\Http\Resources\Vcc\GetVccDetailResource;
 use App\Http\Resources\Vcc\VccDetailResource;
 use App\Http\Resources\Vcc\VccResource;
-use App\Models\Vcc;
 use App\Services\VccService;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -93,5 +90,4 @@ class VccController extends Controller
             return errorResponse(__('Failed! Something went wrong.'));
         }
     }
-
 }

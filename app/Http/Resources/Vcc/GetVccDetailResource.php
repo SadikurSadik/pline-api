@@ -13,7 +13,7 @@ class GetVccDetailResource extends JsonResource
             'id' => $this->id,
             'vin_number' => $this->vehicle->vin_number,
             'customer_name' => $this->vehicle->customer->name,
-            'custom_duty' => $this->custom_duty
+            'custom_duty' => $this->custom_duty,
         ];
     }
 }

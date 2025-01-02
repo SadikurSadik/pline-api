@@ -46,7 +46,6 @@ class VccService
         $vcc->delete();
     }
 
-
     public function store(array $data)
     {
         return $this->saveVcc($data);
@@ -56,7 +55,6 @@ class VccService
     {
         return $this->saveVcc($data, $id);
     }
-
 
     private function saveVcc($data, $id = null)
     {

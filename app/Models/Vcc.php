@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\VccRegistrationType;
+use App\Enums\VccStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,7 +38,8 @@ class Vcc extends Model
     ];
 
     protected $casts = [
-        'vcc_exit_data' => 'array',
+        'status' => VccStatus::class,
+        'vehicle_registration_type' => VccRegistrationType::class
     ];
 
     public function vehicle(): BelongsTo

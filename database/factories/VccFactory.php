@@ -25,7 +25,7 @@ class VccFactory extends Factory
             'status' => fake()->randomElement([1, 3, 4, 5, 6, 7, 8, 10]),
             'deposit_amount' => rand(100, 5000),
             'handed_over_to' => fake()->name,
-            'vehicle_registration_type' => random_int(1, 3),
+            'vehicle_registration_type' => fake()->randomElement([1,3,5,7]),
             'issued_by' => 1,
             'issued_at' => now(),
             'handed_over_by' => 1,

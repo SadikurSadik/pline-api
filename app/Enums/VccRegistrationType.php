@@ -2,13 +2,20 @@
 
 namespace App\Enums;
 
-abstract class VccRegistrationType
+enum VccRegistrationType: int
 {
-    const EXIT = 1;
+    case EXIT = 1;
+    case LOCAL = 3;
+    case GCC = 5;
+    case SCRAP = 7;
 
-    const LOCAL = 3;
-
-    const GCC = 5;
-
-    const SCRAP = 7;
+    public function getLabel(): string
+    {
+        return match ($this) {
+            VccRegistrationType::EXIT => 'Exit',
+            VccRegistrationType::LOCAL => 'Local',
+            VccRegistrationType::GCC => 'GCC',
+            VccRegistrationType::SCRAP => 'Scrap',
+        };
+    }
 }
