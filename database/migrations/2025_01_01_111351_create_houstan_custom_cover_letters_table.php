@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('transportation_value', 45)->nullable();
             $table->string('exporter_dob', 45)->nullable();
             $table->string('ultimate_consignee_dob', 45)->nullable();
-            $table->string('consignee')->nullable();
-            $table->string('notify_party')->nullable();
-            $table->string('manifest_consignee')->nullable();
+            $table->integer('consignee')->nullable();
+            $table->integer('notify_party')->nullable();
+            $table->integer('manifest_consignee')->nullable();
             $table->timestamps();
         });
     }

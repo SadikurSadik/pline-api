@@ -135,7 +135,6 @@ class ContainerService
             ])
         );
 
-        $data['container_type'] = Arr::get($data, 'dock_container_type', '');
         DockReceipt::updateOrCreate(
             ['container_id' => $container->id],
             Arr::only($data, [
@@ -148,7 +147,7 @@ class ContainerService
                 'exporting_carrier',
                 'final_destination',
                 'loading_terminal',
-                'container_type',
+                'dock_container_type',
                 'number_of_packages',
                 'by',
                 'date',

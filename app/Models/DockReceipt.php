@@ -18,7 +18,7 @@ class DockReceipt extends Model
         'exporting_carrier',
         'final_destination',
         'loading_terminal',
-        'container_type',
+        'dock_container_type',
         'number_of_packages',
         'by',
         'date',

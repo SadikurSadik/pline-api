@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('exporting_carrier')->nullable();
             $table->string('final_destination')->nullable();
             $table->string('loading_terminal')->nullable();
-            $table->string('container_type')->nullable();
+            $table->string('dock_container_type')->nullable();
             $table->string('number_of_packages')->nullable();
             $table->string('by')->nullable();
             $table->date('date')->nullable();
