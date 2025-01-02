@@ -34,7 +34,6 @@ class VccFactory extends Factory
             'vcc_attachment' => null,
             'bill_of_entry_attachment' => null,
             'other_attachment' => null,
-            'vcc_exit_data' => null,
         ];
     }
 }

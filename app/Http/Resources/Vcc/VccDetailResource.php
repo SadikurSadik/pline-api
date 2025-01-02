@@ -16,6 +16,7 @@ class VccDetailResource extends JsonResource
             'vin_number' => $this->vehicle->vin_number,
             'service_provider' => $this->vehicle->service_provider,
             'container' => $this->container->container_number,
+            'arrival_date' => $this->container->arrival_date,
             'declaration_number' => $this->declaration_number,
             'declaration_date' => $this->declaration_date,
             'custom_duty_amount' => $this->custom_duty,
