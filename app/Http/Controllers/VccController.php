@@ -3,13 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Exports\VccsExport;
+use App\Http\Requests\Vcc\StoreVccDetailRequest;
+use App\Http\Resources\Vcc\GetVccDetailResource;
 use App\Http\Resources\Vcc\VccDetailResource;
 use App\Http\Resources\Vcc\VccResource;
+use App\Models\Vcc;
 use App\Services\VccService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -50,4 +56,42 @@ class VccController extends Controller
 
         return Excel::download(new VccsExport($request->all()), 'vcc.xlsx');
     }
+
+    public function getVccDetail($id): AnonymousResourceCollection
+    {
+        $vccDetail = $this->service->vccDetail($id);
+
+        return GetVccDetailResource::collection($vccDetail);
+    }
+
+    public function storeVccDetail($containerId, StoreVccDetailRequest $request): JsonResponse
+    {
+        try {
+            DB::beginTransaction();
+            $data = $request->all();
+
+            $commonData = $request->only(['declaration_number', 'declaration_date', 'received_date']);
+            foreach ($request->custom_duty as $id => $dutyAmount) {
+                $this->service->update(
+                    $id,
+                    array_merge(
+                        $commonData,
+                        [
+                            'custom_duty' => $dutyAmount,
+                            'in_hand' => array_key_exists($id, $data['in_hand']),
+                        ]
+                    )
+                );
+            }
+            DB::commit();
+
+            return successResponse(__('VCC detail added successfully.'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('store vcc detail: '.$e->getMessage());
+
+            return errorResponse(__('Failed! Something went wrong.'));
+        }
+    }
+
 }
