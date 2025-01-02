@@ -123,6 +123,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* damage claim related endpoints */
 
     /* vcc related endpoints */
+    Route::post('vcc/{id}/hand-over', [VccController::class, 'vccHandOver']);
     Route::get('vcc-reset/{id}', [VccController::class, 'VccReset']);
     Route::post('vcc/upload-attachment', [VccController::class, 'uploadVccAttachment']);
     Route::post('vcc/{id}/store-attachment', [VccController::class, 'storeVccAttachment']);

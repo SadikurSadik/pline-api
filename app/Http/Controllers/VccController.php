@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VccRegistrationType;
 use App\Enums\VccStatus;
 use App\Exports\VccsExport;
 use App\Http\Requests\Vcc\StoreVccAttachmentRequest;
 use App\Http\Requests\Vcc\StoreVccDetailRequest;
+use App\Http\Requests\Vcc\VccHandOverRequest;
 use App\Http\Resources\Vcc\GetVccDetailResource;
 use App\Http\Resources\Vcc\VccDetailResource;
 use App\Http\Resources\Vcc\VccResource;
+use App\Models\Vcc;
 use App\Services\FileManagerService;
 use App\Services\VccService;
 use Illuminate\Http\JsonResponse;
@@ -165,6 +168,32 @@ class VccController extends Controller
             Log::info($e->getMessage());
 
             return errorResponse(__('Failed! VCC reset failed.'));
+        }
+    }
+
+    public function vccHandOver($id, VccHandOverRequest $request): JsonResponse
+    {
+        try {
+            $vcc = Vcc::with('exit_paper')->findOrFail($id);
+            if ($vcc->status !== VccStatus::ON_HAND || ! empty($vcc->exit_paper)) {
+                return errorResponse(__('VCC already handed over previously.'));
+            }
+
+            $vcc->update([
+                'vehicle_registration_type' => $request->vehicle_registration_type,
+                'handed_over_at' => \Illuminate\Support\Carbon::parse(
+                    $request->handed_over_date.' '.$request->handed_over_time
+                ),
+                'handed_over_to' => $request->handed_over_to,
+                'deposit_amount' => $request->vehicle_registration_type == VccRegistrationType::EXIT->value ? $request->deposit_amount : 0,
+                'status' => VccStatus::HANDED_OVER,
+            ]);
+
+            return successResponse(__('VCC handed over updated successfully.'));
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+
+            return errorResponse(__('Failed! VCC handed over failed.'));
         }
     }
 }
