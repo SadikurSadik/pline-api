@@ -22,6 +22,7 @@ class VccResource extends JsonResource
             'invoice' => null,
             'note' => null,
             'service_provider' => $this->vehicle->service_provider,
+            'container_id' => $this->container_id,
             'container' => $this->container->container_number,
             'arrival_date' => $this->container->arrival_date,
             'declaration_number' => $this->declaration_number,
