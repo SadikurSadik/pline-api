@@ -114,6 +114,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* containers related endpoints */
 
     /* damage claim related endpoints */
+    Route::get('damage-claims/{id}/print-voucher-pdf', [DamageClaimController::class, 'printAsPdfVoucher']);
     Route::put('damage-claims/{id}/approve', [DamageClaimController::class, 'damageClaimApprove']);
     Route::put('damage-claims/{id}/reject', [DamageClaimController::class, 'damageClaimReject']);
     Route::get('damage-claims/{id}/download-photos', [DamageClaimController::class, 'downloadDamageClaimPhotos']);

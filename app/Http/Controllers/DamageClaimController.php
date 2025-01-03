@@ -7,6 +7,7 @@ use App\Http\Requests\DamageClaim\StoreDamageClaimRequest;
 use App\Http\Requests\DamageClaim\UpdateDamageClaimRequest;
 use App\Http\Resources\DamageClaim\DamageClaimDetailResource;
 use App\Http\Resources\DamageClaim\DamageClaimResource;
+use App\Models\DamageClaim;
 use App\Services\DamageClaimService;
 use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
@@ -139,5 +140,19 @@ class DamageClaimController extends Controller
 
             return errorResponse(__('Something Wrong'));
         }
+    }
+
+    public function printAsPdfVoucher($id)
+    {
+        $data = DamageClaim::with('vehicle.customer')->where('id', $id)->first();
+        $pdf = \niklasravnsborg\LaravelPdf\Facades\Pdf::loadView('damage-claim.voucher_pdf', compact('data'), [], [
+            'format' => 'A4',
+            'defaultFont' => 'sans-serif',
+            'isRemoteEnabled' => true,
+        ]);
+
+        $fileName = 'Damage_Claim_Voucher_'.str_pad($data->id, 5, '0', STR_PAD_LEFT).'.pdf';
+
+        return $pdf->stream($fileName);
     }
 }
