@@ -132,6 +132,14 @@ class PermissionSeeder extends Seeder
             ['name' => 'view damage claim', 'module_id' => 16, 'guard_name' => 'web'],
             ['name' => 'delete damage claim', 'module_id' => 16, 'guard_name' => 'web'],
             ['name' => 'export excel damage claim', 'module_id' => 16, 'guard_name' => 'web'],
+
+            // damage claim module
+            ['name' => 'manage vcc', 'module_id' => 17, 'guard_name' => 'web'],
+            ['name' => 'create vcc', 'module_id' => 17, 'guard_name' => 'web'],
+            ['name' => 'update vcc', 'module_id' => 17, 'guard_name' => 'web'],
+            ['name' => 'view vcc', 'module_id' => 17, 'guard_name' => 'web'],
+            ['name' => 'delete vcc', 'module_id' => 17, 'guard_name' => 'web'],
+            ['name' => 'export excel vcc', 'module_id' => 17, 'guard_name' => 'web'],
         ]);
     }
 }
