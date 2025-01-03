@@ -4,11 +4,18 @@ namespace App\Services;
 
 use App\Enums\VccRegistrationType;
 use App\Enums\VccStatus;
+use App\Filters\FilterByArrivedDateOnVehicleContainerRelation;
+use App\Filters\FilterByCustomerUserOnVehicleRelation;
+use App\Filters\FilterByDeclarationDate;
 use App\Filters\FilterByDeclarationNumber;
 use App\Filters\FilterByHandedOverTo;
+use App\Filters\FilterByLotNumberOnVehicleRelation;
 use App\Filters\FilterByReceivedDate;
+use App\Filters\FilterByServiceProviderOnVehicleRelation;
 use App\Filters\FilterByStatus;
+use App\Filters\FilterByVccGlobalSearch;
 use App\Filters\FilterByVehicleRegistrationType;
+use App\Filters\FilterByVinNumberOnVehicleRelation;
 use App\Models\Vcc;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -19,13 +26,20 @@ class VccService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Vcc::with(['vehicle', 'vehicle.customer', 'container', 'exit_paper', 'issued_by']);
+        $query = Vcc::with(['vehicle.customer', 'container', 'exit_paper', 'issued_by']);
 
         return app(FilterPipelineService::class)->apply($query, [
-            FilterByStatus::class,
-            FilterByReceivedDate::class,
+            FilterByVccGlobalSearch::class,
+            FilterByCustomerUserOnVehicleRelation::class,
+            FilterByVinNumberOnVehicleRelation::class,
+            FilterByServiceProviderOnVehicleRelation::class,
+            FilterByArrivedDateOnVehicleContainerRelation::class,
+            FilterByLotNumberOnVehicleRelation::class,
             FilterByDeclarationNumber::class,
+            FilterByDeclarationDate::class,
+            FilterByStatus::class,
             FilterByVehicleRegistrationType::class,
+            FilterByReceivedDate::class,
             FilterByHandedOverTo::class,
         ], $filters);
     }

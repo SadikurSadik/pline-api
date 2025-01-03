@@ -29,6 +29,16 @@ abstract class BaseFilter
     }
 
     /**
+     * Apply a basic "where" filter.
+     */
+    protected function whereDateFilter(EloquentBuilder|Builder $query, string $key, mixed $value): void
+    {
+        if (! empty($value)) {
+            $query->whereDate($key, $value);
+        }
+    }
+
+    /**
      * Apply a "like" filter.
      */
     protected function likeFilter(EloquentBuilder|Builder $query, string $key, ?string $value): void
