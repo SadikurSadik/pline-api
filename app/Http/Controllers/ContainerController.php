@@ -15,14 +15,28 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class ContainerController extends Controller
+class ContainerController extends Controller implements HasMiddleware
 {
     public function __construct(protected ContainerService $service) {}
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role_or_permission:owner|manage container', only: ['index']),
+            new Middleware('role_or_permission:owner|create container', only: ['store']),
+            new Middleware('role_or_permission:owner|update container', only: ['update']),
+            new Middleware('role_or_permission:owner|view container', only: ['show']),
+            new Middleware('role_or_permission:owner|delete container', only: ['destroy']),
+            new Middleware('role_or_permission:owner|export excel container', only: ['exportExcel']),
+        ];
+    }
 
     public function index(Request $request): AnonymousResourceCollection
     {

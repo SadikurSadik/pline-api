@@ -12,12 +12,26 @@ use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class CustomerController extends Controller
+class CustomerController extends Controller implements HasMiddleware
 {
     public function __construct(protected CustomerService $service) {}
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role_or_permission:owner|manage customer', only: ['index']),
+            new Middleware('role_or_permission:owner|create customer', only: ['store']),
+            new Middleware('role_or_permission:owner|update customer', only: ['update']),
+            new Middleware('role_or_permission:owner|view customer', only: ['show']),
+            new Middleware('role_or_permission:owner|delete customer', only: ['destroy']),
+            new Middleware('role_or_permission:owner|export excel customer', only: ['exportExcel']),
+        ];
+    }
 
     public function index(Request $request): AnonymousResourceCollection
     {

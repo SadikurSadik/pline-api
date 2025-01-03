@@ -14,13 +14,27 @@ use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class DamageClaimController extends Controller
+class DamageClaimController extends Controller implements HasMiddleware
 {
     public function __construct(protected DamageClaimService $service) {}
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role_or_permission:owner|manage damage claim', only: ['index']),
+            new Middleware('role_or_permission:owner|create damage claim', only: ['store']),
+            new Middleware('role_or_permission:owner|update damage claim', only: ['update']),
+            new Middleware('role_or_permission:owner|view damage claim', only: ['show']),
+            new Middleware('role_or_permission:owner|delete damage claim', only: ['destroy']),
+            new Middleware('role_or_permission:owner|export excel damage claim', only: ['exportExcel']),
+        ];
+    }
 
     public function index(Request $request): AnonymousResourceCollection
     {

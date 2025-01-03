@@ -16,12 +16,26 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class VehicleController extends Controller
+class VehicleController extends Controller implements HasMiddleware
 {
     public function __construct(protected VehicleService $service) {}
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role_or_permission:owner|manage vehicle', only: ['index']),
+            new Middleware('role_or_permission:owner|create vehicle', only: ['store']),
+            new Middleware('role_or_permission:owner|update vehicle', only: ['update']),
+            new Middleware('role_or_permission:owner|view vehicle', only: ['show']),
+            new Middleware('role_or_permission:owner|delete vehicle', only: ['destroy']),
+            new Middleware('role_or_permission:owner|export excel vehicle', only: ['exportExcel']),
+        ];
+    }
 
     public function index(Request $request): AnonymousResourceCollection
     {

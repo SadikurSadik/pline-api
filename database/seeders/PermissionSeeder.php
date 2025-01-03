@@ -89,7 +89,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'delete consignee', 'module_id' => 10, 'guard_name' => 'web'],
             ['name' => 'export excel consignee', 'module_id' => 10, 'guard_name' => 'web'],
 
-            // consignee module
+            // towing rate module
             ['name' => 'manage towing rate', 'module_id' => 11, 'guard_name' => 'web'],
             ['name' => 'create towing rate', 'module_id' => 11, 'guard_name' => 'web'],
             ['name' => 'update towing rate', 'module_id' => 11, 'guard_name' => 'web'],
@@ -133,7 +133,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'delete damage claim', 'module_id' => 16, 'guard_name' => 'web'],
             ['name' => 'export excel damage claim', 'module_id' => 16, 'guard_name' => 'web'],
 
-            // damage claim module
+            // vcc module
             ['name' => 'manage vcc', 'module_id' => 17, 'guard_name' => 'web'],
             ['name' => 'create vcc', 'module_id' => 17, 'guard_name' => 'web'],
             ['name' => 'update vcc', 'module_id' => 17, 'guard_name' => 'web'],
