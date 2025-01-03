@@ -153,7 +153,11 @@ class DamageClaimController extends Controller implements HasMiddleware
 
     public function printAsPdfVoucher($id)
     {
-        $data = DamageClaim::with('vehicle.customer')->where('id', $id)->first();
+        $data = DamageClaim::with('vehicle.customer')->findOrFail($id);
+        if ($data->status != DamageClaimStatus::Approved) {
+            return errorResponse(__('Only Approved damage claims are allowed to print voucher!'));
+        }
+
         $pdf = \niklasravnsborg\LaravelPdf\Facades\Pdf::loadView('damage-claim.voucher_pdf', compact('data'), [], [
             'format' => 'A4',
             'defaultFont' => 'sans-serif',

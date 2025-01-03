@@ -92,13 +92,12 @@
             <tr>
                 <td>
                     <div class="">
-                        <img width="140"
-                             src="{{ asset('images/logo.png') }}">
+                        <img width="140" src="{{ asset('images/logo.png') }}">
                     </div>
                 </td>
                 <td align="right">
                     <div style="color: #d1652b; font-size: 18px;">
-                        <h2 style="">NaZarov Sea Shipping L.L.C</h2>
+                        <h2 style="">{{ config('app.company_name') }}</h2>
                     </div>
                 </td>
             </tr>
@@ -113,7 +112,7 @@
                 <td align="left" style="padding-right: 12px;">
                     <table>
                         <tr>
-                            <td class="border-radius" style="padding: 12px 20px;"><strong>{{ number_format(abs($data->approve_amount), 2) }}</strong></td>
+                            <td class="border-radius" style="padding: 12px 20px;"><strong>{{ number_format(abs($data->approved_amount), 2) }}</strong></td>
                             <td class="border-radius" style="padding: 12px;">AED</td>
                         </tr>
                     </table>
@@ -149,19 +148,19 @@
         <h4 class="border-dotted" style="margin-bottom: 30px;">
             <span class="label-color">APPROVED AMOUNT:</span>
             <span class="fw-bold" dir="ltr">
-                {{ number_format( abs($data->approve_amount), 2 ) }}
+                {{ number_format( abs($data->approved_amount), 2 ) }}
             </span>
         </h4>
         <h4 class="border-dotted" style="margin-bottom: 30px;">
             <span class="label-color">VIN:</span>
             <span class="fw-normal" dir="ltr">
-                {{ $data?->vehicle?->vin }} ({{ $data->title }})
+                {{ $data?->vehicle?->vin_number }} ({{ $data->title }})
             </span>
         </h4>
 
-        <h4 class="border-dotted" style="margin-bottom: 30px;">
+        <h4 class="@if(! $data->description) border-dotted @endif" style="margin-bottom: 30px;">
             <span class="label-color">DESCRIPTION:</span>
-            <span class="fw-normal" dir="ltr">
+            <span class="fw-normal @if($data->description) border-dotted @endif" dir="ltr">
                 {!! $data->description !!}
             </span>
         </h4>
@@ -191,8 +190,8 @@
 
     <div style="border-top: 4px solid #403a94;">
         <div style="margin-top: 5px;">
-            <div style="font-size: 13px; margin-bottom: 0; text-align: center" >Tel: 065360031, Mob: 0562826798, P.O.Box:83864, Street #23, Industrial Area No. 4, Sharjah- U.A.E</div>
-            <div style="font-size: 13px; margin-bottom: 0; margin-top: 5px; text-align: center" >E-mail: info@olfatshipping.com / olfatshipping@outlook.com / www.olfatshipping.com</div>
+            <div style="font-size: 13px; margin-bottom: 0; text-align: center" >Mobile: {{ config('app.contact_number') }}, P.O.Box:83864, {{ config('app.address') }}</div>
+            <div style="font-size: 13px; margin-bottom: 0; margin-top: 5px; text-align: center" >E-mail: {{ config('app.contact_email') }} / {{ config('app.website') }}</div>
         </div>
     </div>
 </div>

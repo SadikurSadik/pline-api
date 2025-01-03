@@ -125,4 +125,9 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'company_name' => 'NaZarov Sea Shipping L.L.C',
+    'contact_number' => '+971 50 123 4567',
+    'contact_email' => 'info@plineshipping.com',
+    'address' => 'Dubai, United Arab Emirates',
+    'website' => 'https://plineshipping.com',
 ];
