@@ -18,7 +18,7 @@ class NotificationController extends Controller
             $data[$key]['is_read'] = ! empty($item->seen_users->where('user_id', auth()->user()->id)->first());
         }
 
-        return successResponse('', NotificationResource::collection($data)->additional([
+        return successResponse('', 200, NotificationResource::collection($data)->additional([
             'notifications_count' => $this->service->myUnreadNotificationCount(),
         ]));
     }
