@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DamageClaimStatus;
 use App\Exports\DamageClaimsExport;
 use App\Http\Requests\DamageClaim\StoreDamageClaimRequest;
 use App\Http\Requests\DamageClaim\UpdateDamageClaimRequest;
@@ -13,9 +14,7 @@ use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -53,6 +52,11 @@ class DamageClaimController extends Controller
 
     public function destroy(string $id): JsonResponse
     {
+        $claim = $this->service->getById($id);
+        if ($claim->status != DamageClaimStatus::Approved) {
+            return errorResponse(__('Only Rejected damage claims are allowed to delete!'));
+        }
+
         $this->service->destroy($id);
 
         return successResponse(__('Damage Claim deleted successfully.'));
@@ -63,21 +67,20 @@ class DamageClaimController extends Controller
         return Excel::download(new DamageClaimsExport($request->all()), 'damage_claims.xlsx');
     }
 
-    public function uploadPhoto(Request $request): JsonResponse
+    public function uploadPhoto(Request $request, FileManagerService $fileStorage): JsonResponse
     {
         $request->validate([
             'photo' => 'required|image',
         ]);
 
         try {
-            // $upload = app(FileManagerService::class)->uploadPhoto(file_get_contents($request->file), 'uploads/brands/', null, 100);
-            $upload = $request->photo->store('uploads/damage-claims');
+            $upload = $fileStorage->uploadPhoto(file_get_contents($request->file), 'uploads/damage-claims');
 
             if (! $upload) {
                 return response()->json(['success' => false, 'url' => null, 'message' => 'Failed to file upload'], 400);
             }
 
-            return response()->json(['success' => true, 'url' => Storage::url($upload)]);
+            return response()->json(['success' => true, 'url' => $upload]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -107,11 +110,7 @@ class DamageClaimController extends Controller
         ]);
 
         try {
-            DB::beginTransaction();
-
             $this->service->approveDamageClaim($data, $id);
-
-            DB::commit();
 
             return successResponse(__('Damage Claimed approved successfully.'));
         } catch (\Exception $exception) {
@@ -128,11 +127,7 @@ class DamageClaimController extends Controller
         ]);
 
         try {
-            DB::beginTransaction();
-
             $this->service->rejectDamageClaim($data, $id);
-
-            DB::commit();
 
             return successResponse(__('Damage Claimed rejected successfully.'));
         } catch (\Exception $exception) {

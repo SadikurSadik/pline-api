@@ -81,7 +81,7 @@ class UpdateContainerRequest extends FormRequest
             'transportation_value' => 'nullable|max:45',
             'exporter_dob' => 'nullable|max:45',
             'ultimate_consignee_dob' => 'nullable|max:45',
-            'consignee_id' => 'nullable|integer',
+            'consignee' => 'nullable|integer',
             'notify_party' => 'nullable|integer',
             'manifest_consignee' => 'nullable|integer',
         ];

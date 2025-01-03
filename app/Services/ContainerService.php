@@ -119,6 +119,13 @@ class ContainerService
             }
         }
 
+        if (! empty($data['file_urls']['documents'])) {
+            $this->saveDocument(
+                $data['file_urls']['documents'],
+                $container->id
+            );
+        }
+
         HoustanCustomCoverLetter::updateOrCreate(
             ['container_id' => $container->id],
             Arr::only($data, [

@@ -114,7 +114,7 @@ class VehicleController extends Controller
         $type = $request->get('type', VehiclePhotoType::YARD_PHOTO->value);
         $photos = $this->service->getVehiclePhotos($id, $type)->pluck('name');
         $zipFileName = 'vehicle_photos_'.date('Y-m-d').'.zip';
-        $zipPath = storage_path("app/public/uploads/vehicles/photos/tmp/{$zipFileName}");
+        $zipPath = storage_path("app/public/uploads/vehicles/photos/{$zipFileName}");
 
         return $fileManagerService->downloadAsZip($zipPath, $photos);
     }
@@ -124,7 +124,7 @@ class VehicleController extends Controller
         $type = $request->get('type', VehicleDocumentType::DOCUMENT->value);
         $documents = $this->service->getVehicleDocuments($id, $type)->pluck('name');
         $zipFileName = 'vehicle_documents_'.date('Y-m-d').'.zip';
-        $zipPath = storage_path("app/public/uploads/vehicles/documents/tmp/{$zipFileName}");
+        $zipPath = storage_path("app/public/uploads/vehicles/documents/{$zipFileName}");
 
         return $fileManagerService->downloadAsZip($zipPath, $documents);
     }
@@ -139,7 +139,7 @@ class VehicleController extends Controller
         try {
             $this->service->saveVehiclePhoto($request->photos, $id, $request->type);
 
-            return redirect()->back()->with('success', 'Photos added successfully.');
+            return successResponse('Photos added successfully.');
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

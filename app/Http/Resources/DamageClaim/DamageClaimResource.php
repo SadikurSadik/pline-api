@@ -16,6 +16,7 @@ class DamageClaimResource extends JsonResource
             'vin_number' => $this->vehicle?->vin_number,
             'customer_name' => $this->customer?->name,
             'claim_amount' => $this->claim_amount,
+            'approved_amount' => $this->approved_amount,
             'description' => $this->description,
             'status_name' => $this->status->getLabel(),
         ];

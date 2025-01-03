@@ -15,14 +15,14 @@ class HoustanCustomCoverLetter extends Model
         'transportation_value',
         'exporter_dob',
         'ultimate_consignee_dob',
-        'consignee_id',
+        'consignee',
         'notify_party',
         'manifest_consignee',
     ];
 
     public function consignee_item(): BelongsTo
     {
-        return $this->belongsTo(Consignee::class, 'consignee_id');
+        return $this->belongsTo(Consignee::class, 'consignee');
     }
 
     public function notify_party_item(): BelongsTo

@@ -22,9 +22,12 @@ class HoustanCustomCoverLetterResource extends JsonResource
             'transportation_value' => $this->transportation_value,
             'exporter_dob' => $this->exporter_dob,
             'ultimate_consignee_dob' => $this->ultimate_consignee_dob,
-            'consignee_id' => $this->consignee_id,
+            'consignee' => $this->consignee,
+            'consignee_name' => data_get($this, 'consignee_item.name'),
             'notify_party' => $this->notify_party,
+            'notify_party_name' => data_get($this, 'notify_party_item.name'),
             'manifest_consignee' => $this->manifest_consignee,
+            'manifest_consignee_name' => data_get($this, 'manifest_consignee_item.name'),
         ];
     }
 }
