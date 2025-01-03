@@ -59,6 +59,17 @@ abstract class BaseFilter
     }
 
     /**
+     * Apply a "where between" filter.
+     */
+    protected function whereDateBetweenFilter(EloquentBuilder|Builder $query, string $key, ?array $range): void
+    {
+        if (is_array($range) && count($range) === 2) {
+            $query->whereDate($key, '>=', $range[0])
+                ->whereDate($key, '<=', $range[1]);
+        }
+    }
+
+    /**
      * Apply an OR filter for multiple fields.
      */
     protected function orFilter(EloquentBuilder|Builder $query, array $fields, ?string $value): void

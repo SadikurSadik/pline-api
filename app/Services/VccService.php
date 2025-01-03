@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\VccRegistrationType;
 use App\Enums\VccStatus;
 use App\Filters\FilterByArrivedDateOnVehicleContainerRelation;
+use App\Filters\FilterByContainerNumberOnVehicleRelation;
 use App\Filters\FilterByCustomerUserOnVehicleRelation;
 use App\Filters\FilterByDeclarationDate;
 use App\Filters\FilterByDeclarationNumber;
@@ -33,6 +34,7 @@ class VccService
             FilterByCustomerUserOnVehicleRelation::class,
             FilterByVinNumberOnVehicleRelation::class,
             FilterByServiceProviderOnVehicleRelation::class,
+            FilterByContainerNumberOnVehicleRelation::class,
             FilterByArrivedDateOnVehicleContainerRelation::class,
             FilterByLotNumberOnVehicleRelation::class,
             FilterByDeclarationNumber::class,

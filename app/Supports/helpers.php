@@ -106,8 +106,8 @@ if (! function_exists('dateRangeToDateTimeRange')) {
         }
 
         return [
-            \Carbon\Carbon::parse($dateRange[0])->startOfDay(),
-            \Carbon\Carbon::parse($dateRange[1])->endOfDay(),
+            \Carbon\Carbon::parse($dateRange[0])->startOfDay()->format('Y-m-d H:i:s'),
+            \Carbon\Carbon::parse($dateRange[1])->endOfDay()->format('Y-m-d H:i:s'),
         ];
     }
 }
