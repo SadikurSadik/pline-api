@@ -9,7 +9,7 @@ class FilterByReceivedDate extends BaseFilter
 {
     public function handle($query, Closure $next, $data)
     {
-        if( Str::contains($data['received_date'] ?? '', ' to ')) {
+        if (Str::contains($data['received_date'] ?? '', ' to ')) {
             $range = dateRangeToDateTimeRange(explode(' to ', $data['received_date']));
             $this->whereBetweenFilter($query, 'received_date', $range);
         } elseif (! empty($data['received_date'])) {

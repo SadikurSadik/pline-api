@@ -101,8 +101,8 @@ if (! function_exists('amountFormat')) {
 if (! function_exists('dateRangeToDateTimeRange')) {
     function dateRangeToDateTimeRange($dateRange): array
     {
-        if(count($dateRange) !== 2) {
-            return  $dateRange;
+        if (count($dateRange) !== 2) {
+            return $dateRange;
         }
 
         return [

@@ -24,7 +24,7 @@ class VccDetailResource extends JsonResource
             'declaration_date' => $this->declaration_date,
             'custom_duty_amount' => $this->custom_duty,
             'deposit_amount' => $this->deposit_amount,
-            'exit_paper' => !empty($this->exit_paper) ?? new ExitPaperResource($this->exit_paper),
+            'exit_paper' => ! empty($this->exit_paper) ?? new ExitPaperResource($this->exit_paper),
         ];
     }
 }
