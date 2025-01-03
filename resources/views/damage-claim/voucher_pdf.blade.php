@@ -93,12 +93,12 @@
                 <td>
                     <div class="">
                         <img width="140"
-                             src="{{--{{'data:image/png;base64,'.base64_encode(file_get_contents(public_path('/uploads/images/logo.png')))}}--}}">
+                             src="{{ asset('images/logo.png') }}">
                     </div>
                 </td>
                 <td align="right">
                     <div style="color: #d1652b; font-size: 18px;">
-                        <h2 style="">Abdul Razeq Olfat Used Car Tr L.L.C</h2>
+                        <h2 style="">NaZarov Sea Shipping L.L.C</h2>
                     </div>
                 </td>
             </tr>
