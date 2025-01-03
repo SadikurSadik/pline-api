@@ -22,7 +22,6 @@ class Vehicle extends Model
         'version_number',
         'customer_user_id',
         'container_id',
-        'export_id',
         'lot_number',
         'vin_number',
         'year',
@@ -91,6 +90,11 @@ class Vehicle extends Model
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function container(): BelongsTo
+    {
+        return $this->belongsTo(Container::class);
     }
 
     public function state(): BelongsTo
