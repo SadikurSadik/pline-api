@@ -26,6 +26,7 @@ class VccResource extends JsonResource
             'arrival_date' => $this->container->arrival_date,
             'declaration_number' => $this->declaration_number,
             'declaration_date' => $this->declaration_date,
+            'status' => $this->status?->value,
             'status_name' => $this->status->getLabel(),
             'vehicle_registration_type' => $this->vehicle_registration_type->getLabel(),
             'vcc_received_date' => $this->received_date,
