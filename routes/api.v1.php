@@ -159,6 +159,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json(config('setting.mobile_languages'));
     });
 
+    Route::post('notes', [NoteController::class, 'store']);
+
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
             Route::get('countries', 'searchCountry');

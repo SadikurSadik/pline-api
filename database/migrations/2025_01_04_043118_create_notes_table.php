@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigInteger('container_id')->nullable();
             $table->mediumText('description');
             $table->tinyInteger('cust_view')->nullable()->default(1);
-            $table->tinyInteger('cust_view')->nullable()->default(1);
+            $table->tinyInteger('admin_view')->nullable()->default(1);
             $table->bigInteger('created_by');
             $table->softDeletes();
             $table->timestamps();
