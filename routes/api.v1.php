@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminNoteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ClearanceRateController;
@@ -133,6 +134,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('vcc/export-excel', [VccController::class, 'exportExcel']);
     Route::apiResource('vccs', VccController::class);
     /* vcc related endpoints */
+
+    /* note related endpoints */
+    Route::post('vcc/{id}/store-vcc-note', [AdminNoteController::class, 'storeVccNote']);
+    Route::post('vcc/{id}/store-submission-note', [AdminNoteController::class, 'storeSubmissionVcc']);
+    Route::get('vcc/{id}/get-vcc-note', [AdminNoteController::class, 'getVccNote']);
+    Route::get('vcc/{id}/get-submission-note', [AdminNoteController::class, 'getSubmissionNote']);
+    Route::post('vehicle/{id}/note', [AdminNoteController::class, 'storeVehicleNote']);
+    Route::get('vehicle/{id}/note', [AdminNoteController::class, 'getVehicleNote']);
+    Route::post('container/{id}/note', [AdminNoteController::class, 'storeContainerNote']);
+    Route::get('container/{id}/note', [AdminNoteController::class, 'getContainerNote']);
+    /* note related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
