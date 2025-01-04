@@ -57,11 +57,11 @@ class VccResource extends JsonResource
 
     private function showReceiveExitPaperButton()
     {
-        return $this->status == VccStatus::HANDED_OVER && $this->vehicle_registration_type == VccRegistrationType::EXIT && empty( $this->exit_paper);
+        return $this->status == VccStatus::HANDED_OVER && $this->vehicle_registration_type == VccRegistrationType::EXIT && empty($this->exit_paper);
     }
 
     private function showSubmitExitPaperButton()
     {
-        return $this->status == VccStatus::HANDED_OVER && $this->vehicle_registration_type == VccRegistrationType::EXIT && !empty( $this->exit_paper && $this->exit_paper->status == VccStatus::EXIT_PAPER_RECEIVED);
+        return $this->status == VccStatus::HANDED_OVER && $this->vehicle_registration_type == VccRegistrationType::EXIT && ! empty($this->exit_paper && $this->exit_paper->status == VccStatus::EXIT_PAPER_RECEIVED);
     }
 }

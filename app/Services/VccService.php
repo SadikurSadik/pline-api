@@ -12,8 +12,11 @@ use App\Filters\FilterByDeclarationNumber;
 use App\Filters\FilterByHandedOverTo;
 use App\Filters\FilterByLotNumberOnVehicleRelation;
 use App\Filters\FilterByReceivedDate;
+use App\Filters\FilterByReceivedDateOnExitPaperRelation;
 use App\Filters\FilterByServiceProviderOnVehicleRelation;
 use App\Filters\FilterByStatus;
+use App\Filters\FilterByStatusOnExitPaperRelation;
+use App\Filters\FilterBySubmissionDateOnExitPaperRelation;
 use App\Filters\FilterByVccGlobalSearch;
 use App\Filters\FilterByVehicleRegistrationType;
 use App\Filters\FilterByVinNumberOnVehicleRelation;
@@ -43,6 +46,9 @@ class VccService
             FilterByVehicleRegistrationType::class,
             FilterByReceivedDate::class,
             FilterByHandedOverTo::class,
+            FilterByReceivedDateOnExitPaperRelation::class,
+            FilterByStatusOnExitPaperRelation::class,
+            FilterBySubmissionDateOnExitPaperRelation::class,
         ], $filters);
     }
 
