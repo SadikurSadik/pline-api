@@ -57,7 +57,7 @@ class StoreVehicleRequest extends FormRequest
             'note' => 'nullable|max:300',
             'vehicle_features' => 'nullable|array',
             'vehicle_conditions' => 'nullable|array',
-            'status' => ['required', new Enum(VehicleStatus::class)],
+            'status' => ['nullable', new Enum(VehicleStatus::class)],
             'file_urls' => 'required|array',
             'file_urls.yard_photos.*' => 'nullable|url',
             'file_urls.auction_photos.*' => 'nullable|url',
