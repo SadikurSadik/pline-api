@@ -8,7 +8,6 @@ use App\Enums\VehicleTowBy;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class UpdateVehicleRequest extends FormRequest
 {
@@ -39,12 +38,12 @@ class UpdateVehicleRequest extends FormRequest
             'title_amount' => 'nullable|numeric|min:0',
             'storage_amount' => 'nullable|numeric|min:0',
             'additional_charges' => 'nullable|numeric|min:0',
-            'condition' => ['nullable', new Enum(Boolean::class)],
-            'damaged' => ['nullable', new Enum(Boolean::class)],
-            'pictures' => ['nullable', new Enum(Boolean::class)],
-            'keys' => ['nullable', new Enum(Boolean::class)],
-            'towed' => ['nullable', new Enum(Boolean::class)],
-            'title_received' => ['nullable', new Enum(Boolean::class)],
+            'condition' => ['nullable', new Enum(BooleanStatus::class)],
+            'damaged' => ['nullable', new Enum(BooleanStatus::class)],
+            'pictures' => ['nullable', new Enum(BooleanStatus::class)],
+            'keys' => ['nullable', new Enum(BooleanStatus::class)],
+            'towed' => ['nullable', new Enum(BooleanStatus::class)],
+            'title_received' => ['nullable', new Enum(BooleanStatus::class)],
             'title_received_date' => 'nullable|date',
             'title_number' => 'nullable|numeric',
             'title_state' => 'nullable|max:50',

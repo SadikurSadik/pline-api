@@ -171,10 +171,10 @@ class VehicleController extends Controller implements HasMiddleware
         return new VehiclePhotosResource($data);
     }
 
-    public function changeNoteStatus( $id, Request $request ): JsonResponse
+    public function changeNoteStatus($id, Request $request): JsonResponse
     {
-        Vehicle::find( $id )->update( [ 'notes_status' => $request->get( 'note_status' ) ] );
+        Vehicle::find($id)->update(['notes_status' => $request->get('note_status')]);
 
-        return response()->json( [ 'message' => $request->get( 'note_status' ) == '1' ? 'Note Closed successfully.' : 'Note opened successfully.' ] );
+        return response()->json(['message' => $request->get('note_status') == '1' ? 'Note Closed successfully.' : 'Note opened successfully.']);
     }
 }
