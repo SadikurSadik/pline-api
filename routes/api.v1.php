@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
 
     /* Dashboard related routes */
+    Route::get('dashboard-mobile', [DashboardController::class, 'dashboardMobileApi']);
     Route::get('status-overview', [DashboardController::class, 'statusOverview']);
     Route::get('monthly-sales', [DashboardController::class, 'monthlySales']);
     /* Dashboard related routes */

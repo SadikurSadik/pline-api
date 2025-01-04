@@ -85,4 +85,17 @@ class NoteService
             ->where('vehicle_id', $id)
             ->get();
     }
+
+    public function store( array $data ) {
+        return $this->saveNote( $data );
+    }
+
+    private function saveNote ( $data, $id = null )
+    {
+        $note = Note::findOrNew( $id );
+        $note->fill( $data );
+        $note->save();
+
+        return $note;
+    }
 }

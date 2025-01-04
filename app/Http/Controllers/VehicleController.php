@@ -10,6 +10,7 @@ use App\Http\Requests\Vehicle\UpdateVehicleRequest;
 use App\Http\Resources\Vehicle\VehicleDetailResource;
 use App\Http\Resources\Vehicle\VehiclePhotosResource;
 use App\Http\Resources\Vehicle\VehicleResource;
+use App\Models\Vehicle;
 use App\Services\FileManagerService;
 use App\Services\VehicleService;
 use Illuminate\Http\JsonResponse;
@@ -168,5 +169,12 @@ class VehicleController extends Controller implements HasMiddleware
         $data = $this->service->getById($id);
 
         return new VehiclePhotosResource($data);
+    }
+
+    public function changeNoteStatus( $id, Request $request )
+    {
+        Vehicle::find( $id )->update( [ 'notes_status' => $request->get( 'note_status' ) ] );
+
+        return response()->json( [ 'message' => $request->get( 'note_status' ) == '1' ? 'Note Closed successfully.' : 'Note opened successfully.' ] );
     }
 }

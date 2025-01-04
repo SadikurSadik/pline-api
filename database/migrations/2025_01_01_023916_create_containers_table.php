@@ -40,6 +40,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('container_type')->nullable();
             $table->text('container_vehicles')->nullable();
             $table->unsignedTinyInteger('status');
+            $table->tinyInteger('note_status')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

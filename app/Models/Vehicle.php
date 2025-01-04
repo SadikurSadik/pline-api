@@ -61,6 +61,7 @@ class Vehicle extends Model
         'keys',
         'note',
         'status',
+        'note_status',
     ];
 
     protected function casts(): array

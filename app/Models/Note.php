@@ -14,6 +14,8 @@ class Note extends Model
         'vehicle_id',
         'container_id',
         'description',
+        'cust_view',
+        'admin_view',
         'created_by',
     ];
 
