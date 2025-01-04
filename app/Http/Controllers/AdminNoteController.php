@@ -15,7 +15,7 @@ class AdminNoteController extends Controller
     public function storeVccNote(StoreAdminNoteRequest $request, $id): JsonResponse
     {
         $data = $request->validated();
-        $this->service->storeVcc($data, $id);
+        $this->service->storeVccNote($data, $id);
 
         return successResponse(__('Note added successfully'));
     }
@@ -23,7 +23,7 @@ class AdminNoteController extends Controller
     public function storeSubmissionVcc(StoreAdminNoteRequest $request, $id): JsonResponse
     {
         $data = $request->validated();
-        $this->service->storeSubmissionVcc($data, $id);
+        $this->service->storeVccNote($data, $id,'SUBMISSION_NOTE');
 
         return successResponse(__('Note added successfully'));
     }

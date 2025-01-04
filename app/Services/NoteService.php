@@ -8,20 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class NoteService
 {
-    public function storeVcc(array $data, int $id): void
+    public function storeVccNote(array $data, int $id, $type = 'VCC_NOTE'): void
     {
         $data['vcc_id'] = $id;
         $data['created_by'] = Auth::id();
-        $data['note_type'] = 'VCC_NOTE';
-
-        AdminNote::create($data);
-    }
-
-    public function storeSubmissionVcc(array $data, int $id): void
-    {
-        $data['vcc_id'] = $id;
-        $data['created_by'] = Auth::id();
-        $data['note_type'] = 'SUBMISSION_NOTE';
+        $data['note_type'] = $type;
 
         AdminNote::create($data);
     }
