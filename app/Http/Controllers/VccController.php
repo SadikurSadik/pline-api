@@ -8,6 +8,7 @@ use App\Exports\VccsExport;
 use App\Http\Requests\Vcc\StoreVccAttachmentRequest;
 use App\Http\Requests\Vcc\StoreVccDetailRequest;
 use App\Http\Requests\Vcc\StoreVccReceivedExitPaper;
+use App\Http\Requests\Vcc\StoreVccSubmitExitPaper;
 use App\Http\Requests\Vcc\VccHandOverRequest;
 use App\Http\Resources\Vcc\GetVccDetailResource;
 use App\Http\Resources\Vcc\VccDetailResource;
@@ -221,5 +222,24 @@ class VccController extends Controller
         $this->service->updateContainerBgColor($vcc->container_id);
 
         return successResponse(__('VCC Exit paper received successfully.'));
+    }
+
+    public function storeSubmitExitPaper($id, StoreVccSubmitExitPaper $request): JsonResponse
+    {
+        $vcc = $this->service->getById($id);
+        if ($vcc->status !== VccStatus::HANDED_OVER || ! empty($vcc->exit_paper)) {
+            return errorResponse(__('VCC exit paper already submitted previously.'));
+        }
+
+        $vcc->exit_paper->update([
+            'submission_date' => $request->submission_date,
+            'receivable_claim_amount' => $request->receivable_claim_amount,
+            'submitted_by' => auth()->user()->id,
+            'submitted_at' => now(),
+            'status' => VccStatus::EXIT_PAPER_SUBMITTED,
+        ]);
+        $this->service->updateContainerBgColor($vcc->container_id);
+
+        return successResponse(__('VCC Exit paper submitted successfully.'));
     }
 }

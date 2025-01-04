@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Vcc;
 
+use App\Enums\VccRegistrationType;
+use App\Enums\VccStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -48,6 +50,18 @@ class VccResource extends JsonResource
             'vcc_attachment' => $this->vcc_attachment,
             'bill_of_entry_attachment' => $this->bill_of_entry_attachment,
             'other_attachment' => $this->other_attachment,
+            'show_receive_exit_paper_button' => $this->showReceiveExitPaperButton(),
+            'show_submit_exit_paper_button' => $this->showSubmitExitPaperButton(),
         ];
+    }
+
+    private function showReceiveExitPaperButton()
+    {
+        return $this->status == VccStatus::HANDED_OVER && $this->vehicle_registration_type == VccRegistrationType::EXIT && empty( $this->exit_paper);
+    }
+
+    private function showSubmitExitPaperButton()
+    {
+        return $this->status == VccStatus::HANDED_OVER && $this->vehicle_registration_type == VccRegistrationType::EXIT && !empty( $this->exit_paper && $this->exit_paper->status == VccStatus::EXIT_PAPER_RECEIVED);
     }
 }
