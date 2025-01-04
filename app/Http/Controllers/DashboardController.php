@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role;
+use App\Enums\Roles;
 use App\Models\Customer;
 use App\Services\NotificationService;
 use App\Servivces\DashboardService;
@@ -75,6 +76,21 @@ class DashboardController extends Controller
         $data = $this->service->vehicleCounts($filters);
 
         return response()->json($data);
+    }
+
+    public function vehicleStatusOverview(Request $request)
+    {
+        $filters = $request->all();
+        if (optional(auth()->user())->role == Roles::CUSTOMER) {
+            $filters['user_id'] = auth()->user()->id;
+        } elseif (optional(auth()->user())->role == Roles::SUB_USER) {
+            $filters['user_id'] = auth()->user()->parent_id;
+        }
+
+        return response()->json([
+            'vehicles_statuses' => $this->service->vehicleCounts($filters),
+            'unread_notifications_count' => app(\App\Services\Notification\NotificationService::class)->myUnreadNotificationCount(),
+        ]);
     }
 
     public function monthlySales(): array
