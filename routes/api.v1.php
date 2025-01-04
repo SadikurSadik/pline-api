@@ -154,6 +154,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('vehicle/{id}/get-note', [NoteController::class, 'vehicleGetNote']);
     /* note related endpoints */
 
+    Route::get('localization', function () {
+        return response()->json(config('setting.mobile_languages'));
+    });
+
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
             Route::get('countries', 'searchCountry');
