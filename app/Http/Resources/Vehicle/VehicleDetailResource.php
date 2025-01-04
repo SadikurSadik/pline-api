@@ -74,6 +74,7 @@ class VehicleDetailResource extends JsonResource
             'vehicle_features' => $this->vehicle_features->pluck('feature_id', 'feature_id'),
             'tracking_statuses' => Vehicle::$trackingStatuses,
             'tracking_point' => $this->status?->getTrackingPoint(),
+            'photos' => $this->getPhotosProperty($this->yard_photos)->pluck('name'),
             'file_urls' => [
                 'yard_photos' => $this->getPhotosProperty($this->yard_photos),
                 'auction_photos' => $this->getPhotosProperty($this->auction_photos),
