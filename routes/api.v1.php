@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DamageClaimController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\RoleController;
@@ -144,6 +145,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('vehicle/{id}/note', [AdminNoteController::class, 'getVehicleNote']);
     Route::post('container/{id}/note', [AdminNoteController::class, 'storeContainerNote']);
     Route::get('container/{id}/note', [AdminNoteController::class, 'getContainerNote']);
+
+    Route::post('container/{id}/store-note', [NoteController::class, 'containerStoreNote']);
+    Route::get('container/{id}/get-note', [NoteController::class, 'containerGetNote']);
+    Route::post('vehicle/{id}/store-note', [NoteController::class, 'vehicleStoreNote']);
+    Route::get('vehicle/{id}/get-note', [NoteController::class, 'vehicleGetNote']);
     /* note related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
