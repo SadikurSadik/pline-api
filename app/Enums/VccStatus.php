@@ -5,6 +5,7 @@ namespace App\Enums;
 enum VccStatus: int
 {
     // vcc statuses
+    case PENDING = 0;
     case ON_HAND = 1;
     case HANDED_OVER = 3;
 
@@ -19,6 +20,7 @@ enum VccStatus: int
     public function getLabel(): string
     {
         return match ($this) {
+            VccStatus::PENDING => '',
             VccStatus::ON_HAND => 'On Hand',
             VccStatus::HANDED_OVER => 'Handed Over',
             VccStatus::EXIT_PAPER_NOT_RECEIVED => 'Exit Paper Not Received',

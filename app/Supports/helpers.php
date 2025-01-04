@@ -97,3 +97,17 @@ if (! function_exists('amountFormat')) {
         return $amount ? number_format($amount, 2) : '';
     }
 }
+
+if (! function_exists('dateRangeToDateTimeRange')) {
+    function dateRangeToDateTimeRange($dateRange): array
+    {
+        if (count($dateRange) !== 2) {
+            return $dateRange;
+        }
+
+        return [
+            \Carbon\Carbon::parse($dateRange[0])->startOfDay()->format('Y-m-d H:i:s'),
+            \Carbon\Carbon::parse($dateRange[1])->endOfDay()->format('Y-m-d H:i:s'),
+        ];
+    }
+}

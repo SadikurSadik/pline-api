@@ -29,6 +29,16 @@ abstract class BaseFilter
     }
 
     /**
+     * Apply a basic "where" filter.
+     */
+    protected function whereDateFilter(EloquentBuilder|Builder $query, string $key, mixed $value): void
+    {
+        if (! empty($value)) {
+            $query->whereDate($key, $value);
+        }
+    }
+
+    /**
      * Apply a "like" filter.
      */
     protected function likeFilter(EloquentBuilder|Builder $query, string $key, ?string $value): void
@@ -45,6 +55,17 @@ abstract class BaseFilter
     {
         if (is_array($range) && count($range) === 2) {
             $query->whereBetween($key, $range);
+        }
+    }
+
+    /**
+     * Apply a "where between" filter.
+     */
+    protected function whereDateBetweenFilter(EloquentBuilder|Builder $query, string $key, ?array $range): void
+    {
+        if (is_array($range) && count($range) === 2) {
+            $query->whereDate($key, '>=', $range[0])
+                ->whereDate($key, '<=', $range[1]);
         }
     }
 

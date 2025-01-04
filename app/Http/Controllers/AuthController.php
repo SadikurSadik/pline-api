@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\User\UserDetailResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
+use App\Services\NotificationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -36,11 +37,13 @@ class AuthController extends Controller
         }
 
         return response()->json([
+            'status' => 200,
             'access_token' => $accessToken,
             'refresh_token' => $user->refresh_token,
             'token_type' => 'Bearer',
             'user' => new UserDetailResource($user),
             'permissions' => $this->getUserPermissions($user),
+            'unread_notifications_count' => app(NotificationService::class)->myUnreadNotificationCount($user->id),
         ]);
     }
 
@@ -63,11 +66,13 @@ class AuthController extends Controller
         $accessToken = $user->createToken('access_token')->plainTextToken;
 
         return response()->json([
+            'status' => 200,
             'access_token' => $accessToken,
             'refresh_token' => $request->refresh_token,
             'token_type' => 'Bearer',
             'user' => new UserDetailResource($user),
             'permissions' => $this->getUserPermissions($user),
+            'unread_notifications_count' => app(NotificationService::class)->myUnreadNotificationCount($user->id),
         ]);
     }
 

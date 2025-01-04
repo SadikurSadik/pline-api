@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\VccStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +28,13 @@ class VccExitPaper extends Model
         'submitted_by',
         'submitted_at',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'status' => VccStatus::class,
+        ];
+    }
 
     public function vcc(): BelongsTo
     {
