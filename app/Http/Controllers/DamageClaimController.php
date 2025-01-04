@@ -69,7 +69,7 @@ class DamageClaimController extends Controller
     public function uploadPhoto(Request $request, FileManagerService $fileStorage): JsonResponse
     {
         $request->validate([
-            'photo' => 'required|image',
+            'file' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         try {
