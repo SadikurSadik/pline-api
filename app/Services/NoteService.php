@@ -9,6 +9,19 @@ use Illuminate\Support\Facades\Auth;
 
 class NoteService
 {
+    public function all(array $filters =[]): Collection
+    {
+        $query = Note::query();
+        if(!empty($filters['vehicle_id'])){
+            $query->where('vehicle_id', $filters['vehicle_id']);
+        }
+        if(!empty($filters['container_id'])){
+            $query->where('container_id', $filters['container_id']);
+        }
+
+        return $query->limit(100)->get();
+    }
+
     public function storeVccNote(array $data, int $id, $type = 'VCC_NOTE'): void
     {
         $data['vcc_id'] = $id;

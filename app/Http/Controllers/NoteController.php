@@ -23,18 +23,22 @@ class NoteController extends Controller
 {
     public function __construct(protected NoteService $service) {}
 
-    public function index( Request $request ): \Illuminate\Http\JsonResponse
+    public function index( Request $request ): AnonymousResourceCollection
     {
         $vehicleId = $request->get( 'vehicle_id' );
-        if ( $vehicleId ) {
-            $column = optional( auth()->user() )->role == Roles::CUSTOMER ? 'cust_view' : 'admin_view';
+        $containerId = $request->get( 'container_id' );
+        if (! $vehicleId ) {
+            $column = optional( auth()->user() )->role_id == Role::CUSTOMER ? 'cust_view' : 'admin_view';
             Note::where( 'vehicle_id', $vehicleId )->update( [ $column => NoteStatus::READ ] );
         }
+        if (! $containerId ) {
+            $column = optional( auth()->user() )->role_id == Role::CUSTOMER ? 'cust_view' : 'admin_view';
+            Note::where( 'container_id', $containerId )->update( [ $column => NoteStatus::READ ] );
+        }
 
-        $data = $this->service->all( $request->all() )->toArray();
-        $data = ( new PaginatorPresenter( $data ) )->presentBy( NotePresenter::class );
+        $data = $this->service->all( ['vehicle_id' => $vehicleId, 'container_id' => $containerId] );
 
-        return response()->json( $data );
+        return AdminNoteResource::collection($data);
     }
 
     public function store( StoreAdminNoteRequest $request ): JsonResponse
