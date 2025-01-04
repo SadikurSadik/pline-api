@@ -8,9 +8,11 @@ class FilterByContainerNumberOnVehicleRelation extends BaseFilter
 {
     public function handle($query, Closure $next, $data)
     {
-        $query->whereHas('vehicle.container', function ($query) use ($data) {
-            $this->whereFilter($query, 'container_number', $data['container'] ?? null);
-        });
+        if (! empty($data['container'])) {
+            $query->whereHas('vehicle.container', function ($query) use ($data) {
+                $this->whereFilter($query, 'container_number', $data['container'] ?? null);
+            });
+        }
 
         return $next($query);
     }
