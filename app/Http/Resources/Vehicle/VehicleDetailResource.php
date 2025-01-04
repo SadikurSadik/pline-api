@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Vehicle;
 
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -71,6 +72,7 @@ class VehicleDetailResource extends JsonResource
             'status_name' => $this->status->getLabel(),
             'vehicle_conditions' => $this->vehicle_conditions->pluck('value', 'condition_id'),
             'vehicle_features' => $this->vehicle_features->pluck('feature_id', 'feature_id'),
+            'tracking_statuses' => Vehicle::$trackingStatuses,
             'file_urls' => [
                 'yard_photos' => $this->getPhotosProperty($this->yard_photos),
                 'auction_photos' => $this->getPhotosProperty($this->auction_photos),

@@ -78,6 +78,18 @@ class Vehicle extends Model
         ];
     }
 
+    public static array $trackingStatuses = [
+        'New',
+        'Paid',
+        'Dispatched',
+        'Picked Up',
+        'On Hand',
+        'On the way',
+        'In Port',
+        'Arrived',
+        'Handed Over',
+    ];
+
     public function getTitleAttribute(): string
     {
         return sprintf('%s %s %s', $this->year, $this->model, $this->color);
