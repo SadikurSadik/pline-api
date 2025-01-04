@@ -9,6 +9,8 @@ use App\Http\Requests\Container\UpdateContainerRequest;
 use App\Http\Resources\Container\ContainerDetailResource;
 use App\Http\Resources\Container\ContainerPhotosResource;
 use App\Http\Resources\Container\ContainerResource;
+use App\Models\Container;
+use App\Models\Vehicle;
 use App\Services\ContainerService;
 use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
@@ -177,5 +179,12 @@ class ContainerController extends Controller implements HasMiddleware
         $data = $this->service->getById($id);
 
         return new ContainerPhotosResource($data);
+    }
+
+    public function changeNoteStatus( $id, Request $request )
+    {
+        Container::find( $id )->update( [ 'notes_status' => $request->get( 'note_status' ) ] );
+
+        return response()->json( [ 'message' => $request->get( 'note_status' ) == '1' ? 'Note Closed successfully.' : 'Note opened successfully.' ] );
     }
 }
