@@ -181,7 +181,7 @@ class ContainerController extends Controller implements HasMiddleware
         return new ContainerPhotosResource($data);
     }
 
-    public function changeNoteStatus( $id, Request $request )
+    public function changeNoteStatus( $id, Request $request ): JsonResponse
     {
         Container::find( $id )->update( [ 'notes_status' => $request->get( 'note_status' ) ] );
 

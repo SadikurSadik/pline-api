@@ -171,7 +171,7 @@ class VehicleController extends Controller implements HasMiddleware
         return new VehiclePhotosResource($data);
     }
 
-    public function changeNoteStatus( $id, Request $request )
+    public function changeNoteStatus( $id, Request $request ): JsonResponse
     {
         Vehicle::find( $id )->update( [ 'notes_status' => $request->get( 'note_status' ) ] );
 

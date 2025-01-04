@@ -102,7 +102,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('vehicles/upload-document', [VehicleController::class, 'uploadDocument']);
     Route::post('vehicles/upload-photo', [VehicleController::class, 'uploadPhoto']);
     Route::get('vehicles/export-excel', [VehicleController::class, 'exportExcel']);
-    Route::get('vehicles/{id}/change-note-status', [VehicleController::class, 'changeNoteStatus']);
+    Route::post('vehicles/{id}/change-note-status', [VehicleController::class, 'changeNoteStatus']);
     Route::apiResource('vehicles', VehicleController::class);
     /* vehicles related endpoints */
 
@@ -114,7 +114,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('containers/upload-document', [ContainerController::class, 'uploadDocument']);
     Route::post('containers/upload-photo', [ContainerController::class, 'uploadPhoto']);
     Route::get('container/export-excel', [ContainerController::class, 'exportExcel']);
-    Route::get('containers/{id}/change-note-status', [ContainerController::class, 'changeNoteStatus']);
+    Route::post('containers/{id}/change-note-status', [ContainerController::class, 'changeNoteStatus']);
     Route::apiResource('containers', ContainerController::class);
     /* containers related endpoints */
 
