@@ -52,7 +52,7 @@ class DamageClaimController extends Controller
     public function destroy(string $id): JsonResponse
     {
         $claim = $this->service->getById($id);
-        if ($claim->status != DamageClaimStatus::Approved) {
+        if ($claim->status != DamageClaimStatus::Rejected) {
             return errorResponse(__('Only Rejected damage claims are allowed to delete!'));
         }
 

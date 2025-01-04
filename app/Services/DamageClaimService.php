@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\DamageClaimStatus;
 use App\Filters\FilterByCustomerUser;
 use App\Filters\FilterByStatus;
+use App\Filters\FilterByVinNumberOnVehicleRelation;
 use App\Filters\FilterByVinOnVehicleRelation;
 use App\Models\DamageClaim;
 use Carbon\Carbon;
@@ -21,6 +22,7 @@ class DamageClaimService
         return app(FilterPipelineService::class)->apply($query, [
             FilterByStatus::class,
             FilterByCustomerUser::class,
+            FilterByVinNumberOnVehicleRelation::class,
             FilterByVinOnVehicleRelation::class,
         ], $filters);
     }
