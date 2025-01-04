@@ -7,11 +7,13 @@ use App\Enums\VccStatus;
 use App\Exports\VccsExport;
 use App\Http\Requests\Vcc\StoreVccAttachmentRequest;
 use App\Http\Requests\Vcc\StoreVccDetailRequest;
+use App\Http\Requests\Vcc\StoreVccReceivedExitPaper;
 use App\Http\Requests\Vcc\VccHandOverRequest;
 use App\Http\Resources\Vcc\GetVccDetailResource;
 use App\Http\Resources\Vcc\VccDetailResource;
 use App\Http\Resources\Vcc\VccResource;
 use App\Models\Vcc;
+use App\Models\VccExitPaper;
 use App\Services\FileManagerService;
 use App\Services\VccService;
 use Illuminate\Http\JsonResponse;
@@ -195,5 +197,29 @@ class VccController extends Controller
 
             return errorResponse(__('Failed! VCC handed over failed.'));
         }
+    }
+
+    public function storeReceivedExitPaper($id, StoreVccReceivedExitPaper $request): JsonResponse
+    {
+        $vcc = $this->service->getById($id);
+        if ($vcc->status !== VccStatus::HANDED_OVER || ! empty($vcc->exit_paper)) {
+            return errorResponse(__('VCC exit paper already received previously.'));
+        }
+
+        VccExitPaper::create([
+            'vcc_id' => $vcc->id,
+            'received_date' => \Illuminate\Support\Carbon::parse(
+                $request->received_date.' '.$request->received_time
+            ),
+            'status' => VccStatus::EXIT_PAPER_RECEIVED->value,
+            'refund_amount' => $request->refund_amount,
+            'received_from' => $request->received_from,
+            'received_by' => auth()->user()->id,
+            'received_at' => now(),
+        ]);
+
+        $this->service->updateContainerBgColor($vcc->container_id);
+
+        return successResponse(__('VCC Exit paper received successfully.'));
     }
 }

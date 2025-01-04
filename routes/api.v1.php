@@ -130,6 +130,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('vcc/{id}/get-detail-form', [VccController::class, 'getVccDetail']);
     Route::post('vcc/{id}/store-vcc-detail', [VccController::class, 'storeVccDetail']);
     Route::get('vcc/export-excel', [VccController::class, 'exportExcel']);
+    Route::post('vcc/{id}/received-exit-paper', [VccController::class, 'storeReceivedExitPaper']);
     Route::apiResource('vccs', VccController::class);
     /* vcc related endpoints */
 
