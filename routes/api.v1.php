@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminNoteController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BuyerNumberController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ClearanceRateController;
 use App\Http\Controllers\ConsigneeController;
@@ -153,6 +154,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('vehicle/{id}/store-note', [NoteController::class, 'vehicleStoreNote']);
     Route::get('vehicle/{id}/get-note', [NoteController::class, 'vehicleGetNote']);
     /* note related endpoints */
+
+    /* buyer number related endpoints */
+    Route::apiResource('buyer-numbers', BuyerNumberController::class);
+    /* buyer number related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
