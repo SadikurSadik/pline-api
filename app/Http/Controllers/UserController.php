@@ -13,12 +13,26 @@ use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
     public function __construct(protected UserService $service) {}
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role_or_permission:owner|manage user', only: ['index', 'permissions', 'updatePermissions', 'changeStatus']),
+            new Middleware('role_or_permission:owner|create user', only: ['store']),
+            new Middleware('role_or_permission:owner|update user', only: ['update']),
+            new Middleware('role_or_permission:owner|view user', only: ['show']),
+            new Middleware('role_or_permission:owner|delete user', only: ['destroy']),
+            new Middleware('role_or_permission:owner|export excel user', only: ['exportExcel']),
+        ];
+    }
 
     public function index(Request $request): AnonymousResourceCollection
     {

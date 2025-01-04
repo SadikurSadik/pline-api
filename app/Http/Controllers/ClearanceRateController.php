@@ -6,10 +6,20 @@ use App\Http\Requests\ClearanceRate\StoreClearanceRateRequest;
 use App\Http\Resources\ClearanceRate\ClearanceRateDetailResource;
 use App\Services\ClearanceRateService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class ClearanceRateController extends Controller
+class ClearanceRateController extends Controller implements HasMiddleware
 {
     public function __construct(protected ClearanceRateService $service) {}
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role_or_permission:owner|manage clearance rate', only: ['index']),
+            new Middleware('role_or_permission:owner|update clearance rate', only: ['store']),
+        ];
+    }
 
     public function index(): ClearanceRateDetailResource
     {

@@ -7,6 +7,7 @@ use App\Enums\VccStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -65,10 +66,10 @@ class Vcc extends Model
     /*public function shipping_invoice()
     {
         return $this->belongsTo(Invoice::class, 'shipping_invoice_id');
-    }
+    }*/
 
-    public function notes()
+    public function notes(): HasMany
     {
         return $this->hasMany(AdminNote::class, 'vcc_id', 'id');
-    }*/
+    }
 }

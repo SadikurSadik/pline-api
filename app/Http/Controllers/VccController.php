@@ -20,14 +20,28 @@ use App\Services\VccService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class VccController extends Controller
+class VccController extends Controller implements HasMiddleware
 {
     public function __construct(protected VccService $service) {}
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role_or_permission:owner|manage vcc', only: ['index']),
+            new Middleware('role_or_permission:owner|create vcc', only: ['store']),
+            new Middleware('role_or_permission:owner|update vcc', only: ['update']),
+            new Middleware('role_or_permission:owner|view vcc', only: ['show']),
+            new Middleware('role_or_permission:owner|delete vcc', only: ['destroy']),
+            new Middleware('role_or_permission:owner|export excel vcc', only: ['exportExcel']),
+        ];
+    }
 
     public function index(Request $request): AnonymousResourceCollection
     {

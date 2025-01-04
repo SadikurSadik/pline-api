@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminNoteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ClearanceRateController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DamageClaimController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PortController;
 use App\Http\Controllers\RoleController;
@@ -114,6 +116,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* containers related endpoints */
 
     /* damage claim related endpoints */
+    Route::get('damage-claims/{id}/print-voucher-pdf', [DamageClaimController::class, 'printAsPdfVoucher']);
     Route::put('damage-claims/{id}/approve', [DamageClaimController::class, 'damageClaimApprove']);
     Route::put('damage-claims/{id}/reject', [DamageClaimController::class, 'damageClaimReject']);
     Route::get('damage-claims/{id}/download-photos', [DamageClaimController::class, 'downloadDamageClaimPhotos']);
@@ -134,6 +137,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('vcc/{id}/submit-exit-paper', [VccController::class, 'storeSubmitExitPaper']);
     Route::apiResource('vccs', VccController::class);
     /* vcc related endpoints */
+
+    /* note related endpoints */
+    Route::post('vcc/{id}/store-vcc-note', [AdminNoteController::class, 'storeVccNote']);
+    Route::post('vcc/{id}/store-submission-note', [AdminNoteController::class, 'storeSubmissionVcc']);
+    Route::get('vcc/{id}/get-vcc-note', [AdminNoteController::class, 'getVccNote']);
+    Route::get('vcc/{id}/get-submission-note', [AdminNoteController::class, 'getSubmissionNote']);
+    Route::post('vehicle/{id}/note', [AdminNoteController::class, 'storeVehicleNote']);
+    Route::get('vehicle/{id}/note', [AdminNoteController::class, 'getVehicleNote']);
+    Route::post('container/{id}/note', [AdminNoteController::class, 'storeContainerNote']);
+    Route::get('container/{id}/note', [AdminNoteController::class, 'getContainerNote']);
+
+    Route::post('container/{id}/store-note', [NoteController::class, 'containerStoreNote']);
+    Route::get('container/{id}/get-note', [NoteController::class, 'containerGetNote']);
+    Route::post('vehicle/{id}/store-note', [NoteController::class, 'vehicleStoreNote']);
+    Route::get('vehicle/{id}/get-note', [NoteController::class, 'vehicleGetNote']);
+    /* note related endpoints */
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
