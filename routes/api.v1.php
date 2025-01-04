@@ -170,7 +170,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('ports', 'searchPort');
             Route::get('roles', 'searchRole');
             Route::get('customers', 'searchCustomer');
-            Route::get('title-types', 'searchTitleType');
+            Route::get('customers/{id}/buyer-numbers', 'searchBuyerNumbers');
+            Route::get('title-types', 'searchTitleTypes');
             Route::get('colors', 'searchColor');
             Route::get('conditions', 'searchVehicleCondition');
             Route::get('features', 'searchVehicleFeature');
