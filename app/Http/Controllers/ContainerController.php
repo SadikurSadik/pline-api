@@ -182,7 +182,7 @@ class ContainerController extends Controller implements HasMiddleware
 
     public function changeNoteStatus($id, Request $request): JsonResponse
     {
-        Container::find($id)->update(['notes_status' => $request->get('note_status')]);
+        Container::find($id)->update(['note_status' => $request->get('note_status')]);
 
         return response()->json(['message' => $request->get('note_status') == '1' ? 'Note Closed successfully.' : 'Note opened successfully.']);
     }

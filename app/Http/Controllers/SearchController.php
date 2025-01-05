@@ -42,6 +42,7 @@ class SearchController extends Controller
     {
         $query = State::select([
             'id',
+            'short_code',
             'name',
         ])->where('status', VisibilityStatus::ACTIVE);
         if (! empty($request->country_id)) {
