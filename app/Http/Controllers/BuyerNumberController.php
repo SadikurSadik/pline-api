@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BuyerNumber\AssignCustomerRequest;
 use App\Http\Requests\BuyerNumber\StoreBuyerNumberRequest;
 use App\Http\Requests\BuyerNumber\UpdateBuyerNumberRequest;
 use App\Http\Resources\BuyerNumber\BuyerNumberDetailResource;
@@ -84,6 +85,32 @@ class BuyerNumberController extends Controller
                 'message' => 'Failed to upload profile file.',
                 'error' => $e->getMessage(),
             ], 400);
+        }
+    }
+
+    public function submitAddCustomer(AssignCustomerRequest $request): JsonResponse
+    {
+        try {
+            $this->service->addCustomer($request->all());
+
+            return successResponse(__('Buyer Number added successfully.'));
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+
+            return errorResponse(__('Failed! Something went wrong.'));
+        }
+    }
+
+    public function submitReplaceCustomer(AssignCustomerRequest $request): JsonResponse
+    {
+        try {
+            $this->service->replaceCustomer($request->all());
+
+            return successResponse(__('Buyer Number update successfully.'));
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+
+            return errorResponse(__('Failed! Something went wrong.'));
         }
     }
 }

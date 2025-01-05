@@ -121,4 +121,42 @@ class BuyerNumberService
             }
         }
     }
+
+    public function addCustomer($data): void
+    {
+        foreach ($data['customer_user_ids'] as $customer_id) {
+            $isExits = CustomerBuyerNumber::query()
+                ->where(['customer_id' => $customer_id, 'buyer_number_id' => $data['id']])
+                ->whereNull('unassigned_at')
+                ->first();
+
+            if ($isExits) {
+                continue;
+            }
+
+            CustomerBuyerNumber::create([
+                'customer_id' => $customer_id,
+                'buyer_number_id' => $data['id'],
+                'assigned_at' => Carbon::now(),
+            ]);
+        }
+    }
+
+    public function replaceCustomer(array $data): void
+    {
+        CustomerBuyerNumber::query()->where(['buyer_number_id' => $data['id']])
+            ->whereNull('unassigned_at')
+            ->update([
+                'unassigned_at' => Carbon::now(),
+            ]);
+
+        foreach ($data['customer_user_ids'] as $value) {
+            CustomerBuyerNumber::create([
+                'customer_id' => $value,
+                'buyer_number_id' => $data['id'],
+                'assigned_at' => Carbon::now(),
+            ]
+            );
+        }
+    }
 }
