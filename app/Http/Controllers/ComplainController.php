@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\readStatus;
+use App\Enums\ReadStatus;
 use App\Enums\Role;
 use App\Http\Requests\Complain\StoreComplainRequest;
 use App\Http\Requests\Complain\StoreConversationRequest;
