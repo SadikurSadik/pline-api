@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BuyerNumber\StoreBuyerNumberRequest;
+use App\Http\Requests\BuyerNumber\UpdateBuyerNumberRequest;
 use App\Http\Resources\BuyerNumber\BuyerNumberDetailResource;
 use App\Http\Resources\BuyerNumber\BuyerNumberResource;
 use App\Services\BuyerNumberService;
@@ -9,6 +11,7 @@ use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Log;
 
 class BuyerNumberController extends Controller
 {
@@ -26,6 +29,32 @@ class BuyerNumberController extends Controller
         $data = $this->service->getById($id);
 
         return new BuyerNumberDetailResource($data);
+    }
+
+    public function store(StoreBuyerNumberRequest $request): JsonResponse
+    {
+        try {
+            $this->service->store($request->all());
+
+            return successResponse(__('Buyer Number added Successfully.'));
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+
+            return errorResponse(__('Failed! Something went wrong.'));
+        }
+    }
+
+    public function update(UpdateBuyerNumberRequest $request, $id): JsonResponse
+    {
+        try {
+            $this->service->update($request->all(), $id);
+
+            return successResponse(__('Buyer Number update Successfully.'));
+        } catch (\Exception $e) {
+            Log::info($e->getMessage());
+
+            return errorResponse(__('Failed! Something went wrong.'));
+        }
     }
 
     public function destroy($id): JsonResponse

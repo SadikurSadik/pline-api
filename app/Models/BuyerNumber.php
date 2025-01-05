@@ -29,6 +29,7 @@ class BuyerNumber extends Model
 
     protected $casts = [
         'status' => VisibilityStatus::class,
+        'attachments' => 'array',
     ];
 
     public function sheet(): HasOne
