@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Complain;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,7 +18,7 @@ class ComplainResource extends JsonResource
             'message' => $this->message,
             'status' => $this->status,
             'read_by_admin' => $this->read_by_admin,
-            'created_at' => $this->created_at,
+            'created_at' => Carbon::parse($this->created_at)->format('Y-m-d h:i a'),
             'conversations' => ConversationResource::collection($this->conversations),
         ];
     }
