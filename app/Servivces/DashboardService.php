@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Servivces;
+namespace App\Services;
 
 use App\Enums\Role;
 use App\Enums\VehicleStatus;
@@ -92,5 +92,21 @@ class DashboardService
             ->orderBy(DB::raw('month(created_at)'));
 
         return $query->get();
+    }
+
+    public function userInfo($filters = []): ?array
+    {
+        $user = null;
+        if (! empty($filters['user_id'])) {
+            $user = app(UserService::class)->getById($filters['user_id']);
+            $user = [
+                'username' => $user->username,
+                'email' => $user->email,
+                'role' => $user->role_id?->getLabel(),
+                'photo' => $user->photo,
+            ];
+        }
+
+        return $user;
     }
 }

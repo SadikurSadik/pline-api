@@ -8,8 +8,8 @@ use App\Enums\VehicleStatus;
 use App\Models\Customer;
 use App\Models\DamageClaim;
 use App\Services\ComplainService;
+use App\Services\DashboardService;
 use App\Services\NotificationService;
-use App\Servivces\DashboardService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller

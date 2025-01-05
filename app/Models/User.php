@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasPermissions;
@@ -62,6 +63,11 @@ class User extends Authenticatable
             'status' => VisibilityStatus::class,
             'role_id' => \App\Enums\Role::class,
         ];
+    }
+
+    public function getPhotoAttribute(): string
+    {
+        return !empty( $this->photo_url ) ? Storage::url( $this->photo_url ) : asset( 'images/user_default_profile.jpg' );
     }
 
     public function role(): BelongsTo
