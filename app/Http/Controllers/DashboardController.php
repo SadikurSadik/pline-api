@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ClaimType;
 use App\Enums\DamageClaimStatus;
 use App\Enums\Role;
-use App\Enums\Roles;
 use App\Enums\VehicleStatus;
 use App\Models\Customer;
 use App\Models\DamageClaim;
 use App\Services\ComplainService;
-use App\Services\Invoice\InvoiceService;
 use App\Services\NotificationService;
-use App\Services\DamageClaimService;
 use App\Servivces\DashboardService;
 use Illuminate\Http\Request;
 
@@ -20,34 +16,34 @@ class DashboardController extends Controller
 {
     public function __construct(protected DashboardService $service) {}
 
-    public function index( Request $request ): \Illuminate\Http\JsonResponse
+    public function index(Request $request): \Illuminate\Http\JsonResponse
     {
         $filters = $request->all();
-        if ( optional( auth()->user() )->role == Roles::CUSTOMER ) {
-            $filters[ 'user_id' ] = auth()->user()->id;
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $filters['user_id'] = auth()->user()->id;
         }
 
-        $statusOverview = collect( $this->service->vehicleCounts( $filters ) )->whereNotIn('status', [0 , VehicleStatus::LOADED->value, VehicleStatus::DISPATCHED->value])->values();
+        $statusOverview = collect($this->service->vehicleCounts($filters))->whereNotIn('status', [0, VehicleStatus::LOADED->value, VehicleStatus::DISPATCHED->value])->values();
 
         $data = [
-            'status_overview'  => $statusOverview,
-//            'invoice_overview' => app( InvoiceService::class )->invoiceSummary( $filters ),
+            'status_overview' => $statusOverview,
+            //            'invoice_overview' => app( InvoiceService::class )->invoiceSummary( $filters ),
             'invoice_overview' => [],
-            'userInfo'         => $this->service->userInfo( $request->all() ),
-            'counter'          => [
-                'notification'       => app( NotificationService::class )->myUnreadNotificationCount(),
-                'feedback'           => 0,
-                'complain'           => app( ComplainService::class )->adminUnreadCount(),
-                'damage_claims'      => DamageClaim::where('status', DamageClaimStatus::Pending->value)
+            'userInfo' => $this->service->userInfo($request->all()),
+            'counter' => [
+                'notification' => app(NotificationService::class)->myUnreadNotificationCount(),
+                'feedback' => 0,
+                'complain' => app(ComplainService::class)->adminUnreadCount(),
+                'damage_claims' => DamageClaim::where('status', DamageClaimStatus::Pending->value)
                     ->when(auth()->user()->role_id == Role::CUSTOMER, function ($query) {
                         $query->where('customer_user_id', auth()->user()->id);
                     })->count(),
-                'storage_claims'     => 0,
+                'storage_claims' => 0,
                 'key_missing_claims' => 0,
             ],
         ];
 
-        return response()->json( $data );
+        return response()->json($data);
     }
 
     public function dashboardMobileApi(Request $request)
@@ -118,15 +114,15 @@ class DashboardController extends Controller
     public function vehicleStatusOverview(Request $request)
     {
         $filters = $request->all();
-        if (optional(auth()->user())->role == Roles::CUSTOMER) {
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
             $filters['user_id'] = auth()->user()->id;
-        } elseif (optional(auth()->user())->role == Roles::SUB_USER) {
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
             $filters['user_id'] = auth()->user()->parent_id;
         }
 
         return response()->json([
             'vehicles_statuses' => $this->service->vehicleCounts($filters),
-            'unread_notifications_count' => app(\App\Services\Notification\NotificationService::class)->myUnreadNotificationCount(),
+            'unread_notifications_count' => app(\App\Services\NotificationService::class)->myUnreadNotificationCount(),
         ]);
     }
 
