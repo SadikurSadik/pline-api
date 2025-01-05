@@ -14,6 +14,7 @@ class UpdateBuyerNumberRequest extends FormRequest
             'username' => ['required',
                 Rule::unique('buyer_numbers')->where('deleted_at')->ignore($this->buyer_number),
             ],
+            'parent_id' => $this->account_type == 2 ? ['required', 'integer'] : ['nullable'],
         ];
     }
 }

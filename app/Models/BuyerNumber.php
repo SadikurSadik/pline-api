@@ -20,6 +20,8 @@ class BuyerNumber extends Model
         'password',
         'auction_name',
         'account_name',
+        'account_type',
+        'parent_id',
         'company_name',
         'grade_id',
         'note',

@@ -75,6 +75,10 @@ class BuyerNumberService
             unset($data['customer_user_ids']);
         }
 
+        if ($data['account_type'] == 1) {
+            $data['parent_id'] = null;
+        }
+
         $buyerNumber->status = $data['status'] ?? VisibilityStatus::INACTIVE;
         $buyerNumber->fill($data);
         $buyerNumber->save();

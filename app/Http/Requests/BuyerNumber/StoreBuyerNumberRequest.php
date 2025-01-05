@@ -14,6 +14,7 @@ class StoreBuyerNumberRequest extends FormRequest
             'username' => ['required',
                 Rule::unique('buyer_numbers')->where('deleted_at'),
             ],
+            'parent_id' => $this->account_type == 2 ? ['required', 'integer'] : ['nullable'],
         ];
     }
 }

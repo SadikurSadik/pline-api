@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('password', 50)->nullable();
             $table->string('auction_name', 150)->nullable();
             $table->string('account_name', 150)->nullable();
+            $table->integer('account_type')->nullable();
+            $table->integer('parent_id')->nullable();
             $table->string('company_name', 150)->nullable();
             $table->integer('grade_id')->nullable();
             $table->text('note')->nullable();
