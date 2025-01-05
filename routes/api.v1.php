@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminNoteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ClearanceRateController;
+use App\Http\Controllers\ComplainController;
 use App\Http\Controllers\ConsigneeController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\CountryController;
@@ -156,6 +157,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('vehicle/{id}/store-note', [NoteController::class, 'vehicleStoreNote']);
     Route::get('vehicle/{id}/get-note', [NoteController::class, 'vehicleGetNote']);
     /* note related endpoints */
+
+    /* complain and conversations related endpoints */
+    Route::post('complains/store-conversation', [ComplainController::class, 'storeConversation']);
+    Route::apiResource('complains', ComplainController::class);
+    /* complain and conversations related endpoints */
 
     Route::get('localization', function () {
         return response()->json(config('setting.mobile_languages'));
