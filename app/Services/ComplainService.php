@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\readStatus;
+use App\Enums\ReadStatus;
 use App\Filters\FilterByCustomerUser;
 use App\Filters\FilterByStatus;
 use App\Filters\FilterBySubject;
