@@ -17,10 +17,10 @@ class CustomerBuyerNumberFactory extends Factory
     public function definition(): array
     {
         return [
-            'customer_id' => rand(1,10),
-            'buyer_number_id' => rand(1,30),
+            'customer_id' => rand(12, 21),
+            'buyer_number_id' => rand(1, 30),
             'assigned_at' => now()->addHours(12),
-            'unassigned_at' => now()
+            'unassigned_at' => now(),
         ];
     }
 }

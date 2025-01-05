@@ -14,11 +14,11 @@ class Sheet extends Model
 
     protected $fillable = [
         'name',
-        'status'
+        'status',
     ];
 
     protected $casts = [
-        'status' => VisibilityStatus::class
+        'status' => VisibilityStatus::class,
     ];
 
     public function buyer_numbers(): HasMany

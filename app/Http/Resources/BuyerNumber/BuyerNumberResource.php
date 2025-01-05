@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\BuyerNumber;
 
-use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -24,8 +23,9 @@ class BuyerNumberResource extends JsonResource
             'grade_name' => $this->grade?->name,
             'name_on_the_account' => $this->account_name,
             'company_name' => $this->company_name,
+            'assigned_customer' => $this->buyer_customers->pluck('customer.name'),
             'note' => $this->note,
-            'total_vehicle' => $this->vehicles->count(),
+            'total_vehicle' => $this->vehicles_count,
             'attachment' => $this->attachments,
             'status' => $this->status->getLabel(),
         ];

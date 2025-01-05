@@ -13,7 +13,7 @@ class GradeFactory extends Factory
     {
         return [
             'name' => fake()->name,
-            'status' => fake()->randomElement([1,2])
+            'status' => fake()->randomElement([1, 2]),
         ];
     }
 }

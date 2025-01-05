@@ -156,6 +156,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* note related endpoints */
 
     /* buyer number related endpoints */
+    Route::post('buyer-number/upload-attachment', [BuyerNumberController::class, 'BuyerNumberAttachment']);
     Route::apiResource('buyer-numbers', BuyerNumberController::class);
     /* buyer number related endpoints */
 

@@ -28,7 +28,7 @@ class BuyerNumber extends Model
     ];
 
     protected $casts = [
-        'status' => VisibilityStatus::class
+        'status' => VisibilityStatus::class,
     ];
 
     public function sheet(): HasOne

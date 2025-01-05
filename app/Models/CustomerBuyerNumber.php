@@ -15,7 +15,7 @@ class CustomerBuyerNumber extends Model
         'customer_id',
         'buyer_number_id',
         'assigned_at',
-        'unassigned_at'
+        'unassigned_at',
     ];
 
     public function customer(): HasOne

@@ -13,10 +13,10 @@ class Grade extends Model
 
     protected $fillable = [
         'name',
-        'status'
+        'status',
     ];
 
     protected $casts = [
-        'status' => VisibilityStatus::class
+        'status' => VisibilityStatus::class,
     ];
 }
