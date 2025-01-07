@@ -11,6 +11,8 @@ class Location extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'country_id',
+        'state_id',
         'name',
         'status',
     ];

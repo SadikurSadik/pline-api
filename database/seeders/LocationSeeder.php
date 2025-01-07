@@ -14,88 +14,74 @@ class LocationSeeder extends Seeder
     {
         DB::table('locations')->insert([
             [
-                'name' => 'LA',
-                'status' => 1,
+                "country_id" => 1,
+                "state_id" => 11,
+                "name" => "GA",
             ],
             [
-                'name' => 'GA',
-                'status' => 1,
+                "country_id" => 1,
+                "state_id" => 35,
+                "name" => "NY",
             ],
             [
-                'name' => 'NY',
-                'status' => 1,
+                "country_id" => 1,
+                "state_id" => 45,
+                "name" => "TX",
             ],
             [
-                'name' => 'TX',
-                'status' => 1,
+                "country_id" => 1,
+                "state_id" => 6,
+                "name" => "CA",
             ],
             [
-                'name' => 'TX2',
-                'status' => 2,
+                "country_id" => 2,
+                "state_id" => 56,
+                "name" => "ON",
             ],
             [
-                'name' => 'NJ2',
-                'status' => 2,
+                "country_id" => 2,
+                "state_id" => 57,
+                "name" => "QC",
             ],
             [
-                'name' => 'CANADA',
-                'status' => 2,
+                "country_id" => 2,
+                "state_id" => 63,
+                "name" => "NS",
             ],
             [
-                'name' => 'TORONTO',
-                'status' => 1,
+                "country_id" => 2,
+                "state_id" => 58,
+                "name" => "MB",
             ],
             [
-                'name' => 'MONTREAL',
-                'status' => 1,
+                "country_id" => 2,
+                "state_id" => 60,
+                "name" => "AB",
             ],
             [
-                'name' => 'HALIFAX',
-                'status' => 1,
+                "country_id" => 2,
+                "state_id" => 61,
+                "name" => "BC",
             ],
             [
-                'name' => 'EDMONTON',
-                'status' => 1,
+                "country_id" => 3,
+                "state_id" => 53,
+                "name" => "DXB",
             ],
             [
-                'name' => 'CALGARY',
-                'status' => 1,
+                "country_id" => 2,
+                "state_id" => 60,
+                "name" => "AB",
             ],
             [
-                'name' => 'Afghanistan',
-                'status' => 1,
+                "country_id" => 2,
+                "state_id" => 59,
+                "name" => "SK",
             ],
             [
-                'name' => 'Tajikistan',
-                'status' => 2,
-            ],
-            [
-                'name' => 'Turkamanistan',
-                'status' => 1,
-            ],
-            [
-                'name' => 'Uzbekistan',
-                'status' => 2,
-            ],
-            [
-                'name' => 'Iraq',
-                'status' => 2,
-            ],
-            [
-                'name' => 'Iran',
-                'status' => 2,
-            ],
-            [
-                'name' => 'VANCOUVER',
-                'status' => 1,
-            ],
-            [
-                'name' => 'MANITOBA',
-                'status' => 1,
-            ],
-            [
-                'name' => 'WA',
-                'status' => 2,
+                "country_id" => 5,
+                "state_id" => 78,
+                "name" => "BHR",
             ],
         ]);
     }

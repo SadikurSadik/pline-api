@@ -11,10 +11,12 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DamageClaimController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PortController;
+use App\Http\Controllers\PricingController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShippingRateController;
@@ -163,6 +165,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('complains/store-conversation', [ComplainController::class, 'storeConversation']);
     Route::apiResource('complains', ComplainController::class);
     /* complain and conversations related endpoints */
+
+    /* invoice related endpoints */
+    Route::get('vehicle-accounting-invoice', [InvoiceController::class, 'vehicleAccountingInvoice']);
+    Route::get('shipping-accounting-invoice', [InvoiceController::class, 'serviceAccountingInvoice']);
+    Route::get('invoice-summary', [InvoiceController::class, 'invoiceSummary']);
+    Route::get('customer-statement', [InvoiceController::class, 'customerInvoicePdf']);
+    /* invoice related endpoints */
+
+    /* pricing related endpoints */
+    Route::get('pricing-usa', [PricingController::class, 'index']);
+    Route::get('pricing-canada', [PricingController::class, 'index']);
+    /* pricing related endpoints */
 
     Route::get('localization', function () {
         return response()->json(config('setting.mobile_languages'));

@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\VisibilityStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('locations', function (Blueprint $table) {
+        Schema::create('pricing_pdfs', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('country_id');
-            $table->bigInteger('state_id')->nullable();
-            $table->string('name', 200);
-            $table->tinyInteger('status')->nullable()->default(VisibilityStatus::ACTIVE->value);
+            $table->string('pdf_url_a');
+            $table->string('pdf_url_b')->nullable();
+            $table->bigInteger('user_id')->nullable();
+            $table->timestamp('expire_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('pricing_pdfs');
     }
 };
