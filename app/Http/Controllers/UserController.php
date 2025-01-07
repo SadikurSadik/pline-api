@@ -44,7 +44,11 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request): JsonResponse
     {
-        $this->service->store($request->validated());
+        $data = $request->validated();
+        if(auth()->user()->role_id == Role::CUSTOMER) {
+            $data['parent_id'] = auth()->user()->id;
+        }
+        $this->service->store($data);
 
         return successResponse(__('User added Successfully.'));
     }
