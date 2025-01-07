@@ -53,7 +53,7 @@ class DashboardController extends Controller
             'unread_notifications_count' => app(NotificationService::class)->myUnreadNotificationCount(),
             'pending_voucher_count' => 0 /*app(VoucherService::class)->getPendingVoucherCount()*/,
         ];
-        if (optional(auth()->user())->role == Role::CUSTOMER) {
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
             $invoiceData = $invoiceService->invoiceSummary(['customer_id' => auth()->user()->id]);
             $data['invoice_total_amount'] = 'Total: AED '.number_format($invoiceData['total_amount'], 2);
             $total = $invoiceData['total_amount'];
