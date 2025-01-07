@@ -16,13 +16,13 @@ class StoreUserRequest extends FormRequest
             'username' => [
                 'required',
                 'max:200',
-                Rule::unique('users')->whereNull('deleted_at'),
+                Rule::unique('users')->whereNull('deleted_at')->ignore($this->user),
             ],
             'email' => [
                 'required',
                 'email',
                 'max:200',
-                Rule::unique('users')->whereNull('deleted_at'),
+                Rule::unique('users')->whereNull('deleted_at')->ignore($this->user),
             ],
 //            'password' => 'required|min:6|max:12',
             'profile_photo' => ['nullable', 'max:200'],
