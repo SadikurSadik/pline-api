@@ -180,12 +180,14 @@ Route::middleware('auth:sanctum')->group(function () {
     /* pricing related endpoints */
 
     /* voucher related endpoints */
-    Route::post('approve-reject/voucher/{id}', [VoucherController::class, 'approveRejectVoucherApi']);
+    Route::post('approve-reject/voucher/{id}', [VoucherController::class, 'rejectApproveVoucher']);
     Route::post('pending-vouchers/{id}', [VoucherController::class, 'voucherDetail']);
-    Route::get('pending-vouchers', [VoucherController::class, 'getVoucherApi']);
+    Route::get('pending-vouchers', [VoucherController::class, 'index']);
     Route::get('customer-advance-vouchers', [VoucherController::class, 'advancedVoucher']);
     Route::get('customer-invoice-vouchers', [VoucherController::class, 'invoiceVoucher']);
     Route::get('payment-modes', [VoucherController::class, 'getPaymentModes']);
+    Route::get('invoice/payment-receipt', [VoucherController::class, 'invoicePaymentReceipt']);
+    Route::get('advanced-account-receipt/print-pdf/{id}', [VoucherController::class, 'advancedPaymentReceipt']);
     /* voucher related endpoints */
 
     Route::get('localization', function () {

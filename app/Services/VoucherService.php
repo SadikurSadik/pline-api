@@ -3,9 +3,12 @@
 namespace App\Services;
 
 use App\Models\Accounting\AdvancedAccount;
+use App\Models\Accounting\BankAccount;
+use App\Models\Accounting\CashflowTransaction;
 use App\Models\Accounting\InvoicePayment;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class VoucherService
 {
@@ -79,4 +82,20 @@ class VoucherService
         return $query->orderBy('id', 'DESC')
             ->paginate(Arr::get($filters, 'limit', 20));
     }
+
+    public function paymentModes()
+    {
+        return BankAccount::select('id', DB::raw('CONCAT(holder_name) AS name'))
+            ->withoutNonCash()
+            ->get();
+    }
+
+    public function show($id, $type = 'advanced')
+    {
+        $query = $type == 'advanced' ? AdvancedAccount::with('payment_method') :
+            ($type == 'invoice' ? InvoicePayment::with('invoice') : CashflowTransaction::with('payment_method'));
+
+        return $query->find($id);
+    }
+
 }
