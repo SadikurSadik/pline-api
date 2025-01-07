@@ -19,7 +19,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class UserController extends Controller implements HasMiddleware
+class UserController extends Controller
 {
     public function __construct(protected UserService $service) {}
 
