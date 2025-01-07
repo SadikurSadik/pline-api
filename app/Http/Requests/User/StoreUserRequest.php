@@ -4,6 +4,8 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class StoreUserRequest extends FormRequest
 {
@@ -25,7 +27,7 @@ class StoreUserRequest extends FormRequest
 //            'password' => 'required|min:6|max:12',
             'profile_photo' => ['nullable', 'max:200'],
             'role_id' => 'required|integer',
-            'status' => 'nullable|boolean',
+            'status' => ['nullable', new Enum(Boolean::class)],
         ];
     }
 }
