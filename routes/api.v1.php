@@ -178,6 +178,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('pricing-canada', [PricingController::class, 'index']);
     /* pricing related endpoints */
 
+    /* sub users related endpoints */
+    Route::get('sub-users', [UserController::class, 'subUsers']);
+    Route::post('sub-users', [UserController::class, 'store']);
+    Route::put('sub-users/{id}', [UserController::class, 'update']);
+    /* sub users related endpoints */
+
     Route::get('localization', function () {
         return response()->json(config('setting.mobile_languages'));
     });

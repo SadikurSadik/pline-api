@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Roles;
 use App\Enums\VisibilityStatus;
 use App\Exports\UsersExport;
 use App\Http\Requests\User\StoreUserRequest;
@@ -103,5 +104,19 @@ class UserController extends Controller implements HasMiddleware
     public function exportExcel(Request $request): BinaryFileResponse
     {
         return Excel::download(new UsersExport($request->all()), 'users.xlsx');
+    }
+
+    public function subUsers(Request $request): JsonResponse|AnonymousResourceCollection
+    {
+        if (auth()->user()->role_id !== Roles::CUSTOMER) {
+            return response()->json(['success' => false, 'message' => __("You don't have permission to access this page.")], 400);
+        }
+
+        $requestData = $request->all();
+        $user = auth()->user();
+        $requestData['parent_id'] = $user->id;
+        $data = $this->service->all($requestData);
+
+        return UserResource::collection($data);
     }
 }
