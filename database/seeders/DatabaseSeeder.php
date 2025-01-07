@@ -53,6 +53,7 @@ class DatabaseSeeder extends Seeder
             VehicleColorSeeder::class,
             ConditionSeeder::class,
             FeatureSeeder::class,
+            PricingPdfSeeder::class,
         ]);
 
         $adminUser->syncRolePermissions();
