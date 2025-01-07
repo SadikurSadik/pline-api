@@ -10,12 +10,11 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserDetailResource;
 use App\Http\Resources\User\UserPermissionResource;
 use App\Http\Resources\User\UserResource;
+use App\Models\Customer;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -37,7 +36,12 @@ class UserController extends Controller
 
     public function index(Request $request): AnonymousResourceCollection
     {
-        $data = $this->service->all($request->all());
+        $filters = $request->all();
+        if (auth()->user()->role_id = Role::CUSTOMER) {
+            $filters['role_id'] = Role::SUB_USER->value;
+            $filters['parent_id'] = auth()->user()->id;
+        }
+        $data = $this->service->all($filters);
 
         return UserResource::collection($data);
     }
@@ -45,7 +49,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): JsonResponse
     {
         $data = $request->validated();
-        if(auth()->user()->role_id == Role::CUSTOMER) {
+        if (auth()->user()->role_id == Role::CUSTOMER) {
             $data['parent_id'] = auth()->user()->id;
         }
         $this->service->store($data);
@@ -108,19 +112,5 @@ class UserController extends Controller
     public function exportExcel(Request $request): BinaryFileResponse
     {
         return Excel::download(new UsersExport($request->all()), 'users.xlsx');
-    }
-
-    public function subUsers(Request $request): JsonResponse|AnonymousResourceCollection
-    {
-        if (auth()->user()->role_id !== Role::CUSTOMER) {
-            return response()->json(['success' => false, 'message' => __("You don't have permission to access this page.")], 400);
-        }
-
-        $requestData = $request->all();
-        $user = auth()->user();
-        $requestData['parent_id'] = $user->id;
-        $data = $this->service->all($requestData);
-
-        return UserResource::collection($data);
     }
 }

@@ -21,7 +21,7 @@ class PricingResource extends JsonResource
 
     private function getPricingPdfUrl($url): ?string
     {
-        if(empty($url)) {
+        if (empty($url)) {
             return null;
         }
 

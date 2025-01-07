@@ -66,7 +66,7 @@ class User extends Authenticatable
 
     public function getPhotoAttribute(): string
     {
-        return !empty( $this->photo_url ) ? Storage::url( $this->photo_url ) : asset( 'images/user_default_profile.jpg' );
+        return ! empty($this->photo_url) ? Storage::url($this->photo_url) : asset('images/user_default_profile.jpg');
     }
 
     public function role(): BelongsTo

@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 
 class InvoiceController extends Controller
 {
-    public function __construct(protected InvoiceService $service){}
+    public function __construct(protected InvoiceService $service) {}
 
     public function vehicleAccountingInvoice(Request $request): AnonymousResourceCollection
     {
@@ -57,7 +57,7 @@ class InvoiceController extends Controller
 
         $vehicleInvoiceData = $this->service->invoiceSummary([
             'customer_id' => optional(auth()->user())->role_id == Role::CUSTOMER ? auth()->user()->id : '',
-            'type' => 'inventory'
+            'type' => 'inventory',
         ]);
         $serviceInvoiceData = $this->service->invoiceSummary([
             'customer_id' => optional(auth()->user())->role_id == Role::CUSTOMER ? auth()->user()->id : '',
@@ -85,7 +85,7 @@ class InvoiceController extends Controller
     {
         $customer_id = auth()->user()->id;
 
-        if ($customer_id){
+        if ($customer_id) {
             ini_set('max_execution_time', 180);
             ini_set('memory_limit', '3072M');
             $customer = Customer::where(['customer_user_id' => $customer_id])->firstOrFail();
@@ -94,10 +94,10 @@ class InvoiceController extends Controller
                 ->where('customer_id', $customer->customer_id)
                 ->where('status', '!=', 0);
 
-            if (! empty($request->invoice_global_search)){
-                if (Str::startsWith($request->invoice_global_search, 'ARO')){
+            if (! empty($request->invoice_global_search)) {
+                if (Str::startsWith($request->invoice_global_search, 'ARO')) {
                     $query->where('invoice_id_str', '=', $request->invoice_global_search);
-                } else{
+                } else {
                     $query->where(function ($query) use ($request) {
                         $query->whereHas('inventory', function ($q) use ($request) {
                             $q->where(DB::raw('LOWER(name)'), 'LIKE',
@@ -107,11 +107,11 @@ class InvoiceController extends Controller
                 }
             }
 
-            if (! empty($request->ak_type)){
+            if (! empty($request->ak_type)) {
                 $query->where('ak_type', '=', $request->ak_type);
             }
 
-            if (! empty($request->status)){
+            if (! empty($request->status)) {
                 $query->whereIn('status', explode(',', $request->status));
             }
 

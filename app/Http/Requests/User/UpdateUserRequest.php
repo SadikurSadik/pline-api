@@ -24,7 +24,7 @@ class UpdateUserRequest extends FormRequest
                 'max:200',
                 Rule::unique('users')->whereNull('deleted_at')->ignore($this->user),
             ],
-//            'password' => 'nullable|min:6|max:12',
+            //            'password' => 'nullable|min:6|max:12',
             'profile_photo' => ['nullable', 'max:200'],
             'role_id' => 'required|integer',
             'status' => ['nullable', new Enum(BooleanStatus::class)],
