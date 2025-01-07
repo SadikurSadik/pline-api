@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('username', 100);
             $table->string('email', 150)->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('profile_photo', 200)->nullable();
             $table->string('device_token', 200)->nullable();
             $table->string('refresh_token', 200)->nullable();
