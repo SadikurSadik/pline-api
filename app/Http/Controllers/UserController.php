@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Roles;
+use App\Enums\Role;
 use App\Enums\VisibilityStatus;
 use App\Exports\UsersExport;
 use App\Http\Requests\User\StoreUserRequest;
@@ -108,7 +108,7 @@ class UserController extends Controller implements HasMiddleware
 
     public function subUsers(Request $request): JsonResponse|AnonymousResourceCollection
     {
-        if (auth()->user()->role_id !== Roles::CUSTOMER) {
+        if (auth()->user()->role_id !== Role::CUSTOMER) {
             return response()->json(['success' => false, 'message' => __("You don't have permission to access this page.")], 400);
         }
 
