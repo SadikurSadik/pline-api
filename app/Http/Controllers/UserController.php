@@ -26,10 +26,10 @@ class UserController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('role_or_permission:owner|manage user', only: ['index', 'permissions', 'updatePermissions', 'changeStatus']),
-            new Middleware('role_or_permission:owner|create user', only: ['store']),
-            new Middleware('role_or_permission:owner|update user', only: ['update']),
-            new Middleware('role_or_permission:owner|view user', only: ['show']),
+            new Middleware('role_or_permission:owner,customer|manage user', only: ['index', 'permissions', 'updatePermissions', 'changeStatus']),
+            new Middleware('role_or_permission:owner,customer|create user', only: ['store']),
+            new Middleware('role_or_permission:owner,customer|update user', only: ['update']),
+            new Middleware('role_or_permission:owner,customer|view user', only: ['show']),
             new Middleware('role_or_permission:owner|delete user', only: ['destroy']),
             new Middleware('role_or_permission:owner|export excel user', only: ['exportExcel']),
         ];
