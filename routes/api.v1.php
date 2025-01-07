@@ -26,6 +26,7 @@ use App\Http\Controllers\TowingRateController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VccController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -177,6 +178,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('pricing-usa', [PricingController::class, 'index']);
     Route::get('pricing-canada', [PricingController::class, 'index']);
     /* pricing related endpoints */
+
+    /* voucher related endpoints */
+    Route::post('approve-reject/voucher/{id}', [VoucherController::class, 'approveRejectVoucherApi']);
+    Route::post('pending-vouchers/{id}', [VoucherController::class, 'voucherDetail']);
+    Route::get('pending-vouchers', [VoucherController::class, 'getVoucherApi']);
+    Route::get('customer-advance-vouchers', [VoucherController::class, 'advancedVoucher']);
+    Route::get('customer-invoice-vouchers', [VoucherController::class, 'invoiceVoucher']);
+    Route::get('payment-modes', [VoucherController::class, 'getPaymentModes']);
+    /* voucher related endpoints */
 
     Route::get('localization', function () {
         return response()->json(config('setting.mobile_languages'));
