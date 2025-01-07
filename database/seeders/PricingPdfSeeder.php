@@ -13,7 +13,7 @@ class PricingPdfSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('pricing_pdf')->insert([
+        DB::table('pricing_pdfs')->insert([
             [
                 'pdf_url_a' => "https://olfat.ams3.cdn.digitaloceanspaces.com/uploads/pricing/documents/1727796606_66fc157e9548e_shipping.pdf",
                 'pdf_url_b' => null,
