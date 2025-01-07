@@ -140,6 +140,13 @@ class PermissionSeeder extends Seeder
             ['name' => 'view vcc', 'module_id' => 17, 'guard_name' => 'web'],
             ['name' => 'delete vcc', 'module_id' => 17, 'guard_name' => 'web'],
             ['name' => 'export excel vcc', 'module_id' => 17, 'guard_name' => 'web'],
+
+            // complain module
+            ['name' => 'manage complain', 'module_id' => 18, 'guard_name' => 'web'],
+            ['name' => 'create complain', 'module_id' => 18, 'guard_name' => 'web'],
+            ['name' => 'update complain', 'module_id' => 18, 'guard_name' => 'web'],
+            ['name' => 'view complain', 'module_id' => 18, 'guard_name' => 'web'],
+            ['name' => 'delete complain', 'module_id' => 18, 'guard_name' => 'web'],
         ]);
     }
 }
