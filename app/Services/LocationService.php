@@ -14,7 +14,7 @@ class LocationService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Location::query();
+        $query = Location::query()->with('country', 'state');
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByName::class,
