@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\AdvancedAccountType;
+use App\Models\Accounting\AdvancedAccount;
 use App\Models\Accounting\Customer;
 use App\Models\Accounting\Invoice;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -64,5 +66,23 @@ class InvoiceService
             'total_due' => $query->sum(DB::raw('total_due')),
             'total_due_aed' => $query->sum(DB::raw('total_due * aed_rate')),
         ];
+    }
+
+    public function advancePaymentSummary(array $filters = []): array
+    {
+        $customer = Customer::where('customer_user_id', $filters['customer_id'])->first();
+        $query = AdvancedAccount::where([
+            'customer_id' => $customer?->customer_id ?? 0,
+            'status' => 2, // approved
+        ]);
+        $query2 = clone $query;
+
+        $data = [
+            'total_amount' => $query->where('amount', '>', 0)->sum('amount'),
+            'total_utilized' => abs($query2->where('amount', '<', 0)->sum('amount')),
+        ];
+        $data['total_due'] = $data['total_amount'] - $data['total_utilized'];
+
+        return $data;
     }
 }

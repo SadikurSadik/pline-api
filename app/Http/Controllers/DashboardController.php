@@ -9,14 +9,16 @@ use App\Models\Customer;
 use App\Models\DamageClaim;
 use App\Services\ComplainService;
 use App\Services\DashboardService;
+use App\Services\InvoiceService;
 use App\Services\NotificationService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function __construct(protected DashboardService $service) {}
 
-    public function index(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $filters = $request->all();
         if (optional(auth()->user())->role_id == Role::CUSTOMER) {
@@ -27,8 +29,7 @@ class DashboardController extends Controller
 
         $data = [
             'status_overview' => $statusOverview,
-            //            'invoice_overview' => app( InvoiceService::class )->invoiceSummary( $filters ),
-            'invoice_overview' => [],
+            'invoice_overview' => app( InvoiceService::class )->invoiceSummary( $filters ),
             'userInfo' => $this->service->userInfo($request->all()),
             'counter' => [
                 'notification' => app(NotificationService::class)->myUnreadNotificationCount(),
@@ -46,14 +47,14 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
-    public function dashboardMobileApi(Request $request)
+    public function dashboardMobileApi(Request $request, InvoiceService $invoiceService): JsonResponse
     {
         $data = [
             'unread_notifications_count' => app(NotificationService::class)->myUnreadNotificationCount(),
             'pending_voucher_count' => 0 /*app(VoucherService::class)->getPendingVoucherCount()*/,
         ];
-        /*if (optional(auth()->user())->role == Role::CUSTOMER) {
-            $invoiceData = app(InvoiceService::class)->invoiceSmmary(['customer_id' => auth()->user()->id]);
+        if (optional(auth()->user())->role == Role::CUSTOMER) {
+            $invoiceData = $invoiceService->invoiceSummary(['customer_id' => auth()->user()->id]);
             $data['invoice_total_amount'] = 'Total: AED '.number_format($invoiceData['total_amount'], 2);
             $total = $invoiceData['total_amount'];
             if (empty($total)) {
@@ -72,7 +73,7 @@ class DashboardController extends Controller
                 ],
             ];
 
-            $advanceData = app(InvoiceService::class)->advancePaymentSmmary(['customer_id' => auth()->user()->id]);
+            $advanceData = $invoiceService->advancePaymentSummary(['customer_id' => auth()->user()->id]);
             $data['advance_total_amount'] = 'Balance: AED '.number_format($advanceData['total_due'], 2);
             $total = $advanceData['total_amount'] + abs($advanceData['total_utilized']);
             if (empty($total)) {
@@ -90,12 +91,12 @@ class DashboardController extends Controller
                     'color' => '#6495ED',
                 ],
             ];
-        }*/
+        }
 
         return response()->json($data);
     }
 
-    public function statusOverview(Request $request): \Illuminate\Http\JsonResponse
+    public function statusOverview(Request $request): JsonResponse
     {
         $filters = $request->all();
         if (auth()->user()->role_id == Role::CUSTOMER) {
@@ -111,7 +112,7 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
-    public function vehicleStatusOverview(Request $request)
+    public function vehicleStatusOverview(Request $request): JsonResponse
     {
         $filters = $request->all();
         if (optional(auth()->user())->role_id == Role::CUSTOMER) {
