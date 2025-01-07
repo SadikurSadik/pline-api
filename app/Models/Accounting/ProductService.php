@@ -3,14 +3,9 @@
 namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class ProductService extends Model
 {
-    //    use LogsActivity;
-
     protected $connection = 'accounting';
 
     protected $fillable = [
@@ -50,25 +45,5 @@ class ProductService extends Model
     public function customer()
     {
         return $this->hasOne(Customer::class, 'customer_id', 'customer_id');
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['*', 'customer.name'])
-            ->setDescriptionForEvent(function (string $eventName) {
-                return trans('auth.audit_events.'.$eventName).' Car & Service: '.$this->name.' for '.$this->sale_price;
-            })
-            ->dontLogIfAttributesChangedOnly(['updated_by', 'updated_at', 'deleted_at'])
-            ->dontSubmitEmptyLogs();
-    }
-
-    public function tapActivity(Activity $activity, string $eventName)
-    {
-        $activity->subject_type = str_replace('\Accounting', '', $activity->subject_type);
-        //        if( data_get($activity, 'subject.misc.updated_by') ){
-        //            $activity->causer_type = 'App\Models\ExtModel\User';
-        //            $activity->causer_id = $activity->subject ? data_get($activity, 'subject.misc.updated_by') : null;
-        //        }
     }
 }

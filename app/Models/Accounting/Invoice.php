@@ -4,14 +4,9 @@ namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Crypt;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Models\Activity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Invoice extends Model
 {
-    //    use LogsActivity, SoftDeletes;
     use SoftDeletes;
 
     protected $connection = 'accounting';
@@ -124,25 +119,5 @@ class Invoice extends Model
     public function invoiceTotalCreditNote()
     {
         return $this->hasMany('App\Models\Accounting\CreditNote', 'invoice', 'id')->sum('amount');
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->setDescriptionForEvent(function (string $eventName) {
-                return trans('auth.audit_events.'.$eventName)." <a href='".env('ACCOUNTING_APP_URL').'/invoice/'.Crypt::encrypt($this->id)."'>Invoice No.".$this->invoice_id_str.'</a> for '.optional($this->customer)->name.':'.optional($this->inventory)->name.' for '.$this->total_amount;
-            })
-            ->logOnly(['*'])
-            ->dontLogIfAttributesChangedOnly(['deleted_at', 'deleted_by', 'updated_at'])
-            ->dontSubmitEmptyLogs();
-    }
-
-    public function tapActivity(Activity $activity, string $eventName)
-    {
-        $activity->subject_type = str_replace('\Accounting', '', $activity->subject_type);
-        //        if( data_get($activity, 'subject.inventory.misc.updated_by') ) {
-        //            $activity->causer_type = 'App\Models\ExtModel\User';
-        //            $activity->causer_id = $activity->subject ? data_get($activity, 'subject.inventory.misc.updated_by') : null;
-        //        }
     }
 }

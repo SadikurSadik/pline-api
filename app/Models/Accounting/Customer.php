@@ -3,13 +3,9 @@
 namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Customer extends Model
 {
-    use LogsActivity;
-
     protected $connection = 'accounting';
 
     protected $fillable = [
@@ -44,19 +40,4 @@ class Customer extends Model
         'password',
         'remember_token',
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        $message = '';
-        $user = auth()?->user();
-        if (! empty($user)) {
-            $message = $user->name.' has %s Customer# ';
-        }
-
-        return LogOptions::defaults()
-            ->setDescriptionForEvent(fn (string $eventName) => sprintf($message, $eventName))
-            ->logOnly(['*'])
-            ->dontLogIfAttributesChangedOnly(['updated_at', 'last_login_at', 'created_by', 'avatar'])
-            ->dontSubmitEmptyLogs();
-    }
 }
