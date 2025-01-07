@@ -20,7 +20,7 @@ class CashflowVoucherResource extends JsonResource
             'payment_mode' => data_get($this, 'payment_method.holder_name'),
             'credit_amount' => number_format(abs($this->amount)),
             'voucher_type' => $this->account === 3 ? 'TT Cash' : 'Other Cash',
-            'owner_approval_status' => $this->owner_approval_status,
+            'owner_approval_status' => 1,
             'signature_url' => ! empty($this->signature_url) ? Storage::url($this->signature_url) : null,
         ];
     }

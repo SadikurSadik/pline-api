@@ -21,7 +21,7 @@ class AdvancedVoucherResource extends JsonResource
             'credit_amount' => '$'.number_format(abs($this->amount)),
             'voucher_type' => 'Advance',
             'advance_type' => $this->amount < 0 ? 'Withdraw' : 'Deposit',
-            'owner_approval_status' => $this->owner_approval_status,
+            'owner_approval_status' => 1,
             'signature_url' => ! empty($this->signature_url) ? Storage::url($this->signature_url) : null,
             'pdf_url' => url('api/v1/advanced-account-receipt/print-pdf/'.$this->id),
         ];
