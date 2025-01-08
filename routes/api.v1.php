@@ -175,6 +175,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* invoice related endpoints */
 
     /* pricing related endpoints */
+    Route::get('shipping-price-per-vehicle', [PricingController::class, 'pricingPerVehicle']);
     Route::get('pricing-usa', [PricingController::class, 'index']);
     Route::get('pricing-canada', [PricingController::class, 'index']);
     Route::delete('pricing/{id}', [PricingController::class, 'destroy']);

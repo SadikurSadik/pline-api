@@ -29,7 +29,7 @@ class FilterPipelineService
 
                 $limit = Arr::get($data, 'limit', 20);
 
-                return $limit === -1 ? $query->get() : $query->paginate($limit);
+                return $limit == -1 ? $query->get() : $query->paginate($limit);
             });
     }
 }
