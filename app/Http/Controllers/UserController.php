@@ -129,7 +129,7 @@ class UserController extends Controller
                 return response()->json( [ 'success' => false, 'profile_photo' => '', 'message' => 'Failed to file upload' ], \Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST );
             }
 
-            $this->service->update( auth()->user()->id, [ 'photo_url' => str_replace( config('app.media_url'), '', $upload ) ] );
+            $this->service->update( auth()->user()->id, [ 'photo_url' => str_replace( config('app.media_url'), '', $upload ), 'status' => 1 ] );
 
             return response()->json( [ 'success' => true, 'profile_photo' => $upload ] );
         } catch ( \Exception $e ) {
