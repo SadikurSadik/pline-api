@@ -11,5 +11,5 @@ class PricingPdf extends Model
 
     protected $table = 'pricing_pdfs';
 
-    protected $fillable = ['pdf_url_a', 'pdf_url_b', 'pdf_url_c', 'pdf_url_d', 'user_id', 'expire_at'];
+    protected $fillable = ['pdf_url_a', 'pdf_url_b', 'user_id', 'expire_at'];
 }

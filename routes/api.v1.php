@@ -177,6 +177,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* pricing related endpoints */
     Route::get('pricing-usa', [PricingController::class, 'index']);
     Route::get('pricing-canada', [PricingController::class, 'index']);
+    Route::delete('pricing/{id}', [PricingController::class, 'destroy']);
     /* pricing related endpoints */
 
     /* voucher related endpoints */
