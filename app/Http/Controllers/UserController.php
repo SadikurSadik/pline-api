@@ -37,7 +37,7 @@ class UserController extends Controller
     public function index(Request $request): AnonymousResourceCollection
     {
         $filters = $request->all();
-        if (auth()->user()->role_id = Role::CUSTOMER) {
+        if (auth()->user()->role_id == Role::CUSTOMER) {
             $filters['role_id'] = Role::SUB_USER->value;
             $filters['parent_id'] = auth()->user()->id;
         }
