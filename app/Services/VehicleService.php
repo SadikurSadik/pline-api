@@ -60,7 +60,7 @@ class VehicleService
             'vehicle_features',
             'documents',
             'invoices',
-        ])->when($customerUserId, function ($q) use ($customerUserId){
+        ])->when($customerUserId, function ($q) use ($customerUserId) {
             $q->where('customer_user_id', $customerUserId);
         })->find($id);
     }

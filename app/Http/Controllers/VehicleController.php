@@ -65,7 +65,7 @@ class VehicleController extends Controller implements HasMiddleware
         if (optional(auth()->user())->role_id == Role::CUSTOMER) {
             $customerUserId = auth()->user()->id;
         } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
-            $customerUserId= auth()->user()->parent_id;
+            $customerUserId = auth()->user()->parent_id;
         }
         $data = $this->service->getById($id, $customerUserId);
 

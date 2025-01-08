@@ -29,7 +29,7 @@ class DashboardController extends Controller
 
         $data = [
             'status_overview' => $statusOverview,
-            'invoice_overview' => app( InvoiceService::class )->invoiceSummary( $filters ),
+            'invoice_overview' => app(InvoiceService::class)->invoiceSummary($filters),
             'userInfo' => $this->service->userInfo($request->all()),
             'counter' => [
                 'notification' => app(NotificationService::class)->myUnreadNotificationCount(),

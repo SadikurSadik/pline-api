@@ -37,11 +37,11 @@ class ContainerService
             'customer',
             'port_of_loading',
             'port_of_discharge',
-            'vehicles' => function($query) use($filters) {
-                if(!empty($filters['customer_user_id'])){
+            'vehicles' => function ($query) use ($filters) {
+                if (! empty($filters['customer_user_id'])) {
                     $query->where('customer_user_id', $filters['customer_user_id']);
                 }
-            }
+            },
         ]);
 
         return app(FilterPipelineService::class)->apply($query, [

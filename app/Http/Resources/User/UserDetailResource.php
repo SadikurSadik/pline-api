@@ -43,7 +43,7 @@ class UserDetailResource extends JsonResource
 
     private function getAccountingLoginUrlProperty(): ?string
     {
-        if( !in_array( $this->role_id, [Role::OWNER, Role::SUPER_ADMIN, Role::ACCOUNTANT] ) ) {
+        if (! in_array($this->role_id, [Role::OWNER, Role::SUPER_ADMIN, Role::ACCOUNTANT])) {
             return null;
         }
 
@@ -51,11 +51,11 @@ class UserDetailResource extends JsonResource
         $encUserId = Crypt::encryptString($userId);
 
         $data = [
-            'userId' => $encUserId
+            'userId' => $encUserId,
         ];
 
-        $encData = urlencode( json_encode($data) );
+        $encData = urlencode(json_encode($data));
 
-        return env('ACCOUNTING_APP_URL') . '/accounting-auth?enc_data='. $encData;
+        return env('ACCOUNTING_APP_URL').'/accounting-auth?enc_data='.$encData;
     }
 }

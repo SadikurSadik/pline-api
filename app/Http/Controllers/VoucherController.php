@@ -19,7 +19,7 @@ use Illuminate\Http\Response;
 
 class VoucherController extends Controller
 {
-    public function __construct(protected VoucherService $service){}
+    public function __construct(protected VoucherService $service) {}
 
     public function index(Request $request)
     {

@@ -118,25 +118,25 @@ class UserController extends Controller
 
     public function uploadProfilePhoto(FileManagerService $fileStorage, Request $request): JsonResponse
     {
-        $request->validate( [
+        $request->validate([
             'photo' => 'required|image',
-        ] );
+        ]);
 
         try {
-            $upload = $fileStorage->uploadPhoto( $request->photo, 'uploads/users/profile-pics', null, 200 );
+            $upload = $fileStorage->uploadPhoto($request->photo, 'uploads/users/profile-pics', null, 200);
 
-            if ( !$upload ) {
-                return response()->json( [ 'success' => false, 'profile_photo' => '', 'message' => 'Failed to file upload' ], \Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST );
+            if (! $upload) {
+                return response()->json(['success' => false, 'profile_photo' => '', 'message' => 'Failed to file upload'], \Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST);
             }
 
-            $this->service->update( auth()->user()->id, [ 'photo_url' => str_replace( config('app.media_url'), '', $upload ), 'status' => 1 ] );
+            $this->service->update(auth()->user()->id, ['photo_url' => str_replace(config('app.media_url'), '', $upload), 'status' => 1]);
 
-            return response()->json( [ 'success' => true, 'profile_photo' => $upload ] );
-        } catch ( \Exception $e ) {
-            return response()->json( [
+            return response()->json(['success' => true, 'profile_photo' => $upload]);
+        } catch (\Exception $e) {
+            return response()->json([
                 'success' => false,
-                'message' => 'Failed to changed password.' . $e->getMessage(),
-            ], Response::HTTP_BAD_REQUEST );
+                'message' => 'Failed to changed password.'.$e->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 }

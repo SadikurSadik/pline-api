@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class VoucherService
 {
-
     public function customerAdvanceVoucherList(array $filters = []): LengthAwarePaginator
     {
         $query = AdvancedAccount::query();
@@ -97,5 +96,4 @@ class VoucherService
 
         return $query->find($id);
     }
-
 }

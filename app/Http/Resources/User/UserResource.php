@@ -2,10 +2,8 @@
 
 namespace App\Http\Resources\User;
 
-use App\Enums\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
 class UserResource extends JsonResource

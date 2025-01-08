@@ -15,6 +15,8 @@ class StoreLocationRequest extends FormRequest
                 'max:200',
                 Rule::unique('locations')->whereNull('deleted_at'),
             ],
+            'country_id' => 'required|integer',
+            'state_id' => 'required|integer',
             'status' => ['required', 'boolean'],
         ];
     }
