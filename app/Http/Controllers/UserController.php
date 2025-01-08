@@ -11,10 +11,12 @@ use App\Http\Resources\User\UserDetailResource;
 use App\Http\Resources\User\UserPermissionResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\Customer;
+use App\Services\FileManagerService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -112,5 +114,29 @@ class UserController extends Controller
     public function exportExcel(Request $request): BinaryFileResponse
     {
         return Excel::download(new UsersExport($request->all()), 'users.xlsx');
+    }
+
+    public function uploadProfilePhoto(FileManagerService $fileStorage, Request $request): JsonResponse
+    {
+        $request->validate( [
+            'photo' => 'required|image',
+        ] );
+
+        try {
+            $upload = $fileStorage->uploadPhoto( $request->photo, 'uploads/users/profile-pics', null, 200 );
+
+            if ( !$upload ) {
+                return response()->json( [ 'success' => false, 'profile_photo' => '', 'message' => 'Failed to file upload' ], \Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST );
+            }
+
+            $this->service->update( auth()->user()->id, [ 'photo_url' => str_replace( config('app.media_url'), '', $upload ) ] );
+
+            return response()->json( [ 'success' => true, 'profile_photo' => $upload ] );
+        } catch ( \Exception $e ) {
+            return response()->json( [
+                'success' => false,
+                'message' => 'Failed to changed password.' . $e->getMessage(),
+            ], Response::HTTP_BAD_REQUEST );
+        }
     }
 }
