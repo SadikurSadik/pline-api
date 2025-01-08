@@ -20,7 +20,6 @@ class UserResource extends JsonResource
             'role_name' => $this->role_id->name,
             'status_name' => $this->status->getLabel(),
             'profile_photo' => $this->getProfilePhoto($this->profile_photo),
-            'accounting_login_url' => $this->getAccountingLoginUrlProperty(),
         ];
     }
 
@@ -31,23 +30,5 @@ class UserResource extends JsonResource
         }
 
         return Storage::url($photo);
-    }
-
-    private function getAccountingLoginUrlProperty(): ?string
-    {
-        if( !in_array( auth()->user()->role_id, [Role::OWNER, Role::SUPER_ADMIN, Role::ACCOUNTANT] ) ) {
-            return null;
-        }
-
-        $userId = auth()->user()->id;
-        $encUserId = Crypt::encryptString($userId);
-
-        $data = [
-            'userId' => $encUserId
-        ];
-
-        $encData = urlencode( json_encode($data) );
-
-        return env('ACCOUNTING_APP_URL') . '/accounting-auth?enc_data='. $encData;
     }
 }

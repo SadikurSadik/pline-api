@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources\User;
 
+use App\Enums\Role;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
 class UserDetailResource extends JsonResource
@@ -26,6 +28,7 @@ class UserDetailResource extends JsonResource
             'role_name' => $this->role_id->name,
             'status' => $this->status->value,
             'status_name' => $this->status->getLabel(),
+            'accounting_login_url' => $this->getAccountingLoginUrlProperty(),
         ];
     }
 
@@ -36,5 +39,23 @@ class UserDetailResource extends JsonResource
         }
 
         return Storage::url($photo);
+    }
+
+    private function getAccountingLoginUrlProperty(): ?string
+    {
+        if( !in_array( auth()->user()->role_id, [Role::OWNER, Role::SUPER_ADMIN, Role::ACCOUNTANT] ) ) {
+            return null;
+        }
+
+        $userId = auth()->user()->id;
+        $encUserId = Crypt::encryptString($userId);
+
+        $data = [
+            'userId' => $encUserId
+        ];
+
+        $encData = urlencode( json_encode($data) );
+
+        return env('ACCOUNTING_APP_URL') . '/accounting-auth?enc_data='. $encData;
     }
 }
