@@ -29,7 +29,11 @@ class VehicleService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Vehicle::query()->with(['customer', 'location']);
+        $query = Vehicle::query()->with(['customer' => function($query) use($filters) {
+            if(!empty($filters['customer_user_id'])){
+                $query->where('customer_user_id', $filters['customer_user_id']);
+            }
+        }, 'location']);
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByStatus::class,
@@ -46,7 +50,7 @@ class VehicleService
         ], $filters);
     }
 
-    public function getById(int $id)
+    public function getById(int $id, $customerUserId = null)
     {
         return Vehicle::with([
             'customer',
@@ -60,7 +64,9 @@ class VehicleService
             'vehicle_features',
             'documents',
             'invoices',
-        ])->find($id);
+        ])->when($customerUserId, function ($q) use ($customerUserId){
+            $q->where('customer_user_id', $customerUserId);
+        })->find($id);
     }
 
     public function store(array $data)

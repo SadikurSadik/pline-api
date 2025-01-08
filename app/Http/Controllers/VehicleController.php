@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Enums\VehicleDocumentType;
 use App\Enums\VehiclePhotoType;
 use App\Exports\VehiclesExport;
@@ -40,7 +41,13 @@ class VehicleController extends Controller implements HasMiddleware
 
     public function index(Request $request): AnonymousResourceCollection
     {
-        $data = $this->service->all($request->all());
+        $filters = $request->all();
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $filters['customer_user_id'] = auth()->user()->id;
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
+            $filters['customer_user_id'] = auth()->user()->parent_id;
+        }
+        $data = $this->service->all($filters);
 
         return VehicleResource::collection($data);
     }
@@ -54,7 +61,13 @@ class VehicleController extends Controller implements HasMiddleware
 
     public function show(string $id): VehicleDetailResource
     {
-        $data = $this->service->getById($id);
+        $customerUserId = null;
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $customerUserId = auth()->user()->id;
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
+            $customerUserId= auth()->user()->parent_id;
+        }
+        $data = $this->service->getById($id, $customerUserId);
 
         return new VehicleDetailResource($data);
     }
