@@ -83,6 +83,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('customers/upload-document', [CustomerController::class, 'uploadDocument']);
     Route::post('customers/upload-profile-photo', [CustomerController::class, 'uploadProfilePhoto']);
     Route::apiResource('customers', CustomerController::class);
+    Route::post('contact-us', [CustomerController::class, 'contactMessage']);
     /* customer related endpoints */
 
     /* consignee related endpoints */

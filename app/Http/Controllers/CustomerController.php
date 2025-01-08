@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Exports\CustomersExport;
+use App\Http\Requests\Customer\CustomerQueryMessage;
 use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\Customer\CustomerDetailResource;
 use App\Http\Resources\Customer\CustomerResource;
+use App\Models\ContactUs;
 use App\Services\CustomerService;
 use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
@@ -14,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -122,5 +125,18 @@ class CustomerController extends Controller implements HasMiddleware
     public function exportExcel(Request $request): BinaryFileResponse
     {
         return Excel::download(new CustomersExport($request->all()), 'customers.xlsx');
+    }
+
+    public function contactMessage(CustomerQueryMessage $request): JsonResponse
+    {
+        try {
+            ContactUs::create($request->validated());
+
+            return response()->json(['success' => true, 'message' => __('Message sent successfully.')]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            return response()->json(['success' => false, 'message' => __('Unable to create contact message.'), 'error' => $e->getMessage()]);
+        }
     }
 }
