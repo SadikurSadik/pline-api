@@ -78,7 +78,6 @@ class PricingController extends Controller
                 foreach ($items as $towing_rate) {
                     $shipping_price = $data[$towing_rate->location_id]->{'rate_'.$category} / 4;
                     $towing_price = $towing_rate->{'rate_'.$category};
-                    dd($shipping_price, $towing_price);
                     $cities[] = ['id' => $towing_rate->city_id, 'name' => data_get($towing_rate, 'city.name'), 'state_code' => data_get($towing_rate, 'city.state.short_code'), 'price' => ($shipping_price + $clearance_rate + $profit_rate + $towing_price)];
                 }
                 $responseData[] = [
