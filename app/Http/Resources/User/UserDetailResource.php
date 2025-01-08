@@ -43,11 +43,11 @@ class UserDetailResource extends JsonResource
 
     private function getAccountingLoginUrlProperty(): ?string
     {
-        if( !in_array( auth()->user()->role_id, [Role::OWNER, Role::SUPER_ADMIN, Role::ACCOUNTANT] ) ) {
+        if( !in_array( $this->role_id, [Role::OWNER, Role::SUPER_ADMIN, Role::ACCOUNTANT] ) ) {
             return null;
         }
 
-        $userId = auth()->user()->id;
+        $userId = $this->id;
         $encUserId = Crypt::encryptString($userId);
 
         $data = [
