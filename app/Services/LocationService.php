@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Enums\VisibilityStatus;
+use App\Filters\FilterByCountry;
 use App\Filters\FilterByName;
+use App\Filters\FilterByState;
 use App\Filters\FilterByStatus;
 use App\Models\Location;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -18,6 +20,8 @@ class LocationService
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByName::class,
+            FilterByCountry::class,
+            FilterByState::class,
             FilterByStatus::class,
         ], $filters);
     }
