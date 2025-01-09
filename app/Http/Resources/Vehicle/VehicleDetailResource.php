@@ -70,6 +70,8 @@ class VehicleDetailResource extends JsonResource
             'title_type_name' => data_get($this, 'title_type.name'),
             'status' => $this->status,
             'status_name' => $this->status->getLabel(),
+            'container_number' => $this->container?->container_number,
+            'arrival_date' => $this->container?->arrival_date,
             'vehicle_conditions' => $this->vehicle_conditions->pluck('value', 'condition_id'),
             'vehicle_features' => $this->vehicle_features->pluck('feature_id', 'feature_id'),
             'tracking_statuses' => Vehicle::$trackingStatuses,
