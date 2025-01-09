@@ -29,6 +29,7 @@ class UserDetailResource extends JsonResource
             'status' => $this->status->value,
             'status_name' => $this->status->getLabel(),
             'accounting_login_url' => $this->getAccountingLoginUrlProperty(),
+            'advanced_payment_report_url' => $this->advancedPaymentReportUrl(),
         ];
     }
 
@@ -57,5 +58,14 @@ class UserDetailResource extends JsonResource
         $encData = urlencode(json_encode($data));
 
         return env('ACCOUNTING_APP_URL').'/accounting-auth?enc_data='.$encData;
+    }
+
+    private function advancedPaymentReportUrl(): ?string
+    {
+        if ($this->role_id != Role::CUSTOMER) {
+            return null;
+        }
+
+        return env('ACCOUNTING_APP_URL') . '/customer-advance-report/' . Crypt::encrypt(auth()->user()->id);
     }
 }
