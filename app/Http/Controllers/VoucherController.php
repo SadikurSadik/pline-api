@@ -169,7 +169,7 @@ class VoucherController extends Controller
 
     public function advancedVoucher(Request $request): AnonymousResourceCollection|JsonResponse
     {
-        if (auth()->user()->role != Role::CUSTOMER){
+        if (auth()->user()->role_id != Role::CUSTOMER){
             return errorResponse('You are not authorized to do this action.');
         }
 
