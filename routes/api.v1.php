@@ -34,6 +34,9 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
 });
 
+Route::get('invoice/payment-receipt', [VoucherController::class, 'invoicePaymentReceipt']);
+Route::get('advanced-account-receipt/print-pdf/{id}', [VoucherController::class, 'advancedPaymentReceipt']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
 
@@ -191,8 +194,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('customer-advance-vouchers', [VoucherController::class, 'advancedVoucher']);
     Route::get('customer-invoice-vouchers', [VoucherController::class, 'invoiceVoucher']);
     Route::get('payment-modes', [VoucherController::class, 'getPaymentModes']);
-    Route::get('invoice/payment-receipt', [VoucherController::class, 'invoicePaymentReceipt']);
-    Route::get('advanced-account-receipt/print-pdf/{id}', [VoucherController::class, 'advancedPaymentReceipt']);
     /* voucher related endpoints */
 
     Route::get('localization', function () {

@@ -19,23 +19,25 @@ use Illuminate\Http\Response;
 
 class VoucherController extends Controller
 {
-    public function __construct(protected VoucherService $service) {}
+    public function __construct(protected VoucherService $service)
+    {
+    }
 
     public function index(Request $request)
     {
         $limit = $request->get('limit', 50);
 
-        if (auth()->user()->role_id != Role::OWNER) {
+        if (auth()->user()->role_id != Role::OWNER){
             return response()->json([
                 'success' => false,
                 'message' => __('You are not authorized to do this action.'),
             ], 400);
         }
 
-        if ($request->type == 'ttcash') {
+        if ($request->type == 'ttcash'){
             $ttCashPayments = CashflowTransaction::with('payment_method')
                 ->where(['account' => 3, 'type' => 2, 'owner_approval_status' => 0]);
-            if ($request->get('global_search')) {
+            if ($request->get('global_search')){
                 $ttCashPayments = $ttCashPayments->where(function ($q) use ($request) {
                     $q->where('voucher_number', $request->global_search)
                         ->orWhere('name', 'LIKE', '%'.$request->global_search.'%')
@@ -43,16 +45,16 @@ class VoucherController extends Controller
                 });
             }
 
-            if ($request->get('payment_mode')) {
+            if ($request->get('payment_mode')){
                 $ttCashPayments = $ttCashPayments->where('payment_mode', '=', $request->get('payment_mode'));
             }
 
             return CashflowVoucherResource::collection($ttCashPayments->paginate($limit));
         }
-        if ($request->type == 'othercash') {
+        if ($request->type == 'othercash'){
             $otherPayments = CashflowTransaction::with('payment_method')
                 ->where(['account' => 2, 'type' => 2, 'owner_approval_status' => 0]);
-            if ($request->get('global_search')) {
+            if ($request->get('global_search')){
                 $otherPayments = $otherPayments->where(function ($q) use ($request) {
                     $q->where('voucher_number', $request->global_search)
                         ->orWhere('name', 'LIKE', '%'.$request->global_search.'%')
@@ -60,24 +62,24 @@ class VoucherController extends Controller
                 });
             }
 
-            if ($request->get('payment_mode')) {
+            if ($request->get('payment_mode')){
                 $otherPayments = $otherPayments->where('payment_mode', '=', $request->get('payment_mode'));
             }
 
             return CashflowVoucherResource::collection($otherPayments->paginate($limit));
-        } else {
+        } else{
             $customerAdvances = AdvancedAccount::with('payment_method')->where('amount', '<',
                 0)->where('owner_approval_status', 0)
                 ->withoutNonCash()
                 ->orderby('date', 'asc');
-            if ($request->get('global_search')) {
+            if ($request->get('global_search')){
                 $customerAdvances = $customerAdvances->where(function ($q) use ($request) {
                     $q->where('voucher_no', $request->global_search)
                         ->orWhere('note', 'LIKE', '%'.$request->global_search.'%');
                 });
             }
 
-            if ($request->get('payment_mode')) {
+            if ($request->get('payment_mode')){
                 $customerAdvances = $customerAdvances->where('payment_mode', '=', $request->get('payment_mode'));
             }
 
@@ -88,12 +90,12 @@ class VoucherController extends Controller
     public function rejectApproveVoucher($id, Request $request): JsonResponse
     {
         $rules = ['approve_reject' => 'required', 'type' => 'required'];
-        if ($request->approve_reject == 'rejected') {
+        if ($request->approve_reject == 'rejected'){
             $rules['app_reject_note'] = 'required';
         }
         $this->validate($request, $rules);
 
-        if (auth()->user()->role_id != Role::OWNER) {
+        if (auth()->user()->role_id != Role::OWNER){
             return response()->json([
                 'success' => false,
                 'message' => __('You are not authorized to do this action.'),
@@ -101,15 +103,15 @@ class VoucherController extends Controller
         }
 
         try {
-            if ($request->type === 'advanced') {
+            if ($request->type === 'advanced'){
                 $modelObj = new AdvancedAccount;
-            } else {
+            } else{
                 $modelObj = new CashflowTransaction;
             }
 
-            if ($request->approve_reject == 'approved') {
+            if ($request->approve_reject == 'approved'){
                 $status = 1;
-            } else {
+            } else{
                 $status = 2;
             }
 
@@ -134,7 +136,7 @@ class VoucherController extends Controller
 
     public function getPaymentModes(): JsonResponse
     {
-        if (auth()->user()->role_id != Role::OWNER) {
+        if (auth()->user()->role_id != Role::OWNER){
             return response()->json([
                 'success' => false,
                 'message' => __('You are not authorized to do this action.'),
@@ -151,7 +153,7 @@ class VoucherController extends Controller
     {
         $request->validate(['type' => 'required']);
 
-        if (! in_array(auth()->user()->role_id, [Role::OWNER, Role::CUSTOMER])) {
+        if (! in_array(auth()->user()->role_id, [Role::OWNER, Role::CUSTOMER])){
             return response()->json([
                 'success' => false,
                 'message' => __('You are not authorized to do this action.'),
@@ -165,18 +167,28 @@ class VoucherController extends Controller
             ($type === 'invoice' ? new InvoiceVoucherResource($data) : new CashflowVoucherResource($data));
     }
 
-    public function advancedVoucher(Request $request): AnonymousResourceCollection
+    public function advancedVoucher(Request $request): AnonymousResourceCollection|JsonResponse
     {
+        if (auth()->user()->role != Role::CUSTOMER){
+            return errorResponse('You are not authorized to do this action.');
+        }
+
         $customer = Customer::where('customer_user_id', auth()->user()->id)->firstOrFail();
-        $data = $this->service->customerAdvanceVoucherList(array_merge($request->all(), ['customer_id' => $customer->customer_id]));
+        $data = $this->service->customerAdvanceVoucherList(array_merge($request->all(),
+            ['customer_id' => $customer->customer_id]));
 
         return AdvancedVoucherResource::collection($data);
     }
 
-    public function invoiceVoucher(Request $request): AnonymousResourceCollection
+    public function invoiceVoucher(Request $request): AnonymousResourceCollection|JsonResponse
     {
+        if (auth()->user()->role != Role::CUSTOMER){
+            return errorResponse('You are not authorized to do this action.');
+        }
+
         $customer = Customer::where('customer_user_id', auth()->user()->id)->firstOrFail();
-        $data = $this->service->customerInvoiceVoucherList(array_merge($request->all(), ['customer_id' => $customer->customer_id]));
+        $data = $this->service->customerInvoiceVoucherList(array_merge($request->all(),
+            ['customer_id' => $customer->customer_id]));
 
         return InvoiceVoucherResource::collection($data);
     }
@@ -189,7 +201,7 @@ class VoucherController extends Controller
             ->firstOrFail();
 
         $invoiceData = [];
-        if ($invoicePayment) {
+        if ($invoicePayment){
             $invoiceData = InvoicePayment::with('invoice')
                 ->whereIn('id', $invoicePayment->group_payment_ids ?? [$paymentId])
                 ->get();
@@ -210,6 +222,6 @@ class VoucherController extends Controller
             ->setPaper('a4', 'portrait')
             ->setOptions(['defaultFont' => 'sans-serif', 'isRemoteEnabled' => true]);
 
-        return $pdf->stream(($invoicePayment->amount > 0 ? 'Receipt' : 'Payment').'_Voucher_Advance_Payment_'.$invoicePayment->voucher_no.'.pdf');
+        return $pdf->stream(($invoicePayment->amount>0 ? 'Receipt' : 'Payment').'_Voucher_Advance_Payment_'.$invoicePayment->voucher_no.'.pdf');
     }
 }

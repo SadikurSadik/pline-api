@@ -147,6 +147,12 @@ class PermissionSeeder extends Seeder
             ['name' => 'update complain', 'module_id' => 18, 'guard_name' => 'web'],
             ['name' => 'view complain', 'module_id' => 18, 'guard_name' => 'web'],
             ['name' => 'delete complain', 'module_id' => 18, 'guard_name' => 'web'],
+
+            // pricing module
+            ['name' => 'shipping price', 'module_id' => 19, 'guard_name' => 'web'],
+            ['name' => 'generate pricing pdf', 'module_id' => 19, 'guard_name' => 'web'],
+            ['name' => 'pricing pdf', 'module_id' => 19, 'guard_name' => 'web'],
+            ['name' => 'delete pricing pdf', 'module_id' => 19, 'guard_name' => 'web'],
         ]);
     }
 }

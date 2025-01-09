@@ -31,6 +31,7 @@ class ModuleSeeder extends Seeder
             ['name' => 'Damage Claim'],
             ['name' => 'VCC'],
             ['name' => 'Complain'],
+            ['name' => 'Pricing'],
         ]);
     }
 }
