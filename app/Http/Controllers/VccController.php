@@ -241,7 +241,7 @@ class VccController extends Controller implements HasMiddleware
     public function storeSubmitExitPaper($id, StoreVccSubmitExitPaper $request): JsonResponse
     {
         $vcc = $this->service->getById($id);
-        if ($vcc->status !== VccStatus::HANDED_OVER || ! empty($vcc->exit_paper)) {
+        if ($vcc->status != VccStatus::HANDED_OVER || empty($vcc->exit_paper)) {
             return errorResponse(__('VCC exit paper already submitted previously.'));
         }
 
