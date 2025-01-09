@@ -72,6 +72,19 @@ class VehicleController extends Controller implements HasMiddleware
         return new VehicleDetailResource($data);
     }
 
+    public function getByVin(Request $request): VehicleDetailResource
+    {
+        $customerUserId = null;
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $customerUserId = auth()->user()->id;
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
+            $customerUserId = auth()->user()->parent_id;
+        }
+        $data = $this->service->getByVin($request->vin, $customerUserId);
+
+        return new VehicleDetailResource($data);
+    }
+
     public function update(UpdateVehicleRequest $request, string $id): JsonResponse
     {
         $this->service->update($id, $request->validated());

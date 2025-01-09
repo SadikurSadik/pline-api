@@ -102,6 +102,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* pricing related endpoints */
 
     /* vehicles related endpoints */
+    Route::get('vehicles/search-by-vin', [VehicleController::class, 'getByVin']);
     Route::get('vehicles/{id}/all-photos', [VehicleController::class, 'allPhotos']);
     Route::post('vehicles/{id}/add-more-photos', [VehicleController::class, 'addMorePhotos']);
     Route::get('vehicles/{id}/download-photos', [VehicleController::class, 'downloadVehiclePhotos']);

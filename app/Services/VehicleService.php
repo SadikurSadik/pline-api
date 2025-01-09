@@ -257,4 +257,23 @@ class VehicleService
 
         VehicleDocument::whereIn('id', $photoIds)->delete();
     }
+
+    public function getByVin(mixed $vin, null $customerUserId)
+    {
+        return Vehicle::with([
+            'customer',
+            'location',
+            'title_type',
+            'yard_photos',
+            'auction_photos',
+            'pickup_photos',
+            'arrived_photos',
+            'vehicle_conditions',
+            'vehicle_features',
+            'documents',
+            'invoices',
+        ])->when($customerUserId, function ($q) use ($customerUserId) {
+            $q->where('customer_user_id', $customerUserId);
+        })->where('vin', $vin)->firstOrFail();
+    }
 }
