@@ -274,6 +274,11 @@ class VehicleService
             'invoices',
         ])->when($customerUserId, function ($q) use ($customerUserId) {
             $q->where('customer_user_id', $customerUserId);
-        })->where('vin', $vin)->firstOrFail();
+        })->where(function ($query) use ($vin) {
+            $query->where('vin_number', $vin)
+                ->orWhereHas('container.container_number', function ($query) use ($vin){
+                    $query->where('container_number', $vin);
+                });
+        })->firstOrFail();
     }
 }
