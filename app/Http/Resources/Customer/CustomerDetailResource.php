@@ -38,6 +38,7 @@ class CustomerDetailResource extends JsonResource
             'category' => $this->category,
             'documents' => $this->customerDocuments($this->documents ?? []),
             'status' => $this->user?->status,
+            'block_issue_vcc' => $this->block_issue_vcc,
             'status_name' => ! empty($this->user) ? $this->user->status->getLabel() : '',
         ];
     }

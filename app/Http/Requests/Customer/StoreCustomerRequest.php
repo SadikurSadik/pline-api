@@ -34,6 +34,7 @@ class StoreCustomerRequest extends FormRequest
             'state_id' => 'nullable|integer',
             'city_id' => 'nullable|integer',
             'status' => 'nullable|boolean',
+            'block_issue_vcc' => 'nullable|boolean',
             'buyer_ids' => 'nullable|array',
             'documents' => 'nullable|array',
         ];

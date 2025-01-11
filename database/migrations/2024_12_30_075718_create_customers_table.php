@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer('city_id')->nullable();
             $table->string('category')->nullable()->default('A');
             $table->text('documents')->nullable();
+            $table->tinyInteger('block_issue_vcc')->nullable()->default(2);
             $table->softDeletes();
             $table->timestamps();
         });

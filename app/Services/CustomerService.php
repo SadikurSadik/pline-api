@@ -49,6 +49,8 @@ class CustomerService
     {
         $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
             VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
+        $data['block_issue_vcc'] = Arr::get($data, 'block_issue_vcc') == VisibilityStatus::ACTIVE->value ?
+            VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $customer = Customer::findOrNew($id);
         $user = User::findOrNew($customer->user_id);
         if (empty($data['password'])) {
