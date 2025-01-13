@@ -11,14 +11,10 @@ use App\Filters\FilterByCustomerID;
 use App\Filters\FilterByName;
 use App\Filters\FilterByStatusOnUserRelation;
 use App\Models\Customer;
-use App\Models\CustomerDocument;
 use App\Models\User;
-use App\Models\VehicleDocument;
-use App\Models\VehiclePhoto;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Storage;
 
 class CustomerService
 {
@@ -26,14 +22,14 @@ class CustomerService
     {
         $query = Customer::with(['user', 'city'])->withCount([
             'vehicles',
-            'vehicles as on_hand'    => function ( $q ) {
-                $q->where( 'status', '=', VehicleStatus::ON_HAND->value );
+            'vehicles as on_hand' => function ($q) {
+                $q->where('status', '=', VehicleStatus::ON_HAND->value);
             },
-            'vehicles as on_the_way' => function ( $q ) {
-                $q->where( 'status', '=', VehicleStatus::ON_THE_WAY->value );
+            'vehicles as on_the_way' => function ($q) {
+                $q->where('status', '=', VehicleStatus::ON_THE_WAY->value);
             },
-            'vehicles as arrived'    => function ( $q ) {
-                $q->where( 'status', '=', VehicleStatus::ARRIVED->value );
+            'vehicles as arrived' => function ($q) {
+                $q->where('status', '=', VehicleStatus::ARRIVED->value);
             },
         ]);
 
@@ -48,7 +44,7 @@ class CustomerService
 
     public function getById(int $id)
     {
-        return Customer::with(['user', 'country', 'state', 'city', 'documents', 'consignees'])->find($id);
+        return Customer::with(['user', 'country', 'state', 'city', 'consignees'])->find($id);
     }
 
     public function store(array $data)
@@ -71,7 +67,7 @@ class CustomerService
         $user = User::findOrNew($customer->user_id);
         $user->fill($data);
         $user->role_id = Role::CUSTOMER->value;
-        if (! empty($user->profile_photo)){
+        if (! empty($user->profile_photo)) {
             $user->profile_photo = getRelativeUrl($user->profile_photo);
         }
         $user->save();
@@ -79,23 +75,12 @@ class CustomerService
 
         $customer->fill($data);
         $customer->user_id = $user->id;
-        if (! empty($customer->documents)){
+        if (! empty($customer->documents)) {
             $customer->documents = Arr::map($customer->documents, function ($document) {
                 return getRelativeUrl($document);
             });
         }
         $customer->save();
-
-        if(!empty($id)){
-            $this->removeCustomerDocuments($customer->user_id, Arr::get($data, 'documents', []));
-        }
-
-        if (! empty($data['documents'])) {
-            $this->saveCustomerDocument(
-                $data['documents'],
-                $customer->user_id,
-            );
-        }
 
         return $customer;
     }
@@ -110,41 +95,6 @@ class CustomerService
 
     public function getNextCustomerId()
     {
-        return (Customer::max('customer_id') ?? 2025000)+1;
-    }
-
-    private function saveCustomerDocument($documents, $userId): void
-    {
-        foreach ($documents as $url) {
-            $uri = filter_var($url, FILTER_VALIDATE_URL) ? getRelativeUrl($url) : '';
-
-            if ($uri && Storage::exists($uri)) {
-                $path = 'uploads/customers/documents/'.$userId.'/';
-
-                if ($uri !== $path.basename($uri) && Storage::exists($uri)) {
-                    Storage::move($uri, $path.basename($uri));
-                }
-
-                CustomerDocument::updateOrCreate([
-                    'name' => $path.basename($uri),
-                    'customer_user_id' => $userId,
-                ]);
-            }
-        }
-    }
-
-    private function removeCustomerDocuments($customerUserId, $documents): void
-    {
-        $documents = array_map(function ($url) {
-            return getRelativeUrl($url);
-        }, $documents);
-
-        $documentIds = CustomerDocument::where([
-            'customer_user_id' => $customerUserId,
-        ])->whereNotIn('name', $documents)
-            ->pluck('id')
-            ->toArray();
-
-        CustomerDocument::whereIn('id', $documentIds)->delete();
+        return (Customer::max('customer_id') ?? 2025000) + 1;
     }
 }

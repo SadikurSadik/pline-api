@@ -276,7 +276,7 @@ class VehicleService
             $q->where('customer_user_id', $customerUserId);
         })->where(function ($query) use ($vin) {
             $query->where('vin_number', $vin)
-                ->orWhereHas('container', function ($query) use ($vin){
+                ->orWhereHas('container', function ($query) use ($vin) {
                     $query->where('container_number', $vin);
                 });
         })->firstOrFail();

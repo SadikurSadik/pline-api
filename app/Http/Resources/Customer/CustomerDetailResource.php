@@ -3,7 +3,6 @@
 namespace App\Http\Resources\Customer;
 
 use App\Http\Resources\Consignee\ConsigneeDetailResource;
-use App\Http\Resources\Consignee\ConsigneeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
@@ -50,8 +49,9 @@ class CustomerDetailResource extends JsonResource
 
     private function customerDocuments($documents): array
     {
+
         return Arr::map($documents, function ($document) {
-            return filter_var($document['name'], FILTER_VALIDATE_URL) === false ? Storage::url($document['name']) : $document['name'];
+            return filter_var($document, FILTER_VALIDATE_URL) === false ? Storage::url($document) : $document;
         });
     }
 

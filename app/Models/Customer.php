@@ -71,11 +71,6 @@ class Customer extends Model
         return $this->hasMany(Consignee::class, 'customer_user_id', 'user_id');
     }
 
-    public function documents(): HasMany
-    {
-        return $this->hasMany(CustomerDocument::class, 'customer_user_id', 'user_id');
-    }
-
     protected static function boot(): void
     {
         parent::boot();

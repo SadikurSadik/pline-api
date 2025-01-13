@@ -66,6 +66,6 @@ class UserDetailResource extends JsonResource
             return null;
         }
 
-        return env('ACCOUNTING_APP_URL') . '/customer-advance-report/' . Crypt::encrypt($this->id);
+        return env('ACCOUNTING_APP_URL').'/customer-advance-report/'.Crypt::encrypt($this->id);
     }
 }
