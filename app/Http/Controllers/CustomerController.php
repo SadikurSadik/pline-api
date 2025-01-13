@@ -53,7 +53,6 @@ class CustomerController extends Controller implements HasMiddleware
     public function show($id): CustomerDetailResource
     {
         $data = $this->service->getById($id);
-        dd($data->documents);
 
         return new CustomerDetailResource($data);
     }
