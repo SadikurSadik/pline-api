@@ -28,6 +28,7 @@ class Customer extends Model
         'city_id',
         'category',
         'documents',
+        'block_issue_vcc',
     ];
 
     protected $casts = [
@@ -68,6 +69,11 @@ class Customer extends Model
     public function consignees(): HasMany
     {
         return $this->hasMany(Consignee::class, 'customer_user_id', 'user_id');
+    }
+
+    public function documents(): HasMany
+    {
+        return $this->hasMany(CustomerDocument::class, 'customer_user_id', 'user_id');
     }
 
     protected static function boot(): void

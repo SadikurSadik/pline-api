@@ -11,10 +11,14 @@ use App\Filters\FilterByCustomerID;
 use App\Filters\FilterByName;
 use App\Filters\FilterByStatusOnUserRelation;
 use App\Models\Customer;
+use App\Models\CustomerDocument;
 use App\Models\User;
+use App\Models\VehicleDocument;
+use App\Models\VehiclePhoto;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerService
 {
@@ -85,6 +89,17 @@ class CustomerService
         }
         $customer->save();
 
+        if(!empty($id)){
+            $this->removeCustomerDocuments($customer->user_id, Arr::get($data, 'documents', []));
+        }
+
+        if (! empty($data['documents'])) {
+            $this->saveCustomerDocument(
+                $data['documents'],
+                $customer->user_id,
+            );
+        }
+
         return $customer;
     }
 
@@ -99,5 +114,40 @@ class CustomerService
     public function getNextCustomerId()
     {
         return (Customer::max('customer_id') ?? 2025000)+1;
+    }
+
+    private function saveCustomerDocument($documents, $userId): void
+    {
+        foreach ($documents as $url) {
+            $uri = filter_var($url, FILTER_VALIDATE_URL) ? getRelativeUrl($url) : '';
+
+            if ($uri && Storage::exists($uri)) {
+                $path = 'uploads/customers/documents/'.$userId.'/';
+
+                if ($uri !== $path.basename($uri) && Storage::exists($uri)) {
+                    Storage::move($uri, $path.basename($uri));
+                }
+
+                CustomerDocument::updateOrCreate([
+                    'name' => $path.basename($uri),
+                    'customer_user_id' => $userId,
+                ]);
+            }
+        }
+    }
+
+    private function removeCustomerDocuments($customerUserId, $documents): void
+    {
+        $documents = array_map(function ($url) {
+            return getRelativeUrl($url);
+        }, $documents);
+
+        $documentIds = CustomerDocument::where([
+            'customer_user_id' => $customerUserId,
+        ])->whereNotIn('name', $documents)
+            ->pluck('id')
+            ->toArray();
+
+        CustomerDocument::whereIn('id', $documentIds)->delete();
     }
 }
