@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Model
@@ -54,7 +55,22 @@ class Customer extends Model
         return $this->belongsTo(City::class);
     }
 
-    protected static function boot()
+    public function vehicles(): HasMany
+    {
+        return $this->hasMany(Vehicle::class, 'customer_user_id', 'user_id');
+    }
+
+    public function containers(): HasMany
+    {
+        return $this->hasMany(Vehicle::class, 'customer_user_id', 'user_id');
+    }
+
+    public function consignees(): HasMany
+    {
+        return $this->hasMany(Consignee::class, 'customer_user_id', 'user_id');
+    }
+
+    protected static function boot(): void
     {
         parent::boot();
 

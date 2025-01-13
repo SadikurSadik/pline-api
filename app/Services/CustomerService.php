@@ -19,7 +19,7 @@ class CustomerService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Customer::with(['user']);
+        $query = Customer::with(['user', 'city'])->withCount(['containers', 'vehicles']);
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByName::class,
@@ -32,7 +32,7 @@ class CustomerService
 
     public function getById(int $id)
     {
-        return Customer::with(['user', 'country', 'state', 'city'])->find($id);
+        return Customer::with(['user', 'country', 'state', 'city', 'documents', 'consignees'])->find($id);
     }
 
     public function store(array $data)
@@ -53,12 +53,12 @@ class CustomerService
             VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $customer = Customer::findOrNew($id);
         $user = User::findOrNew($customer->user_id);
-        if (empty($data['password'])) {
+        if (empty($data['password'])){
             unset($data['password']);
         }
         $user->fill($data);
         $user->role_id = Role::CUSTOMER->value;
-        if (! empty($user->profile_photo)) {
+        if (! empty($user->profile_photo)){
             $user->profile_photo = getRelativeUrl($user->profile_photo);
         }
         $user->save();
@@ -66,7 +66,7 @@ class CustomerService
 
         $customer->fill($data);
         $customer->user_id = $user->id;
-        if (! empty($customer->documents)) {
+        if (! empty($customer->documents)){
             $customer->documents = Arr::map($customer->documents, function ($document) {
                 return getRelativeUrl($document);
             });
@@ -86,6 +86,6 @@ class CustomerService
 
     public function getNextCustomerId()
     {
-        return (Customer::max('customer_id') ?? 2025000) + 1;
+        return (Customer::max('customer_id') ?? 2025000)+1;
     }
 }
