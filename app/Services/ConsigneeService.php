@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Filters\FilterByConsigneeGlobalSearch;
 use App\Filters\FilterByCustomerID;
+use App\Filters\FilterByCustomerUser;
 use App\Filters\FilterByName;
 use App\Filters\FilterByPhone;
 use App\Models\Consignee;
@@ -18,7 +19,7 @@ class ConsigneeService
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByName::class,
-            FilterByCustomerID::class,
+            FilterByCustomerUser::class,
             FilterByPhone::class,
             FilterByConsigneeGlobalSearch::class,
         ], $filters);
