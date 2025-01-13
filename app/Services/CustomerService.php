@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\Role;
+use App\Enums\VehicleStatus;
 use App\Enums\VisibilityStatus;
 use App\Filters\FilterByCompanyName;
 use App\Filters\FilterByCustomerGlobalSearch;
@@ -19,7 +20,18 @@ class CustomerService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Customer::with(['user', 'city'])->withCount(['containers', 'vehicles']);
+        $query = Customer::with(['user', 'city'])->withCount([
+            'vehicles',
+            'vehicles as on_hand'    => function ( $q ) {
+                $q->where( 'status', '=', VehicleStatus::ON_HAND->value );
+            },
+            'vehicles as on_the_way' => function ( $q ) {
+                $q->where( 'status', '=', VehicleStatus::ON_THE_WAY->value );
+            },
+            'vehicles as arrived'    => function ( $q ) {
+                $q->where( 'status', '=', VehicleStatus::ARRIVED->value );
+            },
+        ]);
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByName::class,
