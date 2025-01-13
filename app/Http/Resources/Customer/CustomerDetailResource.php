@@ -51,7 +51,7 @@ class CustomerDetailResource extends JsonResource
     private function customerDocuments($documents): array
     {
         return Arr::map($documents, function ($document) {
-            return filter_var($document, FILTER_VALIDATE_URL) === false ? Storage::url($document) : $document;
+            return filter_var($document['name'], FILTER_VALIDATE_URL) === false ? Storage::url($document['name']) : $document['name'];
         });
     }
 
