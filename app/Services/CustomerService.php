@@ -69,9 +69,6 @@ class CustomerService
             VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $customer = Customer::findOrNew($id);
         $user = User::findOrNew($customer->user_id);
-        if (empty($data['password'])){
-            unset($data['password']);
-        }
         $user->fill($data);
         $user->role_id = Role::CUSTOMER->value;
         if (! empty($user->profile_photo)){
