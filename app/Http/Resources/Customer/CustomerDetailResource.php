@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Customer;
 
+use App\Http\Resources\Consignee\ConsigneeDetailResource;
 use App\Http\Resources\Consignee\ConsigneeResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -43,7 +44,7 @@ class CustomerDetailResource extends JsonResource
             'status' => $this->user?->status,
             'block_issue_vcc' => $this->block_issue_vcc,
             'status_name' => ! empty($this->user) ? $this->user->status->getLabel() : '',
-            'consignees' => ConsigneeResource::collection($this->consignees),
+            'consignees' => ConsigneeDetailResource::collection($this->consignees),
         ];
     }
 
