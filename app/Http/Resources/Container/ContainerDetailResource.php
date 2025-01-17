@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Container;
 
 use App\Http\Resources\Vehicle\VehicleDetailResource;
+use App\Http\Resources\Vehicle\VehicleResource;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -58,7 +59,7 @@ class ContainerDetailResource extends JsonResource
             'special_instruction' => $this->special_instruction,
             'bol_note' => $this->bol_note,
             'vehicle_ids' => $this->vehicles->pluck('id'),
-            'vehicles' => VehicleDetailResource::collection($this->vehicles),
+            'vehicles' => VehicleResource::collection($this->vehicles),
             'dock_receipt' => ! empty($this->dock_receipt) ? new DockReceiptResource($this->dock_receipt) : new \stdClass,
             'houstan_custom_cover_letter' => ! empty($this->houstan_custom_cover_letter) ? new HoustanCustomCoverLetterResource($this->houstan_custom_cover_letter) : new \stdClass,
             'container_images' => $this->getPhotosProperty($this->container_photos)->pluck('name'),
