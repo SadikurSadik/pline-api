@@ -16,6 +16,7 @@ class VehiclePhotosResource extends JsonResource
             'auction_photos' => $this->getPhotosProperty($this->auction_photos),
             'pickup_photos' => $this->getPhotosProperty($this->pickup_photos),
             'arrived_photos' => $this->getPhotosProperty($this->arrived_photos),
+            'export_photos' => $this->getPhotosProperty($this->export_photos),
         ];
     }
 
