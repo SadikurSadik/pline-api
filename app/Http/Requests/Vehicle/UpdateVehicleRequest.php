@@ -63,6 +63,7 @@ class UpdateVehicleRequest extends FormRequest
             'file_urls.auction_photos.*' => 'nullable|url',
             'file_urls.pickup_photos.*' => 'nullable|url',
             'file_urls.arrived_photos.*' => 'nullable|url',
+            'file_urls.export_photos.*' => 'nullable|url',
             'file_urls.documents.*' => 'nullable|url',
             'file_urls.invoices.*' => 'nullable|url',
         ];
