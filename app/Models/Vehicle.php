@@ -150,6 +150,11 @@ class Vehicle extends Model
         return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::ARRIVED_PHOTO->value);
     }
 
+    public function export_photos(): HasMany
+    {
+        return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::EXPORT_PHOTO->value);
+    }
+
     public function documents(): HasMany
     {
         return $this->hasMany(VehicleDocument::class)->where('type', '=', VehicleDocumentType::DOCUMENT->value);
