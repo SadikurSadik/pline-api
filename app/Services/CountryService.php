@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\VisibilityStatus;
+use App\Filters\FilterByExportVehicle;
 use App\Filters\FilterByName;
 use App\Filters\FilterByShortCode;
 use App\Filters\FilterByStatus;
@@ -21,6 +22,7 @@ class CountryService
             FilterByName::class,
             FilterByStatus::class,
             FilterByShortCode::class,
+            FilterByExportVehicle::class,
         ], $filters);
     }
 
