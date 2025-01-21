@@ -32,6 +32,7 @@ class ModuleSeeder extends Seeder
             ['name' => 'VCC'],
             ['name' => 'Complain'],
             ['name' => 'Pricing'],
+            ['name' => 'Export Rate'],
         ]);
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DamageClaimController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportRateController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NoteController;
@@ -185,6 +186,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('pricing-usa', [PricingController::class, 'index']);
     Route::get('pricing-canada', [PricingController::class, 'index']);
     Route::delete('pricing/{id}', [PricingController::class, 'destroy']);
+    /* pricing related endpoints */
+
+    /* pricing related endpoints */
+    Route::post('export-rates/export-excel', [ExportRateController::class, 'exportExcel']);
+    Route::apiResource('export-rates', ExportRateController::class);
     /* pricing related endpoints */
 
     /* voucher related endpoints */
