@@ -13,6 +13,7 @@ class CountryResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'short_code' => $this->short_code,
+            'export_vehicle' => $this->export_vehicle,
             'status' => $this->status->value,
             'status_name' => $this->status->getLabel(),
         ];

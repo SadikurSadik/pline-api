@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Country;
 
+use App\Enums\BooleanStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateCountryRequest extends FormRequest
 {
@@ -19,6 +21,7 @@ class UpdateCountryRequest extends FormRequest
                 'nullable',
                 Rule::unique('countries')->where('deleted_at')->ignore($this->route()->country),
             ],
+            'export_vehicle' => ['required', new Enum(BooleanStatus::class)],
             'status' => ['required', 'boolean'],
         ];
     }
