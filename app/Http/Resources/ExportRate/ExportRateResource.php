@@ -24,7 +24,7 @@ class ExportRateResource extends JsonResource
             'to_country_id' => $this->to_country_id,
             'to_country_name' => $this->to_country?->name,
             'status' => $this->status?->value,
-            'status_name' => $this->status?->getLable,
+            'status_name' => $this->status?->getLabel(),
         ];
     }
 }

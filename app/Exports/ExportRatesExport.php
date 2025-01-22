@@ -44,7 +44,7 @@ class ExportRatesExport implements FromQuery, WithHeadings, WithMapping
             $row->rate_b,
             data_get($row, 'from_country.name'),
             data_get($row, 'to_country.name'),
-            $row->status->getLabel(),
+            $row->status?->getLabel(),
         ];
     }
 }
