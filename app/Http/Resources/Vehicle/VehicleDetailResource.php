@@ -29,6 +29,7 @@ class VehicleDetailResource extends JsonResource
             'auction_name' => $this->auction_name,
             'service_provider' => $this->service_provider,
             'value' => $this->value,
+            'check_number' => $this->check_number,
             'weight' => $this->weight,
             'license_number' => $this->license_number,
             'additional_charges' => $this->additional_charges,
