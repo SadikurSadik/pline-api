@@ -180,8 +180,7 @@ class Vehicle extends Model
         parent::boot();
 
         Vehicle::creating(function ($model) {
-            $lotNumber = (Vehicle::max('lot_number') ?? 100000) + 1;
-            $model->lot_number = $lotNumber;
+
         });
     }
 }
