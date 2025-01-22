@@ -103,32 +103,32 @@ class PricingController extends Controller
     {
         $data = $this->generatePdf();
 
-//        try {
-//            if (empty($data)) {
-//                return response()->json(['success' => false, 'data' => []]);
-//            }
-//
-//            $previousPdf = PricingPdf::orderBy('id', 'desc')->first();
-//
-//            if ($previousPdf) {
-//                $previousPdf->update([
-//                    'expire_at' => Carbon::now(),
-//                ]);
-//            }
-//            $data['user_id'] = auth()->user()->id;
-//
-//            PricingPdf::create($data);
-//
-//            $url = url('/pricing-canada');
-//
-//            return response()->json([
-//                'success' => true,
-//                'message' => 'Success! Pdf Generate successfully',
-//                'data' => $url
-//            ]);
-//        } catch (\Exception $e) {
-//
-//        }
+        try {
+            if (empty($data)) {
+                return response()->json(['success' => false, 'data' => []]);
+            }
+
+            $previousPdf = PricingPdf::orderBy('id', 'desc')->first();
+
+            if ($previousPdf) {
+                $previousPdf->update([
+                    'expire_at' => Carbon::now(),
+                ]);
+            }
+            $data['user_id'] = auth()->user()->id;
+
+            PricingPdf::create($data);
+
+            $url = url('/pricing-canada');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Success! Pdf Generate successfully',
+                'data' => $url
+            ]);
+        } catch (\Exception $e) {
+
+        }
 
     }
 
@@ -146,7 +146,7 @@ class PricingController extends Controller
 
         $filterArray = [
             'status' => VisibilityStatus::ACTIVE?->value,
-//            'location_ids' => $yard_ids,
+            'location_ids' => $yard_ids,
             'limit' => '-1',
         ];
 
@@ -154,16 +154,6 @@ class PricingController extends Controller
 
         $response = [];
         $prepareArray = [];
-
-//        $terms_conditions = Page::where([
-//            'caption' => 'PDF_TERMS_CONDITIONS',
-//            'status' => VisibilityStatus::ACTIVE,
-//        ])->first();
-//
-//        $title_type_pdf = Page::where([
-//            'caption' => 'PDF_TITLE_TYPE_TABLE',
-//            'status' => VisibilityStatus::ACTIVE,
-//        ])->first();
 
         foreach (['a', 'b'] as $category) {
             $index = 0;
@@ -177,6 +167,7 @@ class PricingController extends Controller
                     $shipping_price = $data[$towing_rate->location_id]->{'rate_'.$category} / 4;
                     $towing_price = $towing_rate->{'rate_'.$category};
                     $prices[$i]['state_short_code'] = data_get($towing_rate, 'state.short_code');
+                    $prices[$i]['state_name'] = data_get($towing_rate, 'state.name');
                     $prices[$i]['city_name'] = data_get($towing_rate, 'city.name');
                     $prices[$i]['price'] = $shipping_price + $clearance_rate + $profit_rate + $towing_price;
                 }
@@ -186,14 +177,14 @@ class PricingController extends Controller
 
             $pdf = PDF::loadView('pricing.template.shipping_pdf', compact('date', 'prepareArray'))
                 ->setPaper('a4', 'portrait')
-                ->setOptions(['defaultFont' => 'sans-serif'])->stream();
-//
-//            $response['pdf_url_'.$category] = 'uploads/pricing/documents/'.time().'_'.uniqid().'_shipping'.'.pdf';
-//
-//            Storage::put($response['pdf_url_'.$category], $pdf->output());
-//            Storage::setVisibility($response['pdf_url_'.$category], 'public');
+                ->setOptions(['defaultFont' => 'sans-serif']);
+
+            $response['pdf_url_'.$category] = 'uploads/pricing/documents/'.time().'_'.uniqid().'_shipping'.'.pdf';
+
+            Storage::put($response['pdf_url_'.$category], $pdf->output());
+            Storage::setVisibility($response['pdf_url_'.$category], 'public');
         }
 
-        return $pdf;
+        return $response;
     }
 }

@@ -7,10 +7,6 @@
     <style>
         /* Reset some default styles */
 
-        @page {
-            margin: 10px;
-        }
-
         .content {
             position: relative;
         }
@@ -101,6 +97,9 @@
         .text-center {
             text-align: center;
         }
+        .text-right {
+            text-align: right;
+        }
 
         tr > td {
             padding-left: 4px;
@@ -116,15 +115,15 @@
 
 <p style="color: red; text-align: right; margin-bottom: 0px; margin-right: 10px; font-size: 10px;">{{$date}}</p>
 <div class="page_one">
-    <img width="100%" height="1060px"
-         src="https://plineshipping.com/assets/images/logo.png">
+    <img width="700px"
+         src="{{'data:image/png;base64,'.base64_encode(file_get_contents('https://plineshipping.com/assets/images/logo.png'))}}">
 </div>
 <div class="page-break"></div>
 
 {{--<p style="color: red; text-align: right; margin-bottom: 0px; margin-right: 10px; font-size: 10px;">{{$date}}</p>--}}
 <div class="watermark">
     <img width="700px" style="opacity: 0.3 !important;"
-         src="https://plineshipping.com/assets/images/logo.png">
+         src="{{'data:image/png;base64,'.base64_encode(file_get_contents('https://plineshipping.com/assets/images/logo.png'))}}">
 </div>
 
 <p style="color: red; text-align: right; margin-bottom: 0px; margin-right: 10px; font-size: 10px;">{{$date}}</p>
@@ -134,21 +133,9 @@
             @if($keyIndex !== 0)
             <div class="page-break"></div>
             @endif
-            <table class="content" style="border-left-style:none; border-right-style:none; border-bottom-style: dotted; border-width: 2px; margin-bottom: 0;">
-                <thead>
-                <tr>
-                    <td style="border-right: none; border-top-style:none;">
-                        <img width="80px" src="https://plineshipping.com/assets/images/logo.png">
-                    </td>
-                    <td colspan="6" style="padding-top: 15px; padding-bottom: 15px; font-weight: bold;  font-size:28px; border-left: none;  border-top-style:none; margin-bottom: 0;">
-                        TOWING + SHIPPING + CLEARANCE PRICES
-                    </td>
-                </tr>
-                </thead>
-            </table>
             <div class="container" style="margin-top: 0;">
                 @php
-                    $pieces = array_chunk($singleData['prices'], ceil(count($singleData['prices']) / 2));
+                    $pieces = $singleData['prices'];
                 @endphp
 
                 <div class="full-width">
@@ -158,8 +145,8 @@
                         <tr>
                             <td style="padding-top: 10px; border-top-style:none; margin-top: 0;"></td>
                         </tr>
-                        <tr style="text-align: center; font-weight:bold;">
-                            <td style=" padding: 10px 0px">{{  $singleData['state_name'] }}
+                        <tr style="text-align: center; font-weight:bold; background: #1f3664; color: white;">
+                            <td style=" padding: 10px 0px;">{{  $singleData['state_name'] }}
                                 - {{ $singleData['location_name']  }}</td>
                         </tr>
                     </table>
@@ -169,46 +156,22 @@
                             <div class="table-responsive" style="margin-bottom: 0px">
                                 <table class="" style="border-left-style: none; border-bottom-style: none;">
                                     <thead style="page-break-before: avoid">
-                                        <tr>
-                                            <th class="text-uppercase" style=" width: 13%">Code</th>
-                                            <th class="text-uppercase" style="width: 20%">City</th>
-                                            <th class="text-uppercase" style="width: 15%;">Price</th>
-                                            <th rowspan="{{ count($pieces[0]) + 1 }}" style="width: 4%;"></th>
-                                            <th class="text-uppercase" style="border-left-style: none; width: 13%">Code</th>
-                                            <th class="text-uppercase" style="width: 20%;">City</th>
-                                            <th class="text-uppercase" style="width: 15%;">Price</th>
+                                        <tr style="background: #acb8ca;">
+                                            <th class="text-uppercase text-right" style="width: 15%;">SEQ.V</th>
+                                            <th class="text-uppercase text-right" style="width: 20%">Code</th>
+                                            <th class="text-uppercase text-right" style="width: 25%">State</th>
+                                            <th class="text-uppercase text-right" style="width: 25%">City</th>
+                                            <th class="text-uppercase text-right" style="width: 15%;">Price</th>
                                         </tr>
                                     </thead>
                                     <tbody style="font-size:12px;">
-                                    @foreach($pieces[0] as $i => $price)
+                                    @foreach($pieces as $i => $price)
                                         <tr>
-                                            <td style=" color: gray">{{ $price['state_short_code'] }}</td>
-                                            <td style="color: gray"> {{ $price['city_name'] }} </td>
-                                            <td style="font-weight: bold;">
-                                                <table style="border:none">
-                                                    <tr>
-                                                        <td style="border:none">$</td>
-                                                        <td style="border:none; text-align: right;">{{ number_format($price['price']) }}</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-
-                                            @if(isset($pieces[1]))
-                                                <td style="border-left-style: none; color: gray">{{ array_key_exists($i, $pieces[1]) ? $pieces[1][$i]['state_short_code'] : ''}}</td>
-                                                <td style="color: gray"> {{ array_key_exists($i, $pieces[1]) ? $pieces[1][$i]['city_name'] : ''}} </td>
-                                                <td style="font-weight: bold;">
-                                                    <table style="border:none">
-                                                        <tr>
-                                                            <td style="border:none">{{ array_key_exists($i, $pieces[1]) ?  '$' : '' }}</td>
-                                                            <td style="border:none; text-align: right;">{{ array_key_exists($i, $pieces[1]) ? number_format($pieces[1][$i]['price']) : '' }}</td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            @else
-                                                <td style="border-left-style: none; color: gray"></td>
-                                                <td style="color: gray"></td>
-                                                <td style="font-weight: bold;"></td>
-                                            @endif
+                                            <td class="text-right">{{ $i+1 }}</td>
+                                            <td class="text-right">{{ $price['state_short_code'] }}</td>
+                                            <td class="text-right">{{ $price['state_name'] }}</td>
+                                            <td class="text-right">{{ $price['city_name'] }}</td>
+                                            <td class="text-right">$ {{ number_format($price['price']) }}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -227,7 +190,7 @@
     <thead>
     <tr>
        <td style="border-right: none;  border-top-style:none;">
-           <img width="80px" src="https://plineshipping.com/assets/images/logo.png">
+           <img width="80px" src="{{'data:image/png;base64,'.base64_encode(file_get_contents('https://plineshipping.com/assets/images/logo.png'))}}">
         </td>
         <td colspan="6" style="padding-top: 5px; padding-bottom: 5px; font-weight: bold;  font-size:18px; border-left: none;  border-top-style:none;">
         </td>
@@ -241,7 +204,7 @@
     <thead>
     <tr>
         <td style="border-right: none;  border-top-style:none;">
-            <img width="80px" src="https://plineshipping.com/assets/images/logo.png">
+            <img width="80px" src="{{'data:image/png;base64,'.base64_encode(file_get_contents('https://plineshipping.com/assets/images/logo.png'))}}">
         </td>
         <td colspan="6" style="padding-top: 5px; padding-bottom: 5px; font-weight: bold;  font-size:18px; border-left: none;  border-top-style:none;">
         </td>
