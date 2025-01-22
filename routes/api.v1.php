@@ -226,3 +226,4 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('consignees', 'searchConsignee');
         });
 });
+Route::get('shipping-vehicle-pdf-generate', [PricingController::class, 'shippingPricePdfGenerate']);
