@@ -25,7 +25,7 @@ class DashboardController extends Controller
             $filters['user_id'] = auth()->user()->id;
         }
 
-        $statusOverview = collect($this->service->vehicleCounts($filters))->whereNotIn('status', [0, VehicleStatus::LOADED->value, VehicleStatus::DISPATCHED->value])->values();
+        $statusOverview = collect($this->service->vehicleCounts($filters))->whereNotIn('status', [11, VehicleStatus::LOADED->value, VehicleStatus::DISPATCHED->value])->values();
 
         $data = [
             'status_overview' => $statusOverview,
