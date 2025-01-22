@@ -52,6 +52,7 @@ class VehicleDetailResource extends JsonResource
             'damaged_name' => $this->damaged?->getLabel(),
             'pictures' => $this->pictures?->value,
             'pictures_name' => $this->pictures?->getLabel(),
+            'towed_from' => $this->towed_from,
             'towed' => $this->towed?->value,
             'towed_name' => $this->towed?->getLabel(),
             'keys' => $this->keys?->value,
