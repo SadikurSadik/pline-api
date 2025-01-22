@@ -160,6 +160,7 @@ class PermissionSeeder extends Seeder
             ['name' => 'update export rate', 'module_id' => 19, 'guard_name' => 'web'],
             ['name' => 'view export rate', 'module_id' => 19, 'guard_name' => 'web'],
             ['name' => 'delete export rate', 'module_id' => 19, 'guard_name' => 'web'],
+            ['name' => 'export excel export rate', 'module_id' => 19, 'guard_name' => 'web'],
         ]);
     }
 }
