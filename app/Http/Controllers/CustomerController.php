@@ -8,6 +8,7 @@ use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\Customer\CustomerDetailResource;
 use App\Http\Resources\Customer\CustomerResource;
+use App\Jobs\SyncCustomerToAccountingJob;
 use App\Models\ContactUs;
 use App\Services\CustomerService;
 use App\Services\FileManagerService;
@@ -45,7 +46,8 @@ class CustomerController extends Controller implements HasMiddleware
 
     public function store(StoreCustomerRequest $request): JsonResponse
     {
-        $this->service->store($request->validated());
+        $customer = $this->service->store($request->validated());
+        $dispatch = SyncCustomerToAccountingJob::dispatch($customer->id);
 
         return successResponse(__('Customer added Successfully.'));
     }
@@ -59,7 +61,8 @@ class CustomerController extends Controller implements HasMiddleware
 
     public function update($id, UpdateCustomerRequest $request): JsonResponse
     {
-        $this->service->update($id, $request->validated());
+        $customer = $this->service->update($id, $request->validated());
+        $dispatch = SyncCustomerToAccountingJob::dispatch($customer->id);
 
         return successResponse(__('Customer updated Successfully.'));
     }

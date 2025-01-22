@@ -11,6 +11,7 @@ use App\Http\Requests\Vehicle\UpdateVehicleRequest;
 use App\Http\Resources\Vehicle\VehicleDetailResource;
 use App\Http\Resources\Vehicle\VehiclePhotosResource;
 use App\Http\Resources\Vehicle\VehicleResource;
+use App\Jobs\SyncVehicleToAccountingJob;
 use App\Models\Vehicle;
 use App\Services\FileManagerService;
 use App\Services\VehicleService;
@@ -54,7 +55,8 @@ class VehicleController extends Controller implements HasMiddleware
 
     public function store(StoreVehicleRequest $request): JsonResponse
     {
-        $this->service->store($request->validated());
+        $vehicle = $this->service->store($request->validated());
+        $dispatched = SyncVehicleToAccountingJob::dispatch($vehicle->id);
 
         return successResponse(__('Vehicle added Successfully.'));
     }
@@ -87,7 +89,8 @@ class VehicleController extends Controller implements HasMiddleware
 
     public function update(UpdateVehicleRequest $request, string $id): JsonResponse
     {
-        $this->service->update($id, $request->validated());
+        $vehicle = $this->service->update($id, $request->validated());
+        $dispatched = SyncVehicleToAccountingJob::dispatch($vehicle->id);
 
         return successResponse(__('Vehicle updated Successfully.'));
     }
