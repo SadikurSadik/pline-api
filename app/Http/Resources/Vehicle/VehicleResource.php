@@ -31,6 +31,7 @@ class VehicleResource extends JsonResource
             'value' => $this->value,
             'note_status' => $this->note_status,
             'note' => $this->note,
+            'license_number' => $this->license_number,
             'container_id' => $this->container_id,
             'container_number' => $this->container?->container_number,
             'keys_name' => $this->keys?->getLabel(),

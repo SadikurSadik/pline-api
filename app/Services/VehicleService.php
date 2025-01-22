@@ -7,6 +7,7 @@ use App\Enums\VehiclePhotoType;
 use App\Filters\FilterByAuctionName;
 use App\Filters\FilterByCustomerUser;
 use App\Filters\FilterById;
+use App\Filters\FilterByLicenseNumber;
 use App\Filters\FilterByLocation;
 use App\Filters\FilterByLotNumber;
 use App\Filters\FilterByPurchaseDate;
@@ -37,6 +38,7 @@ class VehicleService
             FilterById::class,
             FilterByVehicleGlobalSearch::class,
             FilterByCustomerUser::class,
+            FilterByLicenseNumber::class,
             FilterByVinNumber::class,
             FilterByLotNumber::class,
             FilterByAuctionName::class,

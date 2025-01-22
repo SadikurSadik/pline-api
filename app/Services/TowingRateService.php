@@ -7,6 +7,7 @@ use App\Filters\FilterByCity;
 use App\Filters\FilterByCountry;
 use App\Filters\FilterById;
 use App\Filters\FilterByLocation;
+use App\Filters\FilterByLocationIds;
 use App\Filters\FilterByRate;
 use App\Filters\FilterByRateA;
 use App\Filters\FilterByRateB;
@@ -38,6 +39,7 @@ class TowingRateService
             FilterByState::class,
             FilterByCity::class,
             FilterByLocation::class,
+            FilterByLocationIds::class,
             FilterByStatus::class,
             FilterById::class,
             FilterByTowingRateGlobalSearch::class,
