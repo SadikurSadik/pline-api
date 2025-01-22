@@ -69,6 +69,7 @@ class VehicleDetailResource extends JsonResource
             'tow_by' => $this->tow_by?->value,
             'tow_by_name' => $this->tow_by?->getLabel(),
             'tow_fee' => $this->tow_fee,
+            'note' => $this->note,
             'title_type_id' => $this->title_type_id,
             'title_type_name' => data_get($this, 'title_type.name'),
             'status' => $this->status,
