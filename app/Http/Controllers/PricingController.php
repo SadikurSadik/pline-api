@@ -119,15 +119,13 @@ class PricingController extends Controller
 
             PricingPdf::create($data);
 
-            $url = url('/pricing-canada');
-
+            return apiResponse('Success! Pdf Generate successfully');
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => true,
-                'message' => 'Success! Pdf Generate successfully',
-                'data' => $url
-            ]);
-        } catch (\Exception $e) {
-            dd($e->getMessage());
+                'message' => 'Failed! Unable to Generate pdf.',
+                'error' => $e->getMessage()
+            ], 400);
         }
 
     }
