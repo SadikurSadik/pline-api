@@ -22,6 +22,7 @@ class VehicleDetailResource extends JsonResource
             'customer_user_id' => $this->customer_user_id,
             'customer_id' => data_get($this, 'customer.customer_id'),
             'customer_name' => data_get($this, 'customer.name'),
+            'company_name' => data_get($this, 'customer.company_name'),
             'lot_number' => $this->lot_number,
             'vin_number' => $this->vin_number,
             'purchase_date' => $this->purchase_date,
