@@ -115,7 +115,7 @@ class PricingController extends Controller
                     'expire_at' => Carbon::now(),
                 ]);
             }
-            $data['user_id'] = auth()->user()->id;
+            $data['user_id'] = auth()->user()?->id;
 
             PricingPdf::create($data);
 
@@ -127,7 +127,7 @@ class PricingController extends Controller
                 'data' => $url
             ]);
         } catch (\Exception $e) {
-
+            dd($e->getMessage());
         }
 
     }
