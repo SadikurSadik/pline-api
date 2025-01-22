@@ -182,6 +182,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* invoice related endpoints */
 
     /* pricing related endpoints */
+    Route::get('shipping-vehicle-pdf-generate', [PricingController::class, 'shippingPricePdfGenerate']);
     Route::get('shipping-price-per-vehicle', [PricingController::class, 'pricingPerVehicle']);
     Route::get('pricing-usa', [PricingController::class, 'index']);
     Route::get('pricing-canada', [PricingController::class, 'index']);
@@ -226,5 +227,3 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('consignees', 'searchConsignee');
         });
 });
-
-Route::get('shipping-vehicle-pdf-generate', [PricingController::class, 'shippingPricePdfGenerate']);
