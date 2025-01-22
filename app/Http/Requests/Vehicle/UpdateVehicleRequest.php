@@ -21,6 +21,7 @@ class UpdateVehicleRequest extends FormRequest
             ],
             'lot_number' => [
                 'required',
+                'integer',
                 Rule::unique('vehicles')->where('deleted_at')->ignore($this->vehicle),
             ],
             'year' => 'required|integer|digits:4',

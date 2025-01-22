@@ -21,6 +21,7 @@ class StoreVehicleRequest extends FormRequest
             ],
             'lot_number' => [
                 'required',
+                'integer',
                 Rule::unique('vehicles')->where('deleted_at'),
             ],
             'year' => 'required|integer|digits:4',
