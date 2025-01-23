@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PricingType;
 use App\Enums\Role;
 use App\Enums\VisibilityStatus;
 use App\Http\Resources\Pricing\PricingResource;
@@ -37,7 +38,30 @@ class PricingController extends Controller
             DB::raw("pdf_url_{$category} AS pdf_url"),
             'expire_at',
             'created_at',
-        ])->orderBy('id', 'desc')
+        ])->where('type', PricingType::IMPORT->value)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return PricingResource::collection($data);
+    }
+
+    public function exportPricing(): AnonymousResourceCollection
+    {
+        $category = 'a';
+        if (optional(auth()->user())->role === Role::CUSTOMER) {
+            $customer = Customer::where('user_id', auth()->user()->id)->firstOrFail();
+            if (in_array($customer->category, ['a', 'b'])) {
+                $category = $customer->category;
+            }
+        }
+
+        $data = PricingPdf::select([
+            'id',
+            DB::raw("pdf_url_{$category} AS pdf_url"),
+            'expire_at',
+            'created_at',
+        ])->where('type', PricingType::EXPORT->value)
+            ->orderBy('id', 'desc')
             ->get();
 
         return PricingResource::collection($data);

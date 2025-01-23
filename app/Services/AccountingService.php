@@ -17,7 +17,7 @@ class AccountingService
         $user->id = $data['id'];
         $user->name = ! empty($data['name']) ? $data['name'] : '';
         $user->email = $data['email'];
-        $user->password = Hash::make($data['password']);
+        $user->password = bcrypt($data['password']);
         $user->type = $data['type'];
         $user->created_by = 1;
         $user->lang = 'en';

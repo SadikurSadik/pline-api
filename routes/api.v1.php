@@ -184,8 +184,8 @@ Route::middleware('auth:sanctum')->group(function () {
     /* pricing related endpoints */
     Route::get('shipping-vehicle-pdf-generate', [PricingController::class, 'shippingPricePdfGenerate']);
     Route::get('shipping-price-per-vehicle', [PricingController::class, 'pricingPerVehicle']);
-    Route::get('pricing-usa', [PricingController::class, 'index']);
-    Route::get('pricing-canada', [PricingController::class, 'index']);
+    Route::get('pricing-import', [PricingController::class, 'index']);
+    Route::get('pricing-export', [PricingController::class, 'exportPricing']);
     Route::delete('pricing/{id}', [PricingController::class, 'destroy']);
     /* pricing related endpoints */
 
