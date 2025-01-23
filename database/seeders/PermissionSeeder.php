@@ -155,12 +155,15 @@ class PermissionSeeder extends Seeder
             ['name' => 'delete pricing pdf', 'module_id' => 19, 'guard_name' => 'web'],
 
             // export pricing module
-            ['name' => 'manage export rate', 'module_id' => 19, 'guard_name' => 'web'],
-            ['name' => 'create export rate', 'module_id' => 19, 'guard_name' => 'web'],
-            ['name' => 'update export rate', 'module_id' => 19, 'guard_name' => 'web'],
-            ['name' => 'view export rate', 'module_id' => 19, 'guard_name' => 'web'],
-            ['name' => 'delete export rate', 'module_id' => 19, 'guard_name' => 'web'],
-            ['name' => 'export excel export rate', 'module_id' => 19, 'guard_name' => 'web'],
+            ['name' => 'manage export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'create export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'update export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'view export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'delete export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'export excel export rate', 'module_id' => 20, 'guard_name' => 'web'],
+
+            // accounting module
+            ['name' => 'accounting module', 'module_id' => 21, 'guard_name' => 'web'],
         ]);
     }
 }

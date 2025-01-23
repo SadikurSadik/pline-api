@@ -33,6 +33,7 @@ class ModuleSeeder extends Seeder
             ['name' => 'Complain'],
             ['name' => 'Pricing'],
             ['name' => 'Export Rate'],
+            ['name' => 'Accounting'],
         ]);
     }
 }

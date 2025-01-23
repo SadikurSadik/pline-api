@@ -3,6 +3,7 @@
 namespace App\Http\Resources\User;
 
 use App\Enums\Role;
+use App\Models\Accounting\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Crypt;
@@ -45,6 +46,10 @@ class UserDetailResource extends JsonResource
     private function getAccountingLoginUrlProperty(): ?string
     {
         if (! in_array($this->role_id, [Role::OWNER, Role::SUPER_ADMIN, Role::ACCOUNTANT])) {
+            return null;
+        }
+
+        if(! User::find($this->id)) {
             return null;
         }
 

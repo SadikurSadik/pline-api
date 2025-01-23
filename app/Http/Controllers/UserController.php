@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role;
+use App\Enums\Roles;
 use App\Enums\VisibilityStatus;
 use App\Exports\UsersExport;
 use App\Http\Requests\User\StoreUserRequest;
@@ -11,6 +12,8 @@ use App\Http\Resources\User\UserDetailResource;
 use App\Http\Resources\User\UserPermissionResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\Customer;
+use App\Models\User;
+use App\Services\AccountingService;
 use App\Services\FileManagerService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
@@ -87,14 +90,27 @@ class UserController extends Controller
         return new UserPermissionResource($user);
     }
 
-    public function updatePermissions($id, Request $request): JsonResponse
+    public function updatePermissions($id, Request $request, AccountingService $accountingService): JsonResponse
     {
         $request->validate([
             'permissions' => ['required', 'array', 'min:1'],
             'permissions.*' => 'required|integer',
         ]);
 
+        $user = User::find($id);
         $this->service->updatePermissions($id, $request->permissions);
+
+        if ( in_array(110, $request->permissions ?? [])) {
+            $accountingService->syncUser([
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => random_bytes(10),
+                'type' => 'accounted',
+            ]);
+        } else {
+            $accountingService->deleteUser($id);
+        }
 
         return successResponse(__('Permissions updated successfully.'));
     }
