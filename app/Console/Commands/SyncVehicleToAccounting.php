@@ -59,7 +59,7 @@ class SyncVehicleToAccounting extends Command
                         'city' => data_get($vehicle->customer, 'city.name') ?? '',
                     ]);
                 }
-                $photoUrl = url('assets/images/car-default-photo.png');
+                $photoUrl = url('images/car-default-photo.png');
                 $image = $vehicle->yard_photos->first();
                 if ($image && Storage::exists($image->name)) {
                     $photoUrl = Storage::url($image->name);
