@@ -40,7 +40,9 @@ Route::get('invoice/payment-receipt', [VoucherController::class, 'invoicePayment
 Route::get('advanced-account-receipt/print-pdf/{id}', [VoucherController::class, 'advancedPaymentReceipt']);
 
 /* public api for website */
-Route::post('contact-us', [ContactMessageController::class, 'store']);
+Route::group(['prefix' => 'public'], function () {
+    Route::post('contact-us', [ContactMessageController::class, 'store']);
+});
 /* public api for website */
 
 Route::middleware('auth:sanctum')->group(function () {
