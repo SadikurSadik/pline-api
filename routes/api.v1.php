@@ -6,6 +6,7 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\ClearanceRateController;
 use App\Http\Controllers\ComplainController;
 use App\Http\Controllers\ConsigneeController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
@@ -37,6 +38,10 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::get('invoice/payment-receipt', [VoucherController::class, 'invoicePaymentReceipt']);
 Route::get('advanced-account-receipt/print-pdf/{id}', [VoucherController::class, 'advancedPaymentReceipt']);
+
+/* public api for website */
+Route::post('contact-us', [ContactMessageController::class, 'store']);
+/* public api for website */
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
