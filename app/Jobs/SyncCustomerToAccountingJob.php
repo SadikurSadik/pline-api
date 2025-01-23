@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Artisan;
 class SyncCustomerToAccountingJob implements ShouldQueue
 {
     use Queueable;
+
     protected int $customerId;
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Container;
 
-use App\Http\Resources\Vehicle\VehicleDetailResource;
 use App\Http\Resources\Vehicle\VehicleResource;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Foundation\Application;

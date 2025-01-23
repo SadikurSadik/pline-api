@@ -30,7 +30,7 @@ class SearchController extends Controller
             'name',
         ])->where('status', VisibilityStatus::ACTIVE);
 
-        if(!empty($request->export_vehicle)) {
+        if (! empty($request->export_vehicle)) {
             $query->where('export_vehicle', $request->export_vehicle);
         }
 

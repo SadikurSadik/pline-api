@@ -179,8 +179,6 @@ class Vehicle extends Model
     {
         parent::boot();
 
-        Vehicle::creating(function ($model) {
-
-        });
+        Vehicle::creating(function ($model) {});
     }
 }

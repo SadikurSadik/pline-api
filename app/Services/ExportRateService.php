@@ -13,10 +13,11 @@ use App\Models\ExportRate;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class ExportRateService
 {
-    public function all(array $filters = []): LengthAwarePaginator|Builder
+    public function all(array $filters = []): LengthAwarePaginator|Builder|Collection
     {
         $query = ExportRate::with([
             'from_country',

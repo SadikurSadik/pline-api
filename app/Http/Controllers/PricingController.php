@@ -9,9 +9,9 @@ use App\Models\Customer;
 use App\Models\PricingPdf;
 use App\Models\ShippingRate;
 use App\Models\SystemSetting;
-use App\Models\TowingRate;
 use App\Services\ShippingRateService;
 use App\Services\TowingRateService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,7 +19,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class PricingController extends Controller
 {
@@ -124,7 +123,7 @@ class PricingController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Failed! Unable to Generate pdf.',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 400);
         }
 
