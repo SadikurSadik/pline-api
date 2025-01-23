@@ -109,7 +109,7 @@ class ExportRateController extends Controller
 
     public function generatePdf()
     {
-        set_time_limit(300);
+        set_time_limit(100);
         ini_set('memory_limit', '-1');
 
         $date = Carbon::parse(now())->format('d F Y');
