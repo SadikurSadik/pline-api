@@ -30,7 +30,7 @@ class VehicleService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Vehicle::query()->with(['customer', 'location']);
+        $query = Vehicle::query()->with(['customer', 'location', 'title_type', 'yard_photos']);
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByStatus::class,
