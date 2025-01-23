@@ -28,7 +28,7 @@ class VehicleResource extends JsonResource
             'location_name' => data_get($this, 'location.name'),
             'auction_name' => $this->auction_name,
             'service_provider' => $this->service_provider,
-            'value' => $this->value,
+            'value' => $this->value . ' $',
             'note_status' => $this->note_status,
             'note' => $this->note,
             'license_number' => $this->license_number,
