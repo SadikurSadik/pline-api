@@ -40,7 +40,7 @@ class VehicleDetailResource extends JsonResource
             'model' => $this->model,
             'color' => $this->color,
             'country_name' => data_get($this, 'country.name'),
-            'state_name' => data_get($this, 'state.name'),
+            'state_name' => data_get($this, 'state.short_code'),
             'city_name' => data_get($this, 'city.name'),
             'country_id' => data_get($this, 'country.id'),
             'state_id' => data_get($this, 'state.id'),
