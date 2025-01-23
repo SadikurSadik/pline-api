@@ -190,6 +190,7 @@ Route::middleware('auth:sanctum')->group(function () {
     /* pricing related endpoints */
 
     /* pricing related endpoints */
+    Route::get('generate-export-pricing', [ExportRateController::class, 'generatePricing']);
     Route::get('export-rates/export-excel', [ExportRateController::class, 'exportExcel']);
     Route::apiResource('export-rates', ExportRateController::class);
     /* pricing related endpoints */
