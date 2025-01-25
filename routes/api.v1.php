@@ -180,7 +180,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('vehicle/{id}/get-note', [NoteController::class, 'vehicleGetNote']);
     /* note related endpoints */
 
-
     /* buyer number related endpoints */
     Route::post('buyer-number/add-customer', [BuyerNumberController::class, 'submitAddCustomer']);
     Route::post('buyer-number/replace-customer', [BuyerNumberController::class, 'submitReplaceCustomer']);
@@ -228,7 +227,6 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::apiResource('notes', NoteController::class)->only('store', 'index');
-
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {

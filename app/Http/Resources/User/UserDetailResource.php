@@ -49,7 +49,7 @@ class UserDetailResource extends JsonResource
             return null;
         }
 
-        if(! User::find($this->id)) {
+        if (! User::find($this->id)) {
             return null;
         }
 

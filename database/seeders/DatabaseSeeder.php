@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
-
 use App\Models\BuyerNumber;
 use App\Models\Complain;
 use App\Models\Consignee;
