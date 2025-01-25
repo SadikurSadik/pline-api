@@ -6,10 +6,12 @@ use App\Enums\PricingType;
 use App\Enums\Role;
 use App\Enums\VisibilityStatus;
 use App\Http\Resources\Pricing\PricingResource;
+use App\Models\City;
 use App\Models\Customer;
 use App\Models\PricingPdf;
 use App\Models\ShippingRate;
 use App\Models\SystemSetting;
+use App\Models\TowingRate;
 use App\Services\ShippingRateService;
 use App\Services\TowingRateService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -207,5 +209,62 @@ class PricingController extends Controller
         }
 
         return $response;
+    }
+
+    public function searchCitiesWithState(Request $request): JsonResponse
+    {
+        $cityIds = TowingRate::select('city_id')
+            ->where('status', VisibilityStatus::ACTIVE->value)
+            ->distinct()
+            ->pluck('city_id');
+
+        $data = City::with('state')
+            ->whereIn('id', $cityIds)
+            ->get()->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'name' => sprintf('%s-%s', $item->state?->short_code, $item->name),
+                ];
+            });
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function searchPrice(Request $request): JsonResponse
+    {
+        $request->validate([
+            'country_id' => 'required|integer',
+            'city_id' => 'required|integer',
+            'port_id' => 'required|integer',
+        ]);
+
+        $category = 'a';
+
+        $data = app(ShippingRateService::class)->all()->keyby('from_yard_id');
+        $yard_ids = $data->pluck('from_yard_id')->toArray();
+
+        $clearance_rate = optional(SystemSetting::where('name', 'clearance_rate')->first())->value;
+        $profit_rate = optional(SystemSetting::where('name', 'profit')->first())->value;
+
+        $filterArray = [
+            'status' => VisibilityStatus::ACTIVE->value,
+            'location_ids' => $yard_ids,
+            'city_id' => $request->city_id,
+            'limit' => '-1',
+        ];
+
+        $towing_rates = app(TowingRateService::class)->all($filterArray)->groupby('state_id');
+        $totalPrice = 0;
+        foreach ($towing_rates as $key => $items) {
+            foreach ($items as $towing_rate) {
+                $shipping_price = $data[$towing_rate->location_id]->{'rate_'.$category} / 4;
+                $towing_price = $towing_rate->{'rate_'.$category};
+                $totalPrice = $shipping_price + $clearance_rate + $profit_rate + $towing_price;
+            }
+        }
+
+        $message = (empty($shipping_price) || empty($towing_price)) ? 'Rate not found.' : sprintf('Shipping Price is: %s', number_format($totalPrice));
+
+        return apiResponse($message, 200, ['note' => 'There may have additional charges depending on your vehicle.']);
     }
 }
