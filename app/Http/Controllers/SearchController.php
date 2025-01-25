@@ -57,7 +57,7 @@ class SearchController extends Controller
                 ->orWhere('short_code', 'like', "%{$request->search}%");
         }
 
-        return response()->json(['data' => $query->limit(20)->get()]);
+        return response()->json(['data' => $query->limit(50)->get()]);
     }
 
     public function searchCity(Request $request): JsonResponse
