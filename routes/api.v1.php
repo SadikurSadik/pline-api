@@ -45,6 +45,7 @@ Route::get('advanced-account-receipt/print-pdf/{id}', [VoucherController::class,
 Route::group(['prefix' => 'public'], function () {
     Route::post('contact-us', [ContactMessageController::class, 'store']);
     Route::get('search/countries', [SearchController::class, 'searchCountry']);
+    Route::post('get-export-price', [ExportRateController::class, 'searchPrice']);
 });
 /* public api for website */
 

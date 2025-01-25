@@ -8,6 +8,7 @@ use App\Exports\ExportRatesExport;
 use App\Http\Requests\ExportRate\StoreExportRate;
 use App\Http\Requests\ExportRate\UpdateExportRate;
 use App\Http\Resources\ExportRate\ExportRateResource;
+use App\Models\ExportRate;
 use App\Models\PricingPdf;
 use App\Services\ExportRateService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -147,5 +148,23 @@ class ExportRateController extends Controller
         }
 
         return $response;
+    }
+
+    public function searchPrice(Request $request): JsonResponse
+    {
+        $request->validate([
+            'from_country_id' => 'required|integer',
+            'to_country_id' => 'required|integer',
+        ]);
+
+        $exportRate = ExportRate::where([
+            'from_country_id' => $request->from_country_id,
+            'to_country_id' => $request->to_country_id,
+            'status' => VisibilityStatus::ACTIVE->value,
+        ])->first();
+
+        $message = empty($exportRate) ? 'Rate not found.' : sprintf("Rate is: %s", number_format($exportRate->rate_a));
+
+        return apiResponse($message);
     }
 }
