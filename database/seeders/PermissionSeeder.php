@@ -140,6 +140,30 @@ class PermissionSeeder extends Seeder
             ['name' => 'view vcc', 'module_id' => 17, 'guard_name' => 'web'],
             ['name' => 'delete vcc', 'module_id' => 17, 'guard_name' => 'web'],
             ['name' => 'export excel vcc', 'module_id' => 17, 'guard_name' => 'web'],
+
+            // complain module
+            ['name' => 'manage complain', 'module_id' => 18, 'guard_name' => 'web'],
+            ['name' => 'create complain', 'module_id' => 18, 'guard_name' => 'web'],
+            ['name' => 'update complain', 'module_id' => 18, 'guard_name' => 'web'],
+            ['name' => 'view complain', 'module_id' => 18, 'guard_name' => 'web'],
+            ['name' => 'delete complain', 'module_id' => 18, 'guard_name' => 'web'],
+
+            // pricing module
+            ['name' => 'shipping price', 'module_id' => 19, 'guard_name' => 'web'],
+            ['name' => 'generate pricing pdf', 'module_id' => 19, 'guard_name' => 'web'],
+            ['name' => 'pricing pdf', 'module_id' => 19, 'guard_name' => 'web'],
+            ['name' => 'delete pricing pdf', 'module_id' => 19, 'guard_name' => 'web'],
+
+            // export pricing module
+            ['name' => 'manage export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'create export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'update export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'view export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'delete export rate', 'module_id' => 20, 'guard_name' => 'web'],
+            ['name' => 'export excel export rate', 'module_id' => 20, 'guard_name' => 'web'],
+
+            // accounting module
+            ['name' => 'accounting module', 'module_id' => 21, 'guard_name' => 'web'],
         ]);
     }
 }

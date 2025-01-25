@@ -43,6 +43,7 @@ class Container extends Model
         'port_of_discharge_id',
         'container_type',
         'status',
+        'note_status',
     ];
 
     protected function casts(): array

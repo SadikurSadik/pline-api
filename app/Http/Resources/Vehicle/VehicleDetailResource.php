@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Vehicle;
 
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -21,6 +22,7 @@ class VehicleDetailResource extends JsonResource
             'customer_user_id' => $this->customer_user_id,
             'customer_id' => data_get($this, 'customer.customer_id'),
             'customer_name' => data_get($this, 'customer.name'),
+            'company_name' => data_get($this, 'customer.company_name'),
             'lot_number' => $this->lot_number,
             'vin_number' => $this->vin_number,
             'purchase_date' => $this->purchase_date,
@@ -28,6 +30,7 @@ class VehicleDetailResource extends JsonResource
             'auction_name' => $this->auction_name,
             'service_provider' => $this->service_provider,
             'value' => $this->value,
+            'check_number' => $this->check_number,
             'weight' => $this->weight,
             'license_number' => $this->license_number,
             'additional_charges' => $this->additional_charges,
@@ -37,7 +40,7 @@ class VehicleDetailResource extends JsonResource
             'model' => $this->model,
             'color' => $this->color,
             'country_name' => data_get($this, 'country.name'),
-            'state_name' => data_get($this, 'state.name'),
+            'state_name' => data_get($this, 'state.short_code'),
             'city_name' => data_get($this, 'city.name'),
             'country_id' => data_get($this, 'country.id'),
             'state_id' => data_get($this, 'state.id'),
@@ -49,6 +52,7 @@ class VehicleDetailResource extends JsonResource
             'damaged_name' => $this->damaged?->getLabel(),
             'pictures' => $this->pictures?->value,
             'pictures_name' => $this->pictures?->getLabel(),
+            'towed_from' => $this->towed_from,
             'towed' => $this->towed?->value,
             'towed_name' => $this->towed?->getLabel(),
             'keys' => $this->keys?->value,
@@ -65,17 +69,24 @@ class VehicleDetailResource extends JsonResource
             'tow_by' => $this->tow_by?->value,
             'tow_by_name' => $this->tow_by?->getLabel(),
             'tow_fee' => $this->tow_fee,
+            'note' => $this->note,
             'title_type_id' => $this->title_type_id,
             'title_type_name' => data_get($this, 'title_type.name'),
             'status' => $this->status,
             'status_name' => $this->status->getLabel(),
+            'container_number' => $this->container?->container_number,
+            'arrival_date' => $this->container?->arrival_date,
             'vehicle_conditions' => $this->vehicle_conditions->pluck('value', 'condition_id'),
             'vehicle_features' => $this->vehicle_features->pluck('feature_id', 'feature_id'),
+            'tracking_statuses' => Vehicle::$trackingStatuses,
+            'tracking_point' => $this->status?->getTrackingPoint(),
+            'photos' => $this->getPhotosProperty($this->yard_photos)->pluck('name'),
             'file_urls' => [
                 'yard_photos' => $this->getPhotosProperty($this->yard_photos),
                 'auction_photos' => $this->getPhotosProperty($this->auction_photos),
                 'pickup_photos' => $this->getPhotosProperty($this->pickup_photos),
                 'arrived_photos' => $this->getPhotosProperty($this->arrived_photos),
+                'export_photos' => $this->getPhotosProperty($this->export_photos),
                 'documents' => $this->getDocumentProperty($this->documents),
                 'invoices' => $this->getDocumentProperty($this->invoices),
             ],

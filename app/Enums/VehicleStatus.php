@@ -35,4 +35,19 @@ enum VehicleStatus: int
             VehicleStatus::HANDED_OVER => 'Handed Over',
         };
     }
+
+    public function getTrackingPoint(): int
+    {
+        return match ($this) {
+            VehicleStatus::NEW_REQUESTED, VehicleStatus::NEW_PURCHASED => 0,
+            VehicleStatus::PAID => 1,
+            VehicleStatus::DISPATCHED => 2,
+            VehicleStatus::PICKED_UP => 3,
+            VehicleStatus::ON_HAND => 4,
+            VehicleStatus::ON_THE_WAY => 5,
+            VehicleStatus::ARRIVED => 7,
+            VehicleStatus::HANDED_OVER => 8,
+            default => 6,
+        };
+    }
 }

@@ -7,6 +7,7 @@ use App\Enums\VehiclePhotoType;
 use App\Filters\FilterByAuctionName;
 use App\Filters\FilterByCustomerUser;
 use App\Filters\FilterById;
+use App\Filters\FilterByLicenseNumber;
 use App\Filters\FilterByLocation;
 use App\Filters\FilterByLotNumber;
 use App\Filters\FilterByPurchaseDate;
@@ -29,7 +30,7 @@ class VehicleService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Vehicle::query()->with(['customer', 'location']);
+        $query = Vehicle::query()->with(['customer', 'location', 'title_type', 'yard_photos']);
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByStatus::class,
@@ -37,6 +38,7 @@ class VehicleService
             FilterById::class,
             FilterByVehicleGlobalSearch::class,
             FilterByCustomerUser::class,
+            FilterByLicenseNumber::class,
             FilterByVinNumber::class,
             FilterByLotNumber::class,
             FilterByAuctionName::class,
@@ -46,7 +48,7 @@ class VehicleService
         ], $filters);
     }
 
-    public function getById(int $id)
+    public function getById(int $id, $customerUserId = null)
     {
         return Vehicle::with([
             'customer',
@@ -60,7 +62,9 @@ class VehicleService
             'vehicle_features',
             'documents',
             'invoices',
-        ])->find($id);
+        ])->when($customerUserId, function ($q) use ($customerUserId) {
+            $q->where('customer_user_id', $customerUserId);
+        })->find($id);
     }
 
     public function store(array $data)
@@ -254,5 +258,29 @@ class VehicleService
             ->toArray();
 
         VehicleDocument::whereIn('id', $photoIds)->delete();
+    }
+
+    public function getByVin(mixed $vin, null $customerUserId)
+    {
+        return Vehicle::with([
+            'customer',
+            'location',
+            'title_type',
+            'yard_photos',
+            'auction_photos',
+            'pickup_photos',
+            'arrived_photos',
+            'vehicle_conditions',
+            'vehicle_features',
+            'documents',
+            'invoices',
+        ])->when($customerUserId, function ($q) use ($customerUserId) {
+            $q->where('customer_user_id', $customerUserId);
+        })->where(function ($query) use ($vin) {
+            $query->where('vin_number', $vin)
+                ->orWhereHas('container', function ($query) use ($vin) {
+                    $query->where('container_number', $vin);
+                });
+        })->firstOrFail();
     }
 }

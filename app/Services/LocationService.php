@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Enums\VisibilityStatus;
+use App\Filters\FilterByCountry;
 use App\Filters\FilterByName;
+use App\Filters\FilterByState;
 use App\Filters\FilterByStatus;
 use App\Models\Location;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -14,10 +16,12 @@ class LocationService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Location::query();
+        $query = Location::query()->with('country', 'state');
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByName::class,
+            FilterByCountry::class,
+            FilterByState::class,
             FilterByStatus::class,
         ], $filters);
     }

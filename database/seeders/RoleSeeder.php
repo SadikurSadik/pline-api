@@ -27,7 +27,22 @@ class RoleSeeder extends Seeder
 
         Role::find(1)->givePermissionTo(Permission::pluck('name')->toArray());
         Role::find(2)->givePermissionTo(Permission::where('name', 'not like', 'delete %')->pluck('name')->toArray());
-        Role::find(3)->givePermissionTo(Permission::where('name', 'not like', 'delete %')->where('module_id', 9)->pluck('name')->toArray());
+        Role::find(3)->givePermissionTo([
+            'manage user',
+            'create user',
+            'update user',
+            'view user',
+            'manage vehicle',
+            'view vehicle',
+            'manage container',
+            'view container',
+            'manage damage claim',
+            'create damage claim',
+            'update damage claim',
+            'view damage claim',
+            'manage complain',
+            'create complain',
+        ]);
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }

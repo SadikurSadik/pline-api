@@ -14,6 +14,8 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('country_id');
+            $table->bigInteger('state_id')->nullable();
             $table->string('name', 200);
             $table->tinyInteger('status')->nullable()->default(VisibilityStatus::ACTIVE->value);
             $table->softDeletes();

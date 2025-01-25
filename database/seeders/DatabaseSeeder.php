@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
+
 use App\Models\BuyerNumber;
+use App\Models\Complain;
 use App\Models\Consignee;
 use App\Models\Container;
 use App\Models\Customer;
@@ -56,6 +58,7 @@ class DatabaseSeeder extends Seeder
             VehicleColorSeeder::class,
             ConditionSeeder::class,
             FeatureSeeder::class,
+            PricingPdfSeeder::class,
         ]);
 
         $adminUser->syncRolePermissions();
@@ -67,6 +70,7 @@ class DatabaseSeeder extends Seeder
         Container::factory(20)->create();
         DamageClaim::factory(20)->create();
         Vcc::factory(20)->create();
+        Complain::factory(10)->create();
         //VccExitPaper::factory(20)->create();
         Sheet::factory(16)->create();
         Grade::factory(10)->create();

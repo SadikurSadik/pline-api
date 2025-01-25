@@ -2,16 +2,101 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DamageClaimStatus;
 use App\Enums\Role;
+use App\Enums\VehicleStatus;
 use App\Models\Customer;
-use App\Servivces\DashboardService;
+use App\Models\DamageClaim;
+use App\Services\ComplainService;
+use App\Services\DashboardService;
+use App\Services\InvoiceService;
+use App\Services\NotificationService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     public function __construct(protected DashboardService $service) {}
 
-    public function statusOverview(Request $request): \Illuminate\Http\JsonResponse
+    public function index(Request $request): JsonResponse
+    {
+        $filters = $request->all();
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $filters['user_id'] = auth()->user()->id;
+        }
+
+        $statusOverview = collect($this->service->vehicleCounts($filters))->whereNotIn('status', [11, VehicleStatus::LOADED->value])->values();
+
+        $data = [
+            'status_overview' => $statusOverview,
+            'invoice_overview' => app(InvoiceService::class)->invoiceSummary($filters),
+            'userInfo' => $this->service->userInfo($request->all()),
+            'counter' => [
+                'notification' => app(NotificationService::class)->myUnreadNotificationCount(),
+                'feedback' => 0,
+                'complain' => app(ComplainService::class)->adminUnreadCount(),
+                'damage_claims' => DamageClaim::where('status', DamageClaimStatus::Pending->value)
+                    ->when(auth()->user()->role_id == Role::CUSTOMER, function ($query) {
+                        $query->where('customer_user_id', auth()->user()->id);
+                    })->count(),
+                'storage_claims' => 0,
+                'key_missing_claims' => 0,
+            ],
+        ];
+
+        return response()->json($data);
+    }
+
+    public function dashboardMobileApi(Request $request, InvoiceService $invoiceService): JsonResponse
+    {
+        $data = [
+            'unread_notifications_count' => app(NotificationService::class)->myUnreadNotificationCount(),
+            'pending_voucher_count' => 0 /*app(VoucherService::class)->getPendingVoucherCount()*/,
+        ];
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $invoiceData = $invoiceService->invoiceSummary(['customer_id' => auth()->user()->id]);
+            $data['invoice_total_amount'] = 'Total: AED '.number_format($invoiceData['total_amount'], 2);
+            $total = $invoiceData['total_amount'];
+            if (empty($total)) {
+                $total = 100;
+            }
+            $data['invoice_summary'] = [
+                [
+                    'value' => number_format(($invoiceData['total_due'] * 100) / $total, 2),
+                    'label' => 'Balance: AED '.number_format($invoiceData['total_due'], 2),
+                    'color' => '#DC4C64',
+                ],
+                [
+                    'value' => number_format(($invoiceData['total_paid'] * 100) / $total, 2),
+                    'label' => 'Paid: AED '.number_format($invoiceData['total_paid'], 2),
+                    'color' => '#14A44D',
+                ],
+            ];
+
+            $advanceData = $invoiceService->advancePaymentSummary(['customer_id' => auth()->user()->id]);
+            $data['advance_total_amount'] = 'Balance: AED '.number_format($advanceData['total_due'], 2);
+            $total = $advanceData['total_amount'] + abs($advanceData['total_utilized']);
+            if (empty($total)) {
+                $total = 100;
+            }
+            $data['advance_summary'] = [
+                [
+                    'value' => number_format(abs($advanceData['total_utilized'] * 100) / $total, 2),
+                    'label' => 'Utilized: AED '.number_format(abs($advanceData['total_utilized']), 2),
+                    'color' => '#FF7F50',
+                ],
+                [
+                    'value' => number_format(abs($advanceData['total_amount'] * 100) / $total, 2),
+                    'label' => 'Deposit: AED '.number_format($advanceData['total_amount'], 2),
+                    'color' => '#6495ED',
+                ],
+            ];
+        }
+
+        return response()->json($data);
+    }
+
+    public function statusOverview(Request $request): JsonResponse
     {
         $filters = $request->all();
         if (auth()->user()->role_id == Role::CUSTOMER) {
@@ -25,6 +110,21 @@ class DashboardController extends Controller
         $data = $this->service->vehicleCounts($filters);
 
         return response()->json($data);
+    }
+
+    public function vehicleStatusOverview(Request $request): JsonResponse
+    {
+        $filters = $request->all();
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $filters['user_id'] = auth()->user()->id;
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
+            $filters['user_id'] = auth()->user()->parent_id;
+        }
+
+        return response()->json([
+            'vehicles_statuses' => $this->service->vehicleCounts($filters),
+            'unread_notifications_count' => app(\App\Services\NotificationService::class)->myUnreadNotificationCount(),
+        ]);
     }
 
     public function monthlySales(): array

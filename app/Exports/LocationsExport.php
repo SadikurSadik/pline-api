@@ -28,6 +28,8 @@ class LocationsExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'NAME',
+            'COUNTRY',
+            'STATE',
             'STATUS',
         ];
     }
@@ -36,6 +38,8 @@ class LocationsExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             $row->name,
+            $row->country?->name,
+            $row->state?->name,
             $row->status->getLabel(),
         ];
     }

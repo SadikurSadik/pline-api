@@ -19,6 +19,11 @@ class UpdateVehicleRequest extends FormRequest
                 'required',
                 Rule::unique('vehicles')->where('deleted_at')->ignore($this->vehicle),
             ],
+            'lot_number' => [
+                'required',
+                'integer',
+                Rule::unique('vehicles')->where('deleted_at')->ignore($this->vehicle),
+            ],
             'year' => 'required|integer|digits:4',
             'make' => 'required|max:150',
             'model' => 'required|max:150',
@@ -63,6 +68,7 @@ class UpdateVehicleRequest extends FormRequest
             'file_urls.auction_photos.*' => 'nullable|url',
             'file_urls.pickup_photos.*' => 'nullable|url',
             'file_urls.arrived_photos.*' => 'nullable|url',
+            'file_urls.export_photos.*' => 'nullable|url',
             'file_urls.documents.*' => 'nullable|url',
             'file_urls.invoices.*' => 'nullable|url',
         ];

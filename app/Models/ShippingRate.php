@@ -17,9 +17,11 @@ class ShippingRate extends Model
         'amount_45feet',
         'from_country_id',
         'from_state_id',
+        'from_yard_id',
         'from_port_id',
         'to_country_id',
         'to_state_id',
+        'to_yard_id',
         'to_port_id',
         'status',
     ];

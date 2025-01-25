@@ -28,8 +28,15 @@ class VehicleResource extends JsonResource
             'location_name' => data_get($this, 'location.name'),
             'auction_name' => $this->auction_name,
             'service_provider' => $this->service_provider,
-            'value' => $this->value,
+            'value' => $this->value . ' $',
+            'note_status' => $this->note_status,
+            'note' => $this->note,
+            'license_number' => $this->license_number,
+            'container_id' => $this->container_id,
+            'container_number' => $this->container?->container_number,
+            'keys_name' => $this->keys?->getLabel(),
             'status_name' => $this->status->getLabel(),
+            'title_type_name' => data_get($this, 'title_type.name'),
         ];
     }
 

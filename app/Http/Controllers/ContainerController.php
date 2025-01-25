@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ContainerPhotoType;
+use App\Enums\Role;
 use App\Exports\ContainersExport;
 use App\Http\Requests\Container\StoreContainerRequest;
 use App\Http\Requests\Container\UpdateContainerRequest;
 use App\Http\Resources\Container\ContainerDetailResource;
 use App\Http\Resources\Container\ContainerPhotosResource;
 use App\Http\Resources\Container\ContainerResource;
+use App\Models\Container;
 use App\Services\ContainerService;
 use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
@@ -40,7 +42,13 @@ class ContainerController extends Controller implements HasMiddleware
 
     public function index(Request $request): AnonymousResourceCollection
     {
-        $data = $this->service->all($request->all());
+        $filters = $request->all();
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $filters['customer_user_id'] = auth()->user()->id;
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
+            $filters['customer_user_id'] = auth()->user()->parent_id;
+        }
+        $data = $this->service->all($filters);
 
         return ContainerResource::collection($data);
     }
@@ -177,5 +185,12 @@ class ContainerController extends Controller implements HasMiddleware
         $data = $this->service->getById($id);
 
         return new ContainerPhotosResource($data);
+    }
+
+    public function changeNoteStatus($id, Request $request): JsonResponse
+    {
+        Container::find($id)->update(['note_status' => $request->get('note_status')]);
+
+        return response()->json(['message' => $request->get('note_status') == '1' ? 'Note Closed successfully.' : 'Note opened successfully.']);
     }
 }

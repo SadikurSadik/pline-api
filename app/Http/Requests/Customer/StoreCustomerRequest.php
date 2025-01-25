@@ -25,7 +25,6 @@ class StoreCustomerRequest extends FormRequest
                 'max:200',
                 Rule::unique('users')->whereNull('deleted_at'),
             ],
-            'password' => 'required|min:6|max:12',
             'trn' => 'nullable|max:20',
             'category' => ['required', Rule::in(['A', 'B'])],
             'profile_photo' => 'nullable|url',
@@ -34,6 +33,7 @@ class StoreCustomerRequest extends FormRequest
             'state_id' => 'nullable|integer',
             'city_id' => 'nullable|integer',
             'status' => 'nullable|boolean',
+            'block_issue_vcc' => 'nullable|boolean',
             'buyer_ids' => 'nullable|array',
             'documents' => 'nullable|array',
         ];

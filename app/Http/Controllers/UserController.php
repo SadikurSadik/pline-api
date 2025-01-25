@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
+use App\Enums\Roles;
 use App\Enums\VisibilityStatus;
 use App\Exports\UsersExport;
 use App\Http\Requests\User\StoreUserRequest;
@@ -9,41 +11,53 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserDetailResource;
 use App\Http\Resources\User\UserPermissionResource;
 use App\Http\Resources\User\UserResource;
+use App\Models\Customer;
+use App\Models\User;
+use App\Services\AccountingService;
+use App\Services\FileManagerService;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Http\Response;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class UserController extends Controller implements HasMiddleware
+class UserController extends Controller
 {
     public function __construct(protected UserService $service) {}
 
-    public static function middleware(): array
+    /*public static function middleware(): array
     {
         return [
-            new Middleware('role_or_permission:owner|manage user', only: ['index', 'permissions', 'updatePermissions', 'changeStatus']),
+            new Middleware('role_or_permission:owner,customer|manage user', only: ['index', 'permissions', 'updatePermissions', 'changeStatus']),
             new Middleware('role_or_permission:owner|create user', only: ['store']),
             new Middleware('role_or_permission:owner|update user', only: ['update']),
             new Middleware('role_or_permission:owner|view user', only: ['show']),
             new Middleware('role_or_permission:owner|delete user', only: ['destroy']),
             new Middleware('role_or_permission:owner|export excel user', only: ['exportExcel']),
         ];
-    }
+    }*/
 
     public function index(Request $request): AnonymousResourceCollection
     {
-        $data = $this->service->all($request->all());
+        $filters = $request->all();
+        if (auth()->user()->role_id == Role::CUSTOMER) {
+            $filters['role_id'] = Role::SUB_USER->value;
+            $filters['parent_id'] = auth()->user()->id;
+        }
+        $data = $this->service->all($filters);
 
         return UserResource::collection($data);
     }
 
     public function store(StoreUserRequest $request): JsonResponse
     {
-        $this->service->store($request->validated());
+        $data = $request->validated();
+        if (auth()->user()->role_id == Role::CUSTOMER) {
+            $data['parent_id'] = auth()->user()->id;
+        }
+        $this->service->store($data);
 
         return successResponse(__('User added Successfully.'));
     }
@@ -76,14 +90,27 @@ class UserController extends Controller implements HasMiddleware
         return new UserPermissionResource($user);
     }
 
-    public function updatePermissions($id, Request $request): JsonResponse
+    public function updatePermissions($id, Request $request, AccountingService $accountingService): JsonResponse
     {
         $request->validate([
             'permissions' => ['required', 'array', 'min:1'],
             'permissions.*' => 'required|integer',
         ]);
 
+        $user = User::find($id);
         $this->service->updatePermissions($id, $request->permissions);
+
+        if ( in_array(110, $request->permissions ?? [])) {
+            $accountingService->syncUser([
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'password' => random_bytes(10),
+                'type' => 'accounted',
+            ]);
+        } else {
+            $accountingService->deleteUser($id);
+        }
 
         return successResponse(__('Permissions updated successfully.'));
     }
@@ -103,5 +130,29 @@ class UserController extends Controller implements HasMiddleware
     public function exportExcel(Request $request): BinaryFileResponse
     {
         return Excel::download(new UsersExport($request->all()), 'users.xlsx');
+    }
+
+    public function uploadProfilePhoto(FileManagerService $fileStorage, Request $request): JsonResponse
+    {
+        $request->validate([
+            'photo' => 'required|image',
+        ]);
+
+        try {
+            $upload = $fileStorage->uploadPhoto($request->photo, 'uploads/users/profile-pics', null, 200);
+
+            if (! $upload) {
+                return response()->json(['success' => false, 'profile_photo' => '', 'message' => 'Failed to file upload'], \Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST);
+            }
+
+            $this->service->update(auth()->user()->id, ['photo_url' => str_replace(config('app.media_url'), '', $upload), 'status' => 1]);
+
+            return response()->json(['success' => true, 'profile_photo' => $upload]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to changed password.'.$e->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

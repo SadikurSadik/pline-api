@@ -40,6 +40,7 @@ return new class extends Migration
             $table->decimal('storage_amount')->nullable()->default(0);
             $table->decimal('additional_charges')->nullable()->default(0);
             $table->text('note')->nullable();
+            $table->tinyInteger('note_status')->default(0);
 
             // Towing Request
             $table->tinyInteger('condition')->nullable();

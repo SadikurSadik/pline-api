@@ -8,6 +8,7 @@ enum VehiclePhotoType: int
     case AUCTION_PHOTO = 2;
     case PICKUP_PHOTO = 3;
     case ARRIVED_PHOTO = 4;
+    case EXPORT_PHOTO = 5;
 
     public function getKeyName(): string
     {

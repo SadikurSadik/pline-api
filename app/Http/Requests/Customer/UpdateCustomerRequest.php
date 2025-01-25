@@ -26,7 +26,6 @@ class UpdateCustomerRequest extends FormRequest
                 'max:200',
                 Rule::unique('users')->whereNull('deleted_at')->ignore($this->user_id),
             ],
-            'password' => 'nullable|min:6|max:12',
             'trn' => 'nullable|max:20',
             'category' => ['required', Rule::in(['A', 'B'])],
             'profile_photo' => 'nullable|url',
@@ -35,6 +34,7 @@ class UpdateCustomerRequest extends FormRequest
             'state_id' => 'nullable|integer',
             'city_id' => 'nullable|integer',
             'status' => 'nullable|boolean',
+            'block_issue_vcc' => 'nullable|boolean',
             'buyer_ids' => 'nullable|array',
             'documents' => 'nullable|array',
         ];

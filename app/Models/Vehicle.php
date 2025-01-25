@@ -61,6 +61,7 @@ class Vehicle extends Model
         'keys',
         'note',
         'status',
+        'note_status',
     ];
 
     protected function casts(): array
@@ -76,6 +77,18 @@ class Vehicle extends Model
             'tow_by' => VehicleTowBy::class,
         ];
     }
+
+    public static array $trackingStatuses = [
+        'New',
+        'Paid',
+        'Dispatched',
+        'Picked Up',
+        'On Hand',
+        'On the way',
+        'In Port',
+        'Arrived',
+        'Handed Over',
+    ];
 
     public function getTitleAttribute(): string
     {
@@ -137,6 +150,11 @@ class Vehicle extends Model
         return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::ARRIVED_PHOTO->value);
     }
 
+    public function export_photos(): HasMany
+    {
+        return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::EXPORT_PHOTO->value);
+    }
+
     public function documents(): HasMany
     {
         return $this->hasMany(VehicleDocument::class)->where('type', '=', VehicleDocumentType::DOCUMENT->value);
@@ -161,9 +179,6 @@ class Vehicle extends Model
     {
         parent::boot();
 
-        Vehicle::creating(function ($model) {
-            $lotNumber = (Vehicle::max('lot_number') ?? 100000) + 1;
-            $model->lot_number = $lotNumber;
-        });
+        Vehicle::creating(function ($model) {});
     }
 }

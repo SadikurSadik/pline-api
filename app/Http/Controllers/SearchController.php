@@ -13,6 +13,7 @@ use App\Models\Feature;
 use App\Models\Location;
 use App\Models\Port;
 use App\Models\State;
+use App\Models\TitleType;
 use App\Models\Vehicle;
 use App\Models\VehicleColor;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +30,10 @@ class SearchController extends Controller
             'name',
         ])->where('status', VisibilityStatus::ACTIVE);
 
+        if (! empty($request->export_vehicle)) {
+            $query->where('export_vehicle', $request->export_vehicle);
+        }
+
         if (! empty($request->search)) {
             $query->where('name', 'like', "%{$request->search}%")
                 ->orWhere('short_code', 'like', "%{$request->search}%");
@@ -41,6 +46,7 @@ class SearchController extends Controller
     {
         $query = State::select([
             'id',
+            'short_code',
             'name',
         ])->where('status', VisibilityStatus::ACTIVE);
         if (! empty($request->country_id)) {
@@ -102,6 +108,18 @@ class SearchController extends Controller
         return response()->json(['data' => $query->limit(20)->get()]);
     }
 
+    public function searchTitleTypes(Request $request): JsonResponse
+    {
+        $query = TitleType::select(['id', 'name'])
+            ->where('status', VisibilityStatus::ACTIVE);
+
+        if (! empty($request->search)) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
+        return response()->json(['data' => $query->limit(20)->get()]);
+    }
+
     public function searchRole(Request $request)
     {
         $query = Role::select([
@@ -132,6 +150,13 @@ class SearchController extends Controller
         }
 
         return $query->limit(20)->get();
+    }
+
+    public function searchBuyerNumbers($customerUserId)
+    {
+        $customer = Customer::where('user_id', $customerUserId)->firstOrFail();
+
+        return $customer->buyer_ids ?? [];
     }
 
     public function searchColor(Request $request)

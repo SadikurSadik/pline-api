@@ -26,9 +26,11 @@ class ContainerResource extends JsonResource
             'export_date' => $this->export_date,
             'eta_date' => $this->eta_date,
             'streamship_line' => $this->streamship_line,
+            'port_of_loading_name' => $this->port_of_loading?->name,
             'terminal' => $this->terminal,
             'vessel' => $this->vessel,
             'destination' => $this->destination,
+            'note_status' => $this->note_status,
             'container_tracking_url' => $this->trackingUrl($this->streamship_line, $this->container_number),
             'status_name' => $this->status->getLabel(),
         ];
