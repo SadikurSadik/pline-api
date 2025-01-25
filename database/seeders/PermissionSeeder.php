@@ -164,6 +164,22 @@ class PermissionSeeder extends Seeder
 
             // accounting module
             ['name' => 'accounting module', 'module_id' => 21, 'guard_name' => 'web'],
+
+            // sheet module
+            ['name' => 'manage sheet', 'module_id' => 22, 'guard_name' => 'web'],
+            ['name' => 'create sheet', 'module_id' => 22, 'guard_name' => 'web'],
+            ['name' => 'update sheet', 'module_id' => 22, 'guard_name' => 'web'],
+            ['name' => 'view sheet', 'module_id' => 22, 'guard_name' => 'web'],
+            ['name' => 'delete sheet', 'module_id' => 22, 'guard_name' => 'web'],
+            ['name' => 'export excel sheet', 'module_id' => 22, 'guard_name' => 'web'],
+
+            // sheet module
+            ['name' => 'manage buyer number', 'module_id' => 23, 'guard_name' => 'web'],
+            ['name' => 'create buyer number', 'module_id' => 23, 'guard_name' => 'web'],
+            ['name' => 'update buyer number', 'module_id' => 23, 'guard_name' => 'web'],
+            ['name' => 'view buyer number', 'module_id' => 23, 'guard_name' => 'web'],
+            ['name' => 'delete buyer number', 'module_id' => 23, 'guard_name' => 'web'],
+            ['name' => 'export excel buyer number', 'module_id' => 23, 'guard_name' => 'web'],
         ]);
     }
 }
