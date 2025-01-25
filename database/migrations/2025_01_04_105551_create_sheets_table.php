@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sheets', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->tinyInteger('status')->default(\App\Enums\VisibilityStatus::ACTIVE);
+            $table->tinyInteger('status')->nullable()->default(\App\Enums\VisibilityStatus::ACTIVE->value);
             $table->softDeletes();
             $table->timestamps();
         });
