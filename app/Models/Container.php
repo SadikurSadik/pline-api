@@ -35,11 +35,15 @@ class Container extends Model
         'cut_off_date',
         'export_date',
         'eta_date',
+        'arrival_date',
         'contact_detail',
+        'bol_note',
+        'special_instruction',
         'port_of_loading_id',
         'port_of_discharge_id',
         'container_type',
         'status',
+        'note_status',
     ];
 
     protected function casts(): array
@@ -48,7 +52,6 @@ class Container extends Model
             'status' => ContainerStatus::class,
             'container_type' => ContainerType::class,
             'container_vehicles' => 'array',
-
         ];
     }
 
@@ -95,5 +98,15 @@ class Container extends Model
     public function documents(): HasMany
     {
         return $this->hasMany(ContainerDocument::class);
+    }
+
+    public function houstan_custom_cover_letter(): HasOne
+    {
+        return $this->hasOne(HoustanCustomCoverLetter::class);
+    }
+
+    public function dock_receipt(): HasOne
+    {
+        return $this->hasOne(DockReceipt::class);
     }
 }

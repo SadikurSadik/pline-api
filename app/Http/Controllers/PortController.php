@@ -10,12 +10,26 @@ use App\Services\PortService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class PortController extends Controller
+class PortController extends Controller implements HasMiddleware
 {
     public function __construct(protected PortService $service) {}
+
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role_or_permission:owner|manage port', only: ['index']),
+            new Middleware('role_or_permission:owner|create port', only: ['store']),
+            new Middleware('role_or_permission:owner|update port', only: ['update']),
+            new Middleware('role_or_permission:owner|view port', only: ['show']),
+            new Middleware('role_or_permission:owner|delete port', only: ['destroy']),
+            new Middleware('role_or_permission:owner|export excel port', only: ['exportExcel']),
+        ];
+    }
 
     public function index(Request $request): AnonymousResourceCollection
     {

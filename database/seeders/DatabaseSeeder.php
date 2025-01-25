@@ -3,11 +3,16 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
+
 use App\Models\CarFax;
+use App\Models\Complain;
 use App\Models\Consignee;
 use App\Models\Container;
 use App\Models\Customer;
+use App\Models\DamageClaim;
 use App\Models\User;
+use App\Models\Vcc;
+use App\Models\VccExitPaper;
 use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -50,6 +55,7 @@ class DatabaseSeeder extends Seeder
             VehicleColorSeeder::class,
             ConditionSeeder::class,
             FeatureSeeder::class,
+            PricingPdfSeeder::class,
         ]);
 
         $adminUser->syncRolePermissions();
@@ -59,6 +65,11 @@ class DatabaseSeeder extends Seeder
         Consignee::factory(10)->create();
         Vehicle::factory(50)->create();
         Container::factory(20)->create();
+
         CarFax::factory(20)->create();
+        DamageClaim::factory(20)->create();
+        Vcc::factory(20)->create();
+        Complain::factory(10)->create();
+        //VccExitPaper::factory(20)->create();
     }
 }

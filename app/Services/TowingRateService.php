@@ -7,6 +7,7 @@ use App\Filters\FilterByCity;
 use App\Filters\FilterByCountry;
 use App\Filters\FilterById;
 use App\Filters\FilterByLocation;
+use App\Filters\FilterByLocationIds;
 use App\Filters\FilterByRate;
 use App\Filters\FilterByRateA;
 use App\Filters\FilterByRateB;
@@ -17,10 +18,11 @@ use App\Models\TowingRate;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class TowingRateService
 {
-    public function all(array $filters = []): LengthAwarePaginator|Builder
+    public function all(array $filters = []): LengthAwarePaginator|Builder|Collection
     {
         $query = TowingRate::with([
             'country',
@@ -37,6 +39,7 @@ class TowingRateService
             FilterByState::class,
             FilterByCity::class,
             FilterByLocation::class,
+            FilterByLocationIds::class,
             FilterByStatus::class,
             FilterById::class,
             FilterByTowingRateGlobalSearch::class,

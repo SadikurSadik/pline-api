@@ -28,15 +28,22 @@ class VehicleResource extends JsonResource
             'location_name' => data_get($this, 'location.name'),
             'auction_name' => $this->auction_name,
             'service_provider' => $this->service_provider,
-            'value' => $this->value,
+            'value' => $this->value . ' $',
+            'note_status' => $this->note_status,
+            'note' => $this->note,
+            'license_number' => $this->license_number,
+            'container_id' => $this->container_id,
+            'container_number' => $this->container?->container_number,
+            'keys_name' => $this->keys?->getLabel(),
             'status_name' => $this->status->getLabel(),
+            'title_type_name' => data_get($this, 'title_type.name'),
         ];
     }
 
     private function getThumbnailPhoto($photo): Application|string|UrlGenerator
     {
         if (empty($photo)) {
-            return url('assets/img/car-default-photo.png');
+            return url('images/car-default-photo.png');
         }
 
         return filter_var($photo, FILTER_VALIDATE_URL) === false ? Storage::url($photo) : $photo;

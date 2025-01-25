@@ -1,17 +1,25 @@
 <?php
 
+use App\Http\Controllers\AdminNoteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarFaxController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ClearanceRateController;
+use App\Http\Controllers\ComplainController;
 use App\Http\Controllers\ConsigneeController;
+use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\ContainerController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DamageClaimController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportRateController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\NoteController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PortController;
+use App\Http\Controllers\PricingController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShippingRateController;
@@ -19,7 +27,9 @@ use App\Http\Controllers\StateController;
 use App\Http\Controllers\TitleTypeController;
 use App\Http\Controllers\TowingRateController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VccController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
@@ -27,10 +37,21 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
 });
 
+Route::get('invoice/payment-receipt', [VoucherController::class, 'invoicePaymentReceipt']);
+Route::get('advanced-account-receipt/print-pdf/{id}', [VoucherController::class, 'advancedPaymentReceipt']);
+
+/* public api for website */
+Route::group(['prefix' => 'public'], function () {
+    Route::post('contact-us', [ContactMessageController::class, 'store']);
+});
+/* public api for website */
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
 
     /* Dashboard related routes */
+    Route::get('dashboard', [DashboardController::class, 'index']);
+    Route::get('dashboard-mobile', [DashboardController::class, 'dashboardMobileApi']);
     Route::get('status-overview', [DashboardController::class, 'statusOverview']);
     Route::get('monthly-sales', [DashboardController::class, 'monthlySales']);
     /* Dashboard related routes */
@@ -54,6 +75,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('title-types/export-excel', [TitleTypeController::class, 'exportExcel']);
     Route::apiResource('title-types', TitleTypeController::class);
 
+    Route::post('users/upload-profile-photo', [UserController::class, 'uploadProfilePhoto']);
     Route::post('users/{id}/change-status', [UserController::class, 'changeStatus']);
     Route::put('users/{id}/permissions', [UserController::class, 'updatePermissions']);
     Route::get('users/{id}/permissions', [UserController::class, 'permissions']);
@@ -73,6 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('customers/upload-document', [CustomerController::class, 'uploadDocument']);
     Route::post('customers/upload-profile-photo', [CustomerController::class, 'uploadProfilePhoto']);
     Route::apiResource('customers', CustomerController::class);
+    Route::post('contact-us', [CustomerController::class, 'contactMessage']);
     /* customer related endpoints */
 
     /* consignee related endpoints */
@@ -91,13 +114,15 @@ Route::middleware('auth:sanctum')->group(function () {
     /* pricing related endpoints */
 
     /* vehicles related endpoints */
+    Route::get('vehicles/search-by-vin', [VehicleController::class, 'getByVin']);
     Route::get('vehicles/{id}/all-photos', [VehicleController::class, 'allPhotos']);
     Route::post('vehicles/{id}/add-more-photos', [VehicleController::class, 'addMorePhotos']);
     Route::get('vehicles/{id}/download-photos', [VehicleController::class, 'downloadVehiclePhotos']);
     Route::get('vehicles/{id}/download-document', [VehicleController::class, 'downloadVehicleDocuments']);
     Route::post('vehicles/upload-document', [VehicleController::class, 'uploadDocument']);
     Route::post('vehicles/upload-photo', [VehicleController::class, 'uploadPhoto']);
-    Route::get('vehicle/export-excel', [VehicleController::class, 'exportExcel']);
+    Route::get('vehicles/export-excel', [VehicleController::class, 'exportExcel']);
+    Route::post('vehicles/{id}/change-note-status', [VehicleController::class, 'changeNoteStatus']);
     Route::apiResource('vehicles', VehicleController::class);
     /* vehicles related endpoints */
 
@@ -109,6 +134,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('containers/upload-document', [ContainerController::class, 'uploadDocument']);
     Route::post('containers/upload-photo', [ContainerController::class, 'uploadPhoto']);
     Route::get('container/export-excel', [ContainerController::class, 'exportExcel']);
+    Route::post('containers/{id}/change-note-status', [ContainerController::class, 'changeNoteStatus']);
     Route::apiResource('containers', ContainerController::class);
     /* containers related endpoints */
 
@@ -117,6 +143,87 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('car-faxes/request', [CarFaxController::class, 'carFaxRequest']);
     Route::apiResource('car-faxes', CarFaxController::class);
     /* car faxes related endpoints */
+
+    /* damage claim related endpoints */
+    Route::get('damage-claims/{id}/print-voucher-pdf', [DamageClaimController::class, 'printAsPdfVoucher']);
+    Route::put('damage-claims/{id}/approve', [DamageClaimController::class, 'damageClaimApprove']);
+    Route::put('damage-claims/{id}/reject', [DamageClaimController::class, 'damageClaimReject']);
+    Route::get('damage-claims/{id}/download-photos', [DamageClaimController::class, 'downloadDamageClaimPhotos']);
+    Route::post('damage-claims/upload-photo', [DamageClaimController::class, 'uploadPhoto']);
+    Route::get('damage-claims/export-excel', [DamageClaimController::class, 'exportExcel']);
+    Route::apiResource('damage-claims', DamageClaimController::class);
+    /* damage claim related endpoints */
+
+    /* vcc related endpoints */
+    Route::post('vcc/{id}/hand-over', [VccController::class, 'vccHandOver']);
+    Route::get('vcc-reset/{id}', [VccController::class, 'VccReset']);
+    Route::post('vcc/upload-attachment', [VccController::class, 'uploadVccAttachment']);
+    Route::post('vcc/{id}/store-attachment', [VccController::class, 'storeVccAttachment']);
+    Route::get('vcc/{id}/get-detail-form', [VccController::class, 'getVccDetail']);
+    Route::post('vcc/{id}/store-vcc-detail', [VccController::class, 'storeVccDetail']);
+    Route::get('vcc/export-excel', [VccController::class, 'exportExcel']);
+    Route::post('vcc/{id}/received-exit-paper', [VccController::class, 'storeReceivedExitPaper']);
+    Route::post('vcc/{id}/submit-exit-paper', [VccController::class, 'storeSubmitExitPaper']);
+    Route::apiResource('vccs', VccController::class);
+    /* vcc related endpoints */
+
+    /* note related endpoints */
+    Route::post('vcc/{id}/store-vcc-note', [AdminNoteController::class, 'storeVccNote']);
+    Route::post('vcc/{id}/store-submission-note', [AdminNoteController::class, 'storeSubmissionVcc']);
+    Route::get('vcc/{id}/get-vcc-note', [AdminNoteController::class, 'getVccNote']);
+    Route::get('vcc/{id}/get-submission-note', [AdminNoteController::class, 'getSubmissionNote']);
+    Route::post('vehicle/{id}/note', [AdminNoteController::class, 'storeVehicleNote']);
+    Route::get('vehicle/{id}/note', [AdminNoteController::class, 'getVehicleNote']);
+    Route::post('container/{id}/note', [AdminNoteController::class, 'storeContainerNote']);
+    Route::get('container/{id}/note', [AdminNoteController::class, 'getContainerNote']);
+
+    Route::post('container/{id}/store-note', [NoteController::class, 'containerStoreNote']);
+    Route::get('container/{id}/get-note', [NoteController::class, 'containerGetNote']);
+    Route::post('vehicle/{id}/store-note', [NoteController::class, 'vehicleStoreNote']);
+    Route::get('vehicle/{id}/get-note', [NoteController::class, 'vehicleGetNote']);
+    /* note related endpoints */
+
+    /* complain and conversations related endpoints */
+    Route::post('complains/store-conversation', [ComplainController::class, 'storeConversation']);
+    Route::apiResource('complains', ComplainController::class);
+    /* complain and conversations related endpoints */
+
+    /* invoice related endpoints */
+    Route::get('vehicle-accounting-invoice', [InvoiceController::class, 'vehicleAccountingInvoice']);
+    Route::get('shipping-accounting-invoice', [InvoiceController::class, 'serviceAccountingInvoice']);
+    Route::get('invoice-summary', [InvoiceController::class, 'invoiceSummary']);
+    Route::get('customer-statement', [InvoiceController::class, 'customerInvoicePdf']);
+    /* invoice related endpoints */
+
+    /* pricing related endpoints */
+    Route::get('shipping-vehicle-pdf-generate', [PricingController::class, 'shippingPricePdfGenerate']);
+    Route::get('shipping-price-per-vehicle', [PricingController::class, 'pricingPerVehicle']);
+    Route::get('pricing-import', [PricingController::class, 'index']);
+    Route::get('pricing-export', [PricingController::class, 'exportPricing']);
+    Route::delete('pricing/{id}', [PricingController::class, 'destroy']);
+    /* pricing related endpoints */
+
+    /* pricing related endpoints */
+    Route::get('generate-export-pricing', [ExportRateController::class, 'generatePricing']);
+    Route::get('export-rates/export-excel', [ExportRateController::class, 'exportExcel']);
+    Route::apiResource('export-rates', ExportRateController::class);
+    /* pricing related endpoints */
+
+    /* voucher related endpoints */
+    Route::post('approve-reject/voucher/{id}', [VoucherController::class, 'rejectApproveVoucher']);
+    Route::post('pending-vouchers/{id}', [VoucherController::class, 'voucherDetail']);
+    Route::get('pending-vouchers', [VoucherController::class, 'index']);
+    Route::get('customer-advance-vouchers', [VoucherController::class, 'advancedVoucher']);
+    Route::get('customer-invoice-vouchers', [VoucherController::class, 'invoiceVoucher']);
+    Route::get('payment-modes', [VoucherController::class, 'getPaymentModes']);
+    /* voucher related endpoints */
+
+    Route::get('localization', function () {
+        return response()->json(config('setting.mobile_languages'));
+    });
+
+    Route::apiResource('notes', NoteController::class)->only('store', 'index');
+
 
     Route::prefix('search')->controller(SearchController::class)
         ->group(function (): void {
@@ -127,9 +234,12 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('ports', 'searchPort');
             Route::get('roles', 'searchRole');
             Route::get('customers', 'searchCustomer');
-            Route::get('title-types', 'searchTitleType');
+            Route::get('customers/{id}/buyer-numbers', 'searchBuyerNumbers');
+            Route::get('title-types', 'searchTitleTypes');
             Route::get('colors', 'searchColor');
             Route::get('conditions', 'searchVehicleCondition');
             Route::get('features', 'searchVehicleFeature');
+            Route::get('vehicles', 'searchVehicle');
+            Route::get('consignees', 'searchConsignee');
         });
 });

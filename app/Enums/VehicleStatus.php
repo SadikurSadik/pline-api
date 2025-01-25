@@ -4,30 +4,50 @@ namespace App\Enums;
 
 enum VehicleStatus: int
 {
-    case ON_HAND = 1;
-    case READY_TO_LOAD = 2;
-    case ON_THE_WAY = 3;
-    case NEW_PURCHASED = 6;
-    case ARRIVED_IN_THE_PORT = 8;
-    case ARRIVED = 10;
-    case DISPATCHED = 12;
-    case LOADED = 15;
-    case RELISTED = 20;
-    case HANDED_OVER = 30;
+    case NEW_PURCHASED = 10;
+    case NEW_REQUESTED = 11;
+    case PAID = 15;
+    case DISPATCHED = 20;
+    case PICKED_UP = 25;
+    case ON_HAND = 30;
+    case READY_TO_LOAD = 40;
+    case LOADED = 50;
+    case ON_THE_WAY = 60;
+    case ARRIVED = 70;
+    case HANDED_OVER = 80;
+
+    case RELISTED = 90;
 
     public function getLabel(): string
     {
         return match ($this) {
+            VehicleStatus::NEW_PURCHASED => 'New Purchased',
+            VehicleStatus::NEW_REQUESTED => 'New Requested',
+            VehicleStatus::PAID => 'Paid',
+            VehicleStatus::DISPATCHED => 'Dispatched',
+            VehicleStatus::PICKED_UP => 'Picked Up',
+            VehicleStatus::ON_THE_WAY => 'On the Way',
             VehicleStatus::ON_HAND => 'On Hand',
             VehicleStatus::READY_TO_LOAD => 'Ready To Load',
-            VehicleStatus::ON_THE_WAY => 'On the Way',
-            VehicleStatus::NEW_PURCHASED => 'New Purchased',
-            VehicleStatus::ARRIVED_IN_THE_PORT => 'Arrived In the Port',
-            VehicleStatus::ARRIVED => 'Arrived',
-            VehicleStatus::DISPATCHED => 'Dispatched',
             VehicleStatus::LOADED => 'Loaded',
+            VehicleStatus::ARRIVED => 'Arrived',
             VehicleStatus::RELISTED => 'Relisted',
             VehicleStatus::HANDED_OVER => 'Handed Over',
+        };
+    }
+
+    public function getTrackingPoint(): int
+    {
+        return match ($this) {
+            VehicleStatus::NEW_REQUESTED, VehicleStatus::NEW_PURCHASED => 0,
+            VehicleStatus::PAID => 1,
+            VehicleStatus::DISPATCHED => 2,
+            VehicleStatus::PICKED_UP => 3,
+            VehicleStatus::ON_HAND => 4,
+            VehicleStatus::ON_THE_WAY => 5,
+            VehicleStatus::ARRIVED => 7,
+            VehicleStatus::HANDED_OVER => 8,
+            default => 6,
         };
     }
 }

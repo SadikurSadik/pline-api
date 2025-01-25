@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Customer;
 
+use App\Http\Resources\Consignee\ConsigneeDetailResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
@@ -36,14 +37,19 @@ class CustomerDetailResource extends JsonResource
             'city_id' => $this->city_id,
             'city_name' => $this->city?->name,
             'category' => $this->category,
+            'vehicles_count',
+            'exports_count',
             'documents' => $this->customerDocuments($this->documents ?? []),
             'status' => $this->user?->status,
+            'block_issue_vcc' => $this->block_issue_vcc,
             'status_name' => ! empty($this->user) ? $this->user->status->getLabel() : '',
+            'consignees' => ConsigneeDetailResource::collection($this->consignees),
         ];
     }
 
-    private function customerDocuments($documents)
+    private function customerDocuments($documents): array
     {
+
         return Arr::map($documents, function ($document) {
             return filter_var($document, FILTER_VALIDATE_URL) === false ? Storage::url($document) : $document;
         });
@@ -52,8 +58,7 @@ class CustomerDetailResource extends JsonResource
     private function getProfilePhoto(mixed $profilePhoto)
     {
         if (empty($profilePhoto)) {
-            // return default profile photo
-            return '';
+            return asset('images/user_default_profile.jpg');
         }
 
         return filter_var($profilePhoto, FILTER_VALIDATE_URL) ? $profilePhoto : Storage::url($profilePhoto);

@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VehicleStatus;
 use App\Enums\VisibilityStatus;
 use App\Models\City;
 use App\Models\Condition;
+use App\Models\Consignee;
 use App\Models\Country;
 use App\Models\Customer;
 use App\Models\Feature;
 use App\Models\Location;
 use App\Models\Port;
 use App\Models\State;
+use App\Models\TitleType;
+use App\Models\Vehicle;
 use App\Models\VehicleColor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,6 +30,10 @@ class SearchController extends Controller
             'name',
         ])->where('status', VisibilityStatus::ACTIVE);
 
+        if (! empty($request->export_vehicle)) {
+            $query->where('export_vehicle', $request->export_vehicle);
+        }
+
         if (! empty($request->search)) {
             $query->where('name', 'like', "%{$request->search}%")
                 ->orWhere('short_code', 'like', "%{$request->search}%");
@@ -38,6 +46,7 @@ class SearchController extends Controller
     {
         $query = State::select([
             'id',
+            'short_code',
             'name',
         ])->where('status', VisibilityStatus::ACTIVE);
         if (! empty($request->country_id)) {
@@ -99,6 +108,18 @@ class SearchController extends Controller
         return response()->json(['data' => $query->limit(20)->get()]);
     }
 
+    public function searchTitleTypes(Request $request): JsonResponse
+    {
+        $query = TitleType::select(['id', 'name'])
+            ->where('status', VisibilityStatus::ACTIVE);
+
+        if (! empty($request->search)) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
+        return response()->json(['data' => $query->limit(20)->get()]);
+    }
+
     public function searchRole(Request $request)
     {
         $query = Role::select([
@@ -131,6 +152,13 @@ class SearchController extends Controller
         return $query->limit(20)->get();
     }
 
+    public function searchBuyerNumbers($customerUserId)
+    {
+        $customer = Customer::where('user_id', $customerUserId)->firstOrFail();
+
+        return $customer->buyer_ids ?? [];
+    }
+
     public function searchColor(Request $request)
     {
         $query = VehicleColor::select([
@@ -157,5 +185,37 @@ class SearchController extends Controller
     public function searchVehicleFeature()
     {
         return Feature::select('id', 'name')->get();
+    }
+
+    public function searchVehicle(Request $request)
+    {
+        $query = Vehicle::select([
+            'id',
+            DB::raw('vin_number AS name'),
+        ])->where('status', VehicleStatus::ON_HAND->value)
+            ->whereNull('container_id');
+
+        if (! empty($filters['exclude_ids'])) {
+            $query->whereNotIn('id', $filters['exclude_ids']);
+        }
+
+        if (! empty($vehicle->vin)) {
+            $query->where('vin_number', 'like', "%{$vehicle->vin}%");
+        }
+
+        return $query->limit(20)->get();
+    }
+
+    public function searchConsignee(Request $request)
+    {
+        $query = Consignee::select('id', 'name');
+
+        if (! empty($request->search)) {
+            $query->where('name', 'like', "%{$request->search}%");
+        }
+
+        return $query->orderBy('name', 'ASC')
+            ->limit('20')
+            ->get();
     }
 }

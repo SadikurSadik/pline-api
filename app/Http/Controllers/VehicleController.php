@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Enums\VehicleDocumentType;
 use App\Enums\VehiclePhotoType;
 use App\Exports\VehiclesExport;
@@ -10,43 +11,86 @@ use App\Http\Requests\Vehicle\UpdateVehicleRequest;
 use App\Http\Resources\Vehicle\VehicleDetailResource;
 use App\Http\Resources\Vehicle\VehiclePhotosResource;
 use App\Http\Resources\Vehicle\VehicleResource;
+use App\Jobs\SyncVehicleToAccountingJob;
+use App\Models\Vehicle;
 use App\Services\FileManagerService;
 use App\Services\VehicleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class VehicleController extends Controller
+class VehicleController extends Controller implements HasMiddleware
 {
     public function __construct(protected VehicleService $service) {}
 
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('role_or_permission:owner|manage vehicle', only: ['index']),
+            new Middleware('role_or_permission:owner|create vehicle', only: ['store']),
+            new Middleware('role_or_permission:owner|update vehicle', only: ['update']),
+            new Middleware('role_or_permission:owner|view vehicle', only: ['show']),
+            new Middleware('role_or_permission:owner|delete vehicle', only: ['destroy']),
+            new Middleware('role_or_permission:owner|export excel vehicle', only: ['exportExcel']),
+        ];
+    }
+
     public function index(Request $request): AnonymousResourceCollection
     {
-        $data = $this->service->all($request->all());
+        $filters = $request->all();
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $filters['customer_user_id'] = auth()->user()->id;
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
+            $filters['customer_user_id'] = auth()->user()->parent_id;
+        }
+        $data = $this->service->all($filters);
 
         return VehicleResource::collection($data);
     }
 
     public function store(StoreVehicleRequest $request): JsonResponse
     {
-        $this->service->store($request->validated());
+        $vehicle = $this->service->store($request->validated());
+        $dispatched = SyncVehicleToAccountingJob::dispatch($vehicle->id);
 
         return successResponse(__('Vehicle added Successfully.'));
     }
 
     public function show(string $id): VehicleDetailResource
     {
-        $data = $this->service->getById($id);
+        $customerUserId = null;
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $customerUserId = auth()->user()->id;
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
+            $customerUserId = auth()->user()->parent_id;
+        }
+        $data = $this->service->getById($id, $customerUserId);
+
+        return new VehicleDetailResource($data);
+    }
+
+    public function getByVin(Request $request): VehicleDetailResource
+    {
+        $customerUserId = null;
+        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+            $customerUserId = auth()->user()->id;
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
+            $customerUserId = auth()->user()->parent_id;
+        }
+        $data = $this->service->getByVin($request->vin, $customerUserId);
 
         return new VehicleDetailResource($data);
     }
 
     public function update(UpdateVehicleRequest $request, string $id): JsonResponse
     {
-        $this->service->update($id, $request->validated());
+        $vehicle = $this->service->update($id, $request->validated());
+        $dispatched = SyncVehicleToAccountingJob::dispatch($vehicle->id);
 
         return successResponse(__('Vehicle updated Successfully.'));
     }
@@ -114,7 +158,7 @@ class VehicleController extends Controller
         $type = $request->get('type', VehiclePhotoType::YARD_PHOTO->value);
         $photos = $this->service->getVehiclePhotos($id, $type)->pluck('name');
         $zipFileName = 'vehicle_photos_'.date('Y-m-d').'.zip';
-        $zipPath = storage_path("app/public/uploads/vehicles/photos/tmp/{$zipFileName}");
+        $zipPath = storage_path("app/public/uploads/vehicles/photos/{$zipFileName}");
 
         return $fileManagerService->downloadAsZip($zipPath, $photos);
     }
@@ -124,7 +168,7 @@ class VehicleController extends Controller
         $type = $request->get('type', VehicleDocumentType::DOCUMENT->value);
         $documents = $this->service->getVehicleDocuments($id, $type)->pluck('name');
         $zipFileName = 'vehicle_documents_'.date('Y-m-d').'.zip';
-        $zipPath = storage_path("app/public/uploads/vehicles/documents/tmp/{$zipFileName}");
+        $zipPath = storage_path("app/public/uploads/vehicles/documents/{$zipFileName}");
 
         return $fileManagerService->downloadAsZip($zipPath, $documents);
     }
@@ -139,7 +183,7 @@ class VehicleController extends Controller
         try {
             $this->service->saveVehiclePhoto($request->photos, $id, $request->type);
 
-            return redirect()->back()->with('success', 'Photos added successfully.');
+            return successResponse('Photos added successfully.');
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -154,5 +198,12 @@ class VehicleController extends Controller
         $data = $this->service->getById($id);
 
         return new VehiclePhotosResource($data);
+    }
+
+    public function changeNoteStatus($id, Request $request): JsonResponse
+    {
+        Vehicle::find($id)->update(['note_status' => $request->get('note_status')]);
+
+        return response()->json(['message' => $request->get('note_status') == '1' ? 'Note Closed successfully.' : 'Note opened successfully.']);
     }
 }

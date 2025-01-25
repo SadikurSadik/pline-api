@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\VisibilityStatus;
 use App\Filters\FilterByEmail;
 use App\Filters\FilterByName;
+use App\Filters\FilterByParentId;
 use App\Filters\FilterByRole;
 use App\Filters\FilterByStatus;
 use App\Filters\FilterByUsername;
@@ -25,6 +26,7 @@ class UserService
             FilterByUsername::class,
             FilterByEmail::class,
             FilterByRole::class,
+            FilterByParentId::class,
         ], $filters);
     }
 

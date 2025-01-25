@@ -29,6 +29,11 @@ class ModuleSeeder extends Seeder
             ['name' => 'Vehicle'],
             ['name' => 'Container'],
             ['name' => 'Damage Claim'],
+            ['name' => 'VCC'],
+            ['name' => 'Complain'],
+            ['name' => 'Pricing'],
+            ['name' => 'Export Rate'],
+            ['name' => 'Accounting'],
         ]);
     }
 }

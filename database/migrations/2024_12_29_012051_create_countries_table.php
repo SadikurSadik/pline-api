@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', 200);
             $table->string('short_code', 50)->nullable();
+            $table->tinyInteger('export_vehicle')->nullable()->default(\App\Enums\BooleanStatus::NO->value);
             $table->tinyInteger('status')->nullable()->default(\App\Enums\VisibilityStatus::ACTIVE->value);
             $table->softDeletes();
             $table->timestamps();

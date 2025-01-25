@@ -15,6 +15,8 @@ class UpdateLocationRequest extends FormRequest
                 'max:200',
                 Rule::unique('locations')->whereNull('deleted_at')->ignore($this->location),
             ],
+            'country_id' => 'required|integer',
+            'state_id' => 'required|integer',
             'status' => ['required', 'boolean'],
         ];
     }

@@ -50,3 +50,64 @@ if (! function_exists('endsWith')) {
         return substr($haystack, -$length) === $needle;
     }
 }
+
+if (! function_exists('trimHostFromUrls')) {
+    /**
+     * Trim the host and base URL from a list of URLs.
+     */
+    function trimHostFromUrls(array $urls, string $baseUrl): array
+    {
+        return array_map(function ($url) use ($baseUrl) {
+            return str_replace($baseUrl, '', $url);
+        }, $urls);
+    }
+}
+
+if (! function_exists('is_customer')) {
+    function is_customer(): bool
+    {
+        return auth()->user()?->role_id == 4;
+    }
+}
+
+if (! function_exists('dateTimeFormat')) {
+    function dateTimeFormat($date): string
+    {
+        return $date ? \Illuminate\Support\Carbon::parse($date)->format('Y-m-d h:i a') : '';
+    }
+}
+
+if (! function_exists('dateFormat')) {
+    function dateFormat($date): string
+    {
+        return $date ? \Illuminate\Support\Carbon::parse($date)->format('Y-m-d') : '';
+    }
+}
+
+if (! function_exists('dateTimeFormat')) {
+    function dateTimeFormat($date): string
+    {
+        return $date ? \Illuminate\Support\Carbon::parse($date)->format('Y-m-d h:i a') : '';
+    }
+}
+
+if (! function_exists('amountFormat')) {
+    function amountFormat($amount): string
+    {
+        return $amount ? number_format($amount, 2) : '';
+    }
+}
+
+if (! function_exists('dateRangeToDateTimeRange')) {
+    function dateRangeToDateTimeRange($dateRange): array
+    {
+        if (count($dateRange) !== 2) {
+            return $dateRange;
+        }
+
+        return [
+            \Carbon\Carbon::parse($dateRange[0])->startOfDay()->format('Y-m-d H:i:s'),
+            \Carbon\Carbon::parse($dateRange[1])->endOfDay()->format('Y-m-d H:i:s'),
+        ];
+    }
+}

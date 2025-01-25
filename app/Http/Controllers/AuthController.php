@@ -36,6 +36,7 @@ class AuthController extends Controller
         }
 
         return response()->json([
+            'status' => 200,
             'access_token' => $accessToken,
             'refresh_token' => $user->refresh_token,
             'token_type' => 'Bearer',
@@ -63,6 +64,7 @@ class AuthController extends Controller
         $accessToken = $user->createToken('access_token')->plainTextToken;
 
         return response()->json([
+            'status' => 200,
             'access_token' => $accessToken,
             'refresh_token' => $request->refresh_token,
             'token_type' => 'Bearer',

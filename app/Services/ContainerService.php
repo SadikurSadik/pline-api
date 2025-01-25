@@ -21,9 +21,12 @@ use App\Filters\FilterByTerminal;
 use App\Models\Container;
 use App\Models\ContainerDocument;
 use App\Models\ContainerPhoto;
+use App\Models\DockReceipt;
+use App\Models\HoustanCustomCoverLetter;
 use App\Models\Vehicle;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 class ContainerService
@@ -34,6 +37,11 @@ class ContainerService
             'customer',
             'port_of_loading',
             'port_of_discharge',
+            'vehicles' => function ($query) use ($filters) {
+                if (! empty($filters['customer_user_id'])) {
+                    $query->where('customer_user_id', $filters['customer_user_id']);
+                }
+            },
         ]);
 
         return app(FilterPipelineService::class)->apply($query, [
@@ -67,6 +75,8 @@ class ContainerService
             'loading_photos',
             'loaded_photos',
             'documents',
+            'dock_receipt',
+            'houstan_custom_cover_letter',
         ])->find($id);
     }
 
@@ -113,6 +123,52 @@ class ContainerService
                 );
             }
         }
+
+        if (! empty($data['file_urls']['documents'])) {
+            $this->saveDocument(
+                $data['file_urls']['documents'],
+                $container->id
+            );
+        }
+
+        HoustanCustomCoverLetter::updateOrCreate(
+            ['container_id' => $container->id],
+            Arr::only($data, [
+                'vehicle_location',
+                'exporter_id',
+                'exporter_type_issuer',
+                'transportation_value',
+                'exportation_value',
+                'exporter_dob',
+                'ultimate_consignee_dob',
+                'consignee',
+                'notify_party',
+                'manifest_consignee',
+            ])
+        );
+
+        DockReceipt::updateOrCreate(
+            ['container_id' => $container->id],
+            Arr::only($data, [
+                'awb_number',
+                'export_reference',
+                'forwarding_agent',
+                'domestic_routing_instructions',
+                'pre_carriage_by',
+                'place_of_receipt_by_pre_carrier',
+                'exporting_carrier',
+                'final_destination',
+                'loading_terminal',
+                'dock_container_type',
+                'number_of_packages',
+                'by',
+                'date',
+                'auto_receiving_date',
+                'auto_cut_off',
+                'vessel_cut_off',
+                'sale_date',
+            ])
+        );
 
         return $container;
     }

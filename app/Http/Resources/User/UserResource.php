@@ -17,6 +17,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role_name' => $this->role_id->name,
             'status_name' => $this->status->getLabel(),
+            'profile_photo' => $this->getProfilePhoto($this->profile_photo),
         ];
     }
 

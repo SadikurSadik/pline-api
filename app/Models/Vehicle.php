@@ -21,8 +21,7 @@ class Vehicle extends Model
     protected $fillable = [
         'version_number',
         'customer_user_id',
-        'assigned_to',
-        'export_id',
+        'container_id',
         'lot_number',
         'vin_number',
         'year',
@@ -62,6 +61,7 @@ class Vehicle extends Model
         'keys',
         'note',
         'status',
+        'note_status',
     ];
 
     protected function casts(): array
@@ -78,9 +78,21 @@ class Vehicle extends Model
         ];
     }
 
+    public static array $trackingStatuses = [
+        'New',
+        'Paid',
+        'Dispatched',
+        'Picked Up',
+        'On Hand',
+        'On the way',
+        'In Port',
+        'Arrived',
+        'Handed Over',
+    ];
+
     public function getTitleAttribute(): string
     {
-        return sprintf('%s %s %s', $this->year, $this->make, $this->model);
+        return sprintf('%s %s %s', $this->year, $this->model, $this->color);
     }
 
     public function customer(): HasOne
@@ -91,6 +103,11 @@ class Vehicle extends Model
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function container(): BelongsTo
+    {
+        return $this->belongsTo(Container::class);
     }
 
     public function state(): BelongsTo
@@ -133,6 +150,11 @@ class Vehicle extends Model
         return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::ARRIVED_PHOTO->value);
     }
 
+    public function export_photos(): HasMany
+    {
+        return $this->hasMany(VehiclePhoto::class)->where('type', '=', VehiclePhotoType::EXPORT_PHOTO->value);
+    }
+
     public function documents(): HasMany
     {
         return $this->hasMany(VehicleDocument::class)->where('type', '=', VehicleDocumentType::DOCUMENT->value);
@@ -157,9 +179,6 @@ class Vehicle extends Model
     {
         parent::boot();
 
-        Vehicle::creating(function ($model) {
-            $lotNumber = (Vehicle::max('lot_number') ?? 100000) + 1;
-            $model->lot_number = $lotNumber;
-        });
+        Vehicle::creating(function ($model) {});
     }
 }

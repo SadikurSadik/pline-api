@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Container;
 
-use App\Http\Resources\Vehicle\VehicleDetailResource;
+use App\Http\Resources\Vehicle\VehicleResource;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
@@ -26,6 +26,7 @@ class ContainerDetailResource extends JsonResource
             'export_date' => $this->export_date,
             'eta_date' => $this->eta_date,
             'cut_off_date' => $this->cut_off_date,
+            'arrival_date' => $this->arrival_date,
             'streamship_line' => $this->streamship_line,
             'container_type' => $this->container_type,
             'container_type_name' => $this->container_type?->getLabel(),
@@ -54,8 +55,13 @@ class ContainerDetailResource extends JsonResource
             'destination' => $this->destination,
             'ar_number' => $this->ar_number,
             'contact_detail' => $this->contact_detail,
+            'special_instruction' => $this->special_instruction,
+            'bol_note' => $this->bol_note,
             'vehicle_ids' => $this->vehicles->pluck('id'),
-            'vehicles' => VehicleDetailResource::collection($this->vehicles),
+            'vehicles' => VehicleResource::collection($this->vehicles),
+            'dock_receipt' => ! empty($this->dock_receipt) ? new DockReceiptResource($this->dock_receipt) : new \stdClass,
+            'houstan_custom_cover_letter' => ! empty($this->houstan_custom_cover_letter) ? new HoustanCustomCoverLetterResource($this->houstan_custom_cover_letter) : new \stdClass,
+            'container_images' => $this->getPhotosProperty($this->container_photos)->pluck('name'),
             'file_urls' => [
                 'container_photos' => $this->getPhotosProperty($this->container_photos),
                 'empty_container_photos' => $this->getPhotosProperty($this->empty_container_photos),
@@ -69,7 +75,7 @@ class ContainerDetailResource extends JsonResource
     private function getThumbnailPhoto($photo): Application|string|UrlGenerator
     {
         if (empty($photo)) {
-            return url('assets/img/car-default-photo.png');
+            return url('images/car-default-photo.png');
         }
 
         return filter_var($photo, FILTER_VALIDATE_URL) === false ? Storage::url($photo) : $photo;

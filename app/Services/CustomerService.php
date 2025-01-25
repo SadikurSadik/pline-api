@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\Role;
+use App\Enums\VehicleStatus;
 use App\Enums\VisibilityStatus;
 use App\Filters\FilterByCompanyName;
 use App\Filters\FilterByCustomerGlobalSearch;
@@ -19,7 +20,18 @@ class CustomerService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Customer::with(['user']);
+        $query = Customer::with(['user', 'city'])->withCount([
+            'vehicles',
+            'vehicles as on_hand' => function ($q) {
+                $q->where('status', '=', VehicleStatus::ON_HAND->value);
+            },
+            'vehicles as on_the_way' => function ($q) {
+                $q->where('status', '=', VehicleStatus::ON_THE_WAY->value);
+            },
+            'vehicles as arrived' => function ($q) {
+                $q->where('status', '=', VehicleStatus::ARRIVED->value);
+            },
+        ]);
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByName::class,
@@ -32,7 +44,7 @@ class CustomerService
 
     public function getById(int $id)
     {
-        return Customer::with(['user', 'country', 'state', 'city'])->find($id);
+        return Customer::with(['user', 'country', 'state', 'city', 'consignees'])->find($id);
     }
 
     public function store(array $data)
@@ -49,11 +61,10 @@ class CustomerService
     {
         $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
             VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
+        $data['block_issue_vcc'] = Arr::get($data, 'block_issue_vcc') == VisibilityStatus::ACTIVE->value ?
+            VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $customer = Customer::findOrNew($id);
         $user = User::findOrNew($customer->user_id);
-        if (empty($data['password'])) {
-            unset($data['password']);
-        }
         $user->fill($data);
         $user->role_id = Role::CUSTOMER->value;
         if (! empty($user->profile_photo)) {
