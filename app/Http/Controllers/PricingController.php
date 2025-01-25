@@ -222,7 +222,7 @@ class PricingController extends Controller
             ->whereIn('id', $cityIds)
             ->get()->map(function ($item) {
                 return [
-                    'id' => $this->id,
+                    'id' => $item->id,
                     'name' => sprintf('%s-%s', $item->state?->short_code, $item->name),
                 ];
             });
