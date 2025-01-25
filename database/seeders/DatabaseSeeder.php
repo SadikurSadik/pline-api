@@ -3,11 +3,15 @@
 namespace Database\Seeders;
 
 use App\Enums\Role;
+use App\Models\BuyerNumber;
 use App\Models\Complain;
 use App\Models\Consignee;
 use App\Models\Container;
 use App\Models\Customer;
+use App\Models\CustomerBuyerNumber;
 use App\Models\DamageClaim;
+use App\Models\Grade;
+use App\Models\Sheet;
 use App\Models\User;
 use App\Models\Vcc;
 use App\Models\VccExitPaper;
@@ -67,5 +71,9 @@ class DatabaseSeeder extends Seeder
         Vcc::factory(20)->create();
         Complain::factory(10)->create();
         //VccExitPaper::factory(20)->create();
+        Sheet::factory(16)->create();
+        Grade::factory(10)->create();
+        CustomerBuyerNumber::factory(30)->create();
+        BuyerNumber::factory(30)->create();
     }
 }

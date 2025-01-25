@@ -20,7 +20,7 @@ class ContactMessageController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => __('Message sent successfully.')
+                'message' => __('Message sent successfully.'),
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

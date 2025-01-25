@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminNoteController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BuyerNumberController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ClearanceRateController;
 use App\Http\Controllers\ComplainController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\PortController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SheetController;
 use App\Http\Controllers\ShippingRateController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\TitleTypeController;
@@ -83,6 +85,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
 
     Route::apiResource('roles', RoleController::class)->except('store', 'destroy');
+
+    Route::apiResource('sheets', SheetController::class);
     /* setting related endpoints */
 
     /* notification related endpoints */
@@ -176,6 +180,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('vehicle/{id}/store-note', [NoteController::class, 'vehicleStoreNote']);
     Route::get('vehicle/{id}/get-note', [NoteController::class, 'vehicleGetNote']);
     /* note related endpoints */
+
+    /* buyer number related endpoints */
+    Route::post('buyer-number/add-customer', [BuyerNumberController::class, 'submitAddCustomer']);
+    Route::post('buyer-number/replace-customer', [BuyerNumberController::class, 'submitReplaceCustomer']);
+    Route::post('buyer-number/upload-attachment', [BuyerNumberController::class, 'BuyerNumberAttachment']);
+    Route::apiResource('buyer-numbers', BuyerNumberController::class);
+    /* buyer number related endpoints */
 
     /* complain and conversations related endpoints */
     Route::post('complains/store-conversation', [ComplainController::class, 'storeConversation']);
