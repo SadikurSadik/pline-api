@@ -19,12 +19,15 @@ class BuyerNumberDetailResource extends JsonResource
             'username' => $this->username,
             'password' => $this->password,
             'account_name' => $this->account_name,
+            'account_type' => $this->account_type,
+            'auction_name' => $this->auction_name,
             'company_name' => $this->company_name,
             'total_vehicle' => $this->vehicles_count,
             'note' => $this->note,
             'attachments' => $this->attachments,
             'status' => $this->status,
             'status_name' => $this->status->getLabel(),
+            "customer_user_ids" => $this->buyer_customers?->pluck('customer.user_id')?->filter()?->values()?->toArray(),
             'customers' => CustomerBuyerNumberResource::collection($this->buyer_customers),
         ];
     }

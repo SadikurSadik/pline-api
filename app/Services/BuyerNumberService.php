@@ -18,6 +18,7 @@ use App\Models\CustomerBuyerNumber;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 
 class BuyerNumberService
 {
@@ -79,7 +80,8 @@ class BuyerNumberService
             $data['parent_id'] = null;
         }
 
-        $buyerNumber->status = $data['status'] ?? VisibilityStatus::INACTIVE;
+        $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
+            VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
         $buyerNumber->fill($data);
         $buyerNumber->save();
 
