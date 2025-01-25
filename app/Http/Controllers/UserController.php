@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Role;
-use App\Enums\Roles;
 use App\Enums\VisibilityStatus;
 use App\Exports\UsersExport;
 use App\Http\Requests\User\StoreUserRequest;
@@ -100,7 +99,7 @@ class UserController extends Controller
         $user = User::find($id);
         $this->service->updatePermissions($id, $request->permissions);
 
-        if ( in_array(110, $request->permissions ?? [])) {
+        if (in_array(110, $request->permissions ?? [])) {
             $accountingService->syncUser([
                 'id' => $user->id,
                 'name' => $user->name,
