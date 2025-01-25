@@ -265,6 +265,6 @@ class PricingController extends Controller
 
         $message = (empty($shipping_price) || empty($towing_price)) ? 'Rate not found.' : sprintf('Shipping Price is: %s', number_format($totalPrice));
 
-        return apiResponse($message);
+        return apiResponse($message, 200, ['note' => 'There may have additional charges depending on your vehicle.']);
     }
 }
