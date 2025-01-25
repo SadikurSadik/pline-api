@@ -10,7 +10,7 @@ class StoreSheetRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'status' => ['required', 'integer'],
+            'status' => 'nullable|boolean',
         ];
     }
 }

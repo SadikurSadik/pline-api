@@ -10,7 +10,7 @@ class UpdateSheetRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'status' => ['required', 'integer'],
+            'status' => ['required', 'boolean'],
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Enums\VisibilityStatus;
 use App\Filters\FilterByName;
 use App\Filters\FilterBySheetGlobalSearch;
 use App\Filters\FilterByStatus;
@@ -9,6 +10,7 @@ use App\Models\Sheet;
 use App\Services\FilterPipelineService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 
 class SheetService
 {
@@ -40,11 +42,13 @@ class SheetService
 
     private function save(array $data, ?int $id = null)
     {
-        $country = Sheet::findOrNew($id);
-        $country->fill($data);
-        $country->save();
+        $sheet = Sheet::findOrNew($id);
+        $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
+            VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
+        $sheet->fill($data);
+        $sheet->save();
 
-        return $country;
+        return $sheet;
     }
 
     public function destroy($id)
