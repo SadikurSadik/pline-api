@@ -163,7 +163,7 @@ class ExportRateController extends Controller
             'status' => VisibilityStatus::ACTIVE->value,
         ])->first();
 
-        $message = empty($exportRate) ? 'Rate not found.' : sprintf("Rate is: %s", number_format($exportRate->rate_a));
+        $message = empty($exportRate) ? 'Rate not found.' : sprintf('Rate is: %s', number_format($exportRate->rate_a));
 
         return apiResponse($message);
     }

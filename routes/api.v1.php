@@ -46,6 +46,9 @@ Route::group(['prefix' => 'public'], function () {
     Route::post('contact-us', [ContactMessageController::class, 'store']);
     Route::get('search/countries', [SearchController::class, 'searchCountry']);
     Route::post('get-export-price', [ExportRateController::class, 'searchPrice']);
+    Route::get('search/cities', [PricingController::class, 'searchCitiesWithState']);
+    Route::get('search/ports', [SearchController::class, 'searchPort']);
+    Route::post('get-import-price', [PricingController::class, 'searchPrice']);
 });
 /* public api for website */
 
