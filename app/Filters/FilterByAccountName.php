@@ -8,7 +8,7 @@ class FilterByAccountName extends BaseFilter
 {
     public function handle($query, Closure $next, $data)
     {
-        $this->likeFilter($query, 'account_name', $data['account_name'] ?? null);
+        $this->likeFilter($query, 'name_on_the_account', $data['name_on_the_account'] ?? null);
 
         return $next($query);
     }

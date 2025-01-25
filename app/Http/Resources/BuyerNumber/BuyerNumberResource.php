@@ -21,7 +21,7 @@ class BuyerNumberResource extends JsonResource
             'password' => $this->password,
             'auction_name' => $this->auction_name,
             'grade_name' => $this->grade?->name,
-            'name_on_the_account' => $this->account_name,
+            'name_on_the_account' => $this->name_on_the_account,
             'company_name' => $this->company_name,
             'assigned_customer' => $this->buyer_customers->pluck('customer.name'),
             'note' => $this->note,
