@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VisibilityStatus;
 use App\Exports\BuyerNumbersExport;
 use App\Http\Requests\BuyerNumber\AssignCustomerRequest;
 use App\Http\Requests\BuyerNumber\StoreBuyerNumberRequest;
@@ -120,5 +121,15 @@ class BuyerNumberController extends Controller
 
             return errorResponse(__('Failed! Something went wrong.'));
         }
+    }
+
+    public function customerBuyerNumber()
+    {
+        $filters['status'] = VisibilityStatus::ACTIVE;
+        $filters['assigned_to'] = auth()->user()->id;
+
+        $data = $this->service->all($filters);
+
+        return BuyerNumberResource::collection($data);
     }
 }
