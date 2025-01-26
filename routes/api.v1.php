@@ -190,6 +190,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('buyer-number/add-customer', [BuyerNumberController::class, 'submitAddCustomer']);
     Route::post('buyer-number/replace-customer', [BuyerNumberController::class, 'submitReplaceCustomer']);
     Route::post('buyer-number/upload-attachment', [BuyerNumberController::class, 'BuyerNumberAttachment']);
+    Route::get('buyer-numbers/export-excel', [BuyerNumberController::class, 'exportExcel']);
     Route::apiResource('buyer-numbers', BuyerNumberController::class);
     /* buyer number related endpoints */
 

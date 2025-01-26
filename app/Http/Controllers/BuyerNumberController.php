@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BuyerNumbersExport;
 use App\Http\Requests\BuyerNumber\AssignCustomerRequest;
 use App\Http\Requests\BuyerNumber\StoreBuyerNumberRequest;
 use App\Http\Requests\BuyerNumber\UpdateBuyerNumberRequest;
@@ -13,6 +14,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class BuyerNumberController extends Controller
 {
@@ -63,6 +66,11 @@ class BuyerNumberController extends Controller
         $this->service->destroy($id);
 
         return successResponse(__('Buyer Number deleted Successfully.'));
+    }
+
+    public function exportExcel(Request $request): BinaryFileResponse
+    {
+        return Excel::download(new BuyerNumbersExport($request->all()), 'buyer_numbers.xlsx');
     }
 
     public function BuyerNumberAttachment(Request $request): JsonResponse
