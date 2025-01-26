@@ -27,7 +27,8 @@ class BuyerNumberResource extends JsonResource
             'note' => $this->note,
             'total_vehicle' => $this->vehicles_count,
             'attachment' => $this->attachments,
-            'status' => $this->status->getLabel(),
+            'status' => $this->status,
+            'status_name' => $this->status->getLabel(),
         ];
     }
 }

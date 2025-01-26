@@ -84,6 +84,7 @@ class BuyerNumberService
 
         $data['status'] = Arr::get($data, 'status') == VisibilityStatus::ACTIVE->value ?
             VisibilityStatus::ACTIVE->value : VisibilityStatus::INACTIVE->value;
+
         $buyerNumber->fill($data);
         $buyerNumber->save();
 
