@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Filters\FilterByExceptIds;
 use App\Filters\FilterByName;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Permission\Models\Role;
@@ -32,6 +33,13 @@ class RoleService
         $role->save();
 
         $role->syncPermissions($data['permissions']);
+
+        if($id == 3) {
+            // customer role
+            foreach (User::where('role_id', $id)->cursor() as $customer) {
+                $customer->syncPermissions($data['permissions']);
+            }
+        }
 
         return $role;
     }
