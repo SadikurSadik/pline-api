@@ -19,15 +19,15 @@ class BuyerNumberResource extends JsonResource
             'buyer_id' => $this->buyer_id,
             'username' => $this->username,
             'password' => $this->password,
+            'account_name' => $this->account_name,
+            'grade_name' => $this->grade_id?->getLabel(),
             'auction_name' => $this->auction_name,
-            'grade_name' => $this->grade?->name,
-            'name_on_the_account' => $this->account_name,
             'company_name' => $this->company_name,
-            'assigned_customer' => $this->buyer_customers->pluck('customer.name'),
+            'assigned_customer' => $this->buyer_customers?->pluck('customer.name')?->implode(', '),
             'note' => $this->note,
             'total_vehicle' => $this->vehicles_count,
-            'attachment' => $this->attachments,
-            'status' => $this->status->getLabel(),
+            'status' => $this->status,
+            'status_name' => $this->status->getLabel(),
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\VisibilityStatus;
+use App\Exports\BuyerNumbersExport;
 use App\Http\Requests\BuyerNumber\AssignCustomerRequest;
 use App\Http\Requests\BuyerNumber\StoreBuyerNumberRequest;
 use App\Http\Requests\BuyerNumber\UpdateBuyerNumberRequest;
@@ -13,6 +15,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class BuyerNumberController extends Controller
 {
@@ -65,6 +69,11 @@ class BuyerNumberController extends Controller
         return successResponse(__('Buyer Number deleted Successfully.'));
     }
 
+    public function exportExcel(Request $request): BinaryFileResponse
+    {
+        return Excel::download(new BuyerNumbersExport($request->all()), 'buyer_numbers.xlsx');
+    }
+
     public function BuyerNumberAttachment(Request $request): JsonResponse
     {
         $request->validate([
@@ -112,5 +121,16 @@ class BuyerNumberController extends Controller
 
             return errorResponse(__('Failed! Something went wrong.'));
         }
+    }
+
+    public function customerBuyerNumber(Request $request)
+    {
+        $filters = $request->all();
+        $filters['status'] = VisibilityStatus::ACTIVE;
+        $filters['customer_user_ids'] = [auth()->user()->id];
+
+        $data = $this->service->all($filters);
+
+        return BuyerNumberResource::collection($data);
     }
 }

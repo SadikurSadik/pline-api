@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\GradeName;
 use App\Enums\VisibilityStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -31,6 +33,7 @@ class BuyerNumber extends Model
 
     protected $casts = [
         'status' => VisibilityStatus::class,
+        'grade_id' => GradeName::class,
         'attachments' => 'array',
     ];
 
@@ -52,5 +55,10 @@ class BuyerNumber extends Model
     public function buyer_customers(): HasMany
     {
         return $this->hasMany(CustomerBuyerNumber::class, 'buyer_number_id', 'id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id', 'id');
     }
 }

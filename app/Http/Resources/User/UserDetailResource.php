@@ -3,7 +3,9 @@
 namespace App\Http\Resources\User;
 
 use App\Enums\Role;
+use App\Enums\VisibilityStatus;
 use App\Models\Accounting\User;
+use App\Models\Sheet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Crypt;
@@ -31,6 +33,7 @@ class UserDetailResource extends JsonResource
             'status_name' => $this->status->getLabel(),
             'accounting_login_url' => $this->getAccountingLoginUrlProperty(),
             'advanced_payment_report_url' => $this->advancedPaymentReportUrl(),
+            'sheets' => $this->getActiveSheets(),
         ];
     }
 
@@ -72,5 +75,10 @@ class UserDetailResource extends JsonResource
         }
 
         return env('ACCOUNTING_APP_URL').'/customer-advance-report/'.Crypt::encrypt($this->id);
+    }
+
+    private function getActiveSheets()
+    {
+        return Sheet::where('status', VisibilityStatus::ACTIVE->value)->select('id', 'name')->get();
     }
 }

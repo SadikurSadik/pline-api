@@ -90,6 +90,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('roles', RoleController::class)->except('store', 'destroy');
 
+    Route::get('sheets/export-excel', [SheetController::class, 'exportExcel']);
     Route::apiResource('sheets', SheetController::class);
     /* setting related endpoints */
 
@@ -186,9 +187,11 @@ Route::middleware('auth:sanctum')->group(function () {
     /* note related endpoints */
 
     /* buyer number related endpoints */
-    Route::post('buyer-number/add-customer', [BuyerNumberController::class, 'submitAddCustomer']);
-    Route::post('buyer-number/replace-customer', [BuyerNumberController::class, 'submitReplaceCustomer']);
+    Route::get('/customer-buyer-numbers', [BuyerNumberController::class, 'customerBuyerNumber']);
+    Route::put('buyer-number/add-customer', [BuyerNumberController::class, 'submitAddCustomer']);
+    Route::put('buyer-number/replace-customer', [BuyerNumberController::class, 'submitReplaceCustomer']);
     Route::post('buyer-number/upload-attachment', [BuyerNumberController::class, 'BuyerNumberAttachment']);
+    Route::get('buyer-numbers/export-excel', [BuyerNumberController::class, 'exportExcel']);
     Route::apiResource('buyer-numbers', BuyerNumberController::class);
     /* buyer number related endpoints */
 
@@ -249,5 +252,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('features', 'searchVehicleFeature');
             Route::get('vehicles', 'searchVehicle');
             Route::get('consignees', 'searchConsignee');
+            Route::get('master-account', 'searchMasterAccount');
         });
 });

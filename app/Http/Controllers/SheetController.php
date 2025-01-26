@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SheetsExport;
 use App\Http\Requests\Sheet\StoreSheetRequest;
 use App\Http\Requests\Sheet\UpdateSheetRequest;
 use App\Http\Resources\Sheet\SheetDetailResource;
@@ -10,6 +11,8 @@ use App\Service\SheetService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class SheetController extends Controller
 {
@@ -48,5 +51,10 @@ class SheetController extends Controller
         $this->service->destroy($id);
 
         return successResponse(__('Sheet deleted Successfully.'));
+    }
+
+    public function exportExcel(Request $request): BinaryFileResponse
+    {
+        return Excel::download(new SheetsExport($request->all()), 'sheets.xlsx');
     }
 }

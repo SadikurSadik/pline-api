@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\VehicleStatus;
 use App\Enums\VisibilityStatus;
+use App\Models\BuyerNumber;
 use App\Models\City;
 use App\Models\Condition;
 use App\Models\Consignee;
@@ -215,6 +216,23 @@ class SearchController extends Controller
         }
 
         return $query->orderBy('name', 'ASC')
+            ->limit('20')
+            ->get();
+    }
+
+    public function searchMasterAccount(Request $request)
+    {
+        $query = BuyerNumber::whereNull('parent_id')->select([
+            DB::raw('account_name AS parent_name'),
+            'parent_id',
+            'id'
+        ]);
+
+        if (! empty($request->search)) {
+            $query->where('account_name', 'like', "%{$request->search}%");
+        }
+
+        return $query->orderBy('account_name', 'ASC')
             ->limit('20')
             ->get();
     }
