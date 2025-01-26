@@ -90,6 +90,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('roles', RoleController::class)->except('store', 'destroy');
 
+    Route::get('sheets/export-excel', [SheetController::class, 'exportExcel']);
     Route::apiResource('sheets', SheetController::class);
     /* setting related endpoints */
 
