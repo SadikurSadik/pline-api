@@ -21,7 +21,7 @@ class BuyerNumberFactory extends Factory
             'auction_name' => Vehicle::query()->inRandomOrder()->first()->auction_name,
             'account_name' => fake()->name,
             'company_name' => fake()->company,
-            'grade_id' => rand(1, 30),
+            'grade_id' => rand(1, 5),
             'note' => fake()->paragraph,
             'attachments' => '',
             'status' => rand(1, 2),

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\GradeName;
 use App\Enums\VisibilityStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +33,7 @@ class BuyerNumber extends Model
 
     protected $casts = [
         'status' => VisibilityStatus::class,
+        'grade_id' => GradeName::class,
         'attachments' => 'array',
     ];
 

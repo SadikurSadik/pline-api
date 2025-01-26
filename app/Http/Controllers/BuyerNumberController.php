@@ -123,10 +123,11 @@ class BuyerNumberController extends Controller
         }
     }
 
-    public function customerBuyerNumber()
+    public function customerBuyerNumber(Request $request)
     {
+        $filters = $request->all();
         $filters['status'] = VisibilityStatus::ACTIVE;
-        $filters['assigned_to'] = auth()->user()->id;
+        $filters['customer_user_ids'] = [auth()->user()->id];
 
         $data = $this->service->all($filters);
 
