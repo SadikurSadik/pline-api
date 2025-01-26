@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Service;
+namespace App\Services;
 
 use App\Enums\VisibilityStatus;
 use App\Filters\FilterByName;
 use App\Filters\FilterBySheetGlobalSearch;
 use App\Filters\FilterByStatus;
 use App\Models\Sheet;
-use App\Services\FilterPipelineService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;

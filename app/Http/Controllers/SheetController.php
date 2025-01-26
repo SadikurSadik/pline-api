@@ -7,7 +7,7 @@ use App\Http\Requests\Sheet\StoreSheetRequest;
 use App\Http\Requests\Sheet\UpdateSheetRequest;
 use App\Http\Resources\Sheet\SheetDetailResource;
 use App\Http\Resources\Sheet\SheetResource;
-use App\Service\SheetService;
+use App\Services\SheetService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
