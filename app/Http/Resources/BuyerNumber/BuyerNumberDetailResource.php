@@ -13,6 +13,8 @@ class BuyerNumberDetailResource extends JsonResource
             'id' => $this->id,
             'sheet_id' => $this->sheet->id,
             'sheet_name' => $this->sheet->name,
+            'parent_id' => $this->parent_id,
+            'parent_name' => $this->parent?->account_name,
             'grade_id' => $this->grade?->id,
             'grade_name' => $this->grade?->name,
             'buyer_id' => $this->buyer_id,

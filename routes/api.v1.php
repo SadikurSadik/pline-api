@@ -252,5 +252,6 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('features', 'searchVehicleFeature');
             Route::get('vehicles', 'searchVehicle');
             Route::get('consignees', 'searchConsignee');
+            Route::get('master-account', 'searchMasterAccount');
         });
 });
