@@ -8,6 +8,7 @@ use App\Filters\FilterByAuctionName;
 use App\Filters\FilterByBuyerId;
 use App\Filters\FilterByBuyerNumberGlobalSearch;
 use App\Filters\FilterByCompanyName;
+use App\Filters\FilterByBuyerNumberCustomerIDs;
 use App\Filters\FilterByGradeName;
 use App\Filters\FilterByNote;
 use App\Filters\FilterByPassword;
@@ -35,6 +36,7 @@ class BuyerNumberService
             FilterByGradeName::class,
             FilterByAccountName::class,
             FilterByCompanyName::class,
+            FilterByBuyerNumberCustomerIDs::class,
             FilterByNote::class,
             FilterByStatus::class,
             FilterByBuyerNumberGlobalSearch::class,
