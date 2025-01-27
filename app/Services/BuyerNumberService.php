@@ -12,6 +12,7 @@ use App\Filters\FilterByBuyerNumberCustomerIDs;
 use App\Filters\FilterByGradeName;
 use App\Filters\FilterByNote;
 use App\Filters\FilterByPassword;
+use App\Filters\FilterBySheetId;
 use App\Filters\FilterByStatus;
 use App\Filters\FilterByUsername;
 use App\Models\BuyerNumber;
@@ -30,6 +31,7 @@ class BuyerNumberService
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByBuyerId::class,
+            FilterBySheetId::class,
             FilterByUsername::class,
             FilterByPassword::class,
             FilterByAuctionName::class,
