@@ -29,7 +29,7 @@ class RoleController extends Controller implements HasMiddleware
     {
         $data = $this->service->all([
             'order_by' => 'ASC',
-            'except_ids' => [Role::CUSTOMER->value, Role::SUB_USER->value],
+//            'except_ids' => [Role::CUSTOMER->value, Role::SUB_USER->value],
         ]);
 
         return RoleResource::collection($data);
