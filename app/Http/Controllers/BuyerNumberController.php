@@ -133,4 +133,14 @@ class BuyerNumberController extends Controller
 
         return BuyerNumberResource::collection($data);
     }
+
+    public function sheetWiseBuyerNumber(Request $request, $id): AnonymousResourceCollection
+    {
+        $filters = $request->all();
+        $filters['sheet_id'] = $id;
+
+        $data = $this->service->all($filters);
+
+        return BuyerNumberResource::collection($data);
+    }
 }
