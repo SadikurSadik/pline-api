@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Enums\VisibilityStatus;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\User\UserDetailResource;
 use App\Http\Resources\User\UserResource;
+use App\Models\Sheet;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -42,7 +44,13 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'user' => new UserDetailResource($user),
             'permissions' => $this->getUserPermissions($user),
+            'sheets' => !in_array(auth()->user()->role_id, [Role::CUSTOMER->value, Role::SUB_USER->value]) ? $this->getActiveSheets() : [],
         ]);
+    }
+
+    private function getActiveSheets()
+    {
+        return Sheet::where('status', VisibilityStatus::ACTIVE->value)->select('id', 'name')->get();
     }
 
     public function refresh(Request $request): JsonResponse

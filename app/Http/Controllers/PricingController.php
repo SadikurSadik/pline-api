@@ -215,6 +215,7 @@ class PricingController extends Controller
     {
         $cityIds = TowingRate::select('city_id')
             ->where('status', VisibilityStatus::ACTIVE->value)
+            ->where('country_id', $request->country_id)
             ->distinct()
             ->pluck('city_id');
 
