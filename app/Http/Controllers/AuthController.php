@@ -44,7 +44,7 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'user' => new UserDetailResource($user),
             'permissions' => $this->getUserPermissions($user),
-            'sheets' => !in_array(auth()->user()->role_id, [Role::CUSTOMER->value, Role::SUB_USER->value]) ? $this->getActiveSheets() : [],
+            'sheets' => !in_array($user->role_id, [Role::CUSTOMER, Role::SUB_USER]) ? $this->getActiveSheets() : [],
         ]);
     }
 
