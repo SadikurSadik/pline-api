@@ -22,6 +22,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class PricingController extends Controller
 {
@@ -206,6 +207,14 @@ class PricingController extends Controller
 
             Storage::put($response['pdf_url_'.$category], $pdf->output());
             Storage::setVisibility($response['pdf_url_'.$category], 'public');
+
+            // merge with existing pdf
+            $oMerger = PDFMerger::init();
+            $oMerger->addPDF(public_path('assets/pdf/brand.pdf'), [1]);
+            $oMerger->addPDF(Storage::path($response['pdf_url_'.$category]), 'all');
+            $oMerger->addPDF(public_path('assets/pdf/brand.pdf'), [2]);
+            $oMerger->merge();
+            $oMerger->save(Storage::path($response['pdf_url_'.$category]));
         }
 
         return $response;
