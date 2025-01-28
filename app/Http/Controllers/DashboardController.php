@@ -16,16 +16,19 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function __construct(protected DashboardService $service) {}
+    public function __construct(protected DashboardService $service)
+    {
+    }
 
     public function index(Request $request): JsonResponse
     {
         $filters = $request->all();
-        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+        if (optional(auth()->user())->role_id == Role::CUSTOMER){
             $filters['user_id'] = auth()->user()->id;
         }
 
-        $statusOverview = collect($this->service->vehicleCounts($filters))->whereNotIn('status', [11, VehicleStatus::LOADED->value])->values();
+        $statusOverview = collect($this->service->vehicleCounts($filters))->whereNotIn('status',
+            [11, VehicleStatus::LOADED->value])->values();
 
         $data = [
             'status_overview' => $statusOverview,
@@ -44,6 +47,24 @@ class DashboardController extends Controller
             ],
         ];
 
+        if (optional(auth()->user())->role_id == Role::CUSTOMER){
+            $invoiceSummary = app(InvoiceService::class)->invoiceSummary(['customer_id' => auth()->user()->id]);
+            $advancePaymentSummary = app(InvoiceService::class)->advancePaymentSummary([
+                'customer_id' => auth()->user()->id,
+            ]);
+            $data['invoice_summary'] = [
+                ['name' => 'Total', 'value' => $invoiceSummary['total_amount']],
+                ['name' => 'Paid', 'value' => $invoiceSummary['total_paid']],
+                ['name' => 'Balance', 'value' => $invoiceSummary['total_due']],
+            ];
+
+            $data['advance_summary'] = [
+                ['name' => 'Total Deposit', 'value' => $advancePaymentSummary['total_amount']],
+                ['name' => 'Withdraw', 'value' => $advancePaymentSummary['total_utilized']],
+                ['name' => 'Balance', 'value' => $advancePaymentSummary['total_due']],
+            ];
+        }
+
         return response()->json($data);
     }
 
@@ -53,21 +74,21 @@ class DashboardController extends Controller
             'unread_notifications_count' => app(NotificationService::class)->myUnreadNotificationCount(),
             'pending_voucher_count' => 0 /*app(VoucherService::class)->getPendingVoucherCount()*/,
         ];
-        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+        if (optional(auth()->user())->role_id == Role::CUSTOMER){
             $invoiceData = $invoiceService->invoiceSummary(['customer_id' => auth()->user()->id]);
             $data['invoice_total_amount'] = 'Total: AED '.number_format($invoiceData['total_amount'], 2);
             $total = $invoiceData['total_amount'];
-            if (empty($total)) {
+            if (empty($total)){
                 $total = 100;
             }
             $data['invoice_summary'] = [
                 [
-                    'value' => number_format(($invoiceData['total_due'] * 100) / $total, 2),
+                    'value' => number_format(($invoiceData['total_due']*100)/$total, 2),
                     'label' => 'Balance: AED '.number_format($invoiceData['total_due'], 2),
                     'color' => '#DC4C64',
                 ],
                 [
-                    'value' => number_format(($invoiceData['total_paid'] * 100) / $total, 2),
+                    'value' => number_format(($invoiceData['total_paid']*100)/$total, 2),
                     'label' => 'Paid: AED '.number_format($invoiceData['total_paid'], 2),
                     'color' => '#14A44D',
                 ],
@@ -75,18 +96,18 @@ class DashboardController extends Controller
 
             $advanceData = $invoiceService->advancePaymentSummary(['customer_id' => auth()->user()->id]);
             $data['advance_total_amount'] = 'Balance: AED '.number_format($advanceData['total_due'], 2);
-            $total = $advanceData['total_amount'] + abs($advanceData['total_utilized']);
-            if (empty($total)) {
+            $total = $advanceData['total_amount']+abs($advanceData['total_utilized']);
+            if (empty($total)){
                 $total = 100;
             }
             $data['advance_summary'] = [
                 [
-                    'value' => number_format(abs($advanceData['total_utilized'] * 100) / $total, 2),
+                    'value' => number_format(abs($advanceData['total_utilized']*100)/$total, 2),
                     'label' => 'Utilized: AED '.number_format(abs($advanceData['total_utilized']), 2),
                     'color' => '#FF7F50',
                 ],
                 [
-                    'value' => number_format(abs($advanceData['total_amount'] * 100) / $total, 2),
+                    'value' => number_format(abs($advanceData['total_amount']*100)/$total, 2),
                     'label' => 'Deposit: AED '.number_format($advanceData['total_amount'], 2),
                     'color' => '#6495ED',
                 ],
@@ -99,11 +120,11 @@ class DashboardController extends Controller
     public function statusOverview(Request $request): JsonResponse
     {
         $filters = $request->all();
-        if (auth()->user()->role_id == Role::CUSTOMER) {
+        if (auth()->user()->role_id == Role::CUSTOMER){
             $filters['user_id'] = auth()->user()->id;
-        } elseif (! empty($filters['customer_id'])) {
+        } elseif (! empty($filters['customer_id'])){
             $customer = Customer::find($filters['customer_id']);
-            if ($customer) {
+            if ($customer){
                 $filters['user_id'] = $customer->user_id;
             }
         }
@@ -115,9 +136,9 @@ class DashboardController extends Controller
     public function vehicleStatusOverview(Request $request): JsonResponse
     {
         $filters = $request->all();
-        if (optional(auth()->user())->role_id == Role::CUSTOMER) {
+        if (optional(auth()->user())->role_id == Role::CUSTOMER){
             $filters['user_id'] = auth()->user()->id;
-        } elseif (optional(auth()->user())->role_id == Role::SUB_USER) {
+        } elseif (optional(auth()->user())->role_id == Role::SUB_USER){
             $filters['user_id'] = auth()->user()->parent_id;
         }
 
