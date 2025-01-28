@@ -52,7 +52,7 @@ class InvoiceService
 
         if (! empty($filters['customer_id'])) {
             $customer = Customer::where('customer_user_id', $filters['customer_id'])->first();
-            $query->where('customer_id', $customer?->customer_id);
+            $query->where('customer_id', !empty($customer) ? $customer->id : 0);
         }
 
         if (! empty($filters['type'])) {
