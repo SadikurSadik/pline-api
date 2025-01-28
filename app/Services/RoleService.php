@@ -16,7 +16,6 @@ class RoleService
         $query = Role::query()->with('permissions');
 
         return app(FilterPipelineService::class)->apply($query, [
-            FilterByExceptIds::class,
             FilterByName::class,
         ], $filters);
     }
