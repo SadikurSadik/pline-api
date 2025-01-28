@@ -51,8 +51,8 @@ class InvoiceService
         $query = Invoice::with(['inventory', 'items'])->where('status', '>', 0);
 
         if (! empty($filters['customer_id'])) {
-            $customer = Customer::where('customer_user_id', $filters['customer_id'])->firstOrFail();
-            $query->where('customer_id', $customer->customer_id);
+            $customer = Customer::where('customer_user_id', $filters['customer_id'])->first();
+            $query->where('customer_id', $customer?->customer_id);
         }
 
         if (! empty($filters['type'])) {
