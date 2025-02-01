@@ -321,7 +321,7 @@ return [
                 'issueVcc' => 'Issue VCC',
                 ' vccIssueExpiredAutomatically' =>
                     'You can issue the vcc, once received the VCC then after 180 days it will expired automatically',
-                'key' => 'Key=>',
+                'key' => 'Keys: ',
                 'pPrice=>' => 'P. Price=>',
                 'pDate=>' => 'P. Date=>',
                 'vehicleDetails' => ' Vehicle Details',
@@ -481,6 +481,8 @@ return [
                 'rejectDamageClaim' => 'Reject damage claim',
                 'pricingImport' => 'Pricing Import',
                 'pricingExport' => 'Pricing Export',
+                'pPrice' => 'Price',
+                'pDate' => 'P. Date',
             ],
         ],
         [

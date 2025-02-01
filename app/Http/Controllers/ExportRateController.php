@@ -20,6 +20,7 @@ use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class ExportRateController extends Controller
 {
@@ -145,6 +146,13 @@ class ExportRateController extends Controller
 
             Storage::put($response['pdf_url_'.$category], $pdf->output());
             Storage::setVisibility($response['pdf_url_'.$category], 'public');
+
+            $oMerger = PDFMerger::init();
+            $oMerger->addPDF(public_path('assets/pdf/export.pdf'), [1]);
+            $oMerger->addPDF(Storage::path($response['pdf_url_'.$category]), 'all');
+            $oMerger->addPDF(public_path('assets/pdf/export.pdf'), [2]);
+            $oMerger->merge();
+            $oMerger->save(Storage::path($response['pdf_url_'.$category]));
         }
 
         return $response;

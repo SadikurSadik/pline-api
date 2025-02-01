@@ -34,6 +34,8 @@ class ModuleSeeder extends Seeder
             ['name' => 'Pricing'],
             ['name' => 'Export Rate'],
             ['name' => 'Accounting'],
+            ['name' => 'Sheet'],
+            ['name' => 'Buyer Number'],
         ]);
     }
 }

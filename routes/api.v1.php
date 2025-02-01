@@ -214,13 +214,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('pricing-import', [PricingController::class, 'index']);
     Route::get('pricing-export', [PricingController::class, 'exportPricing']);
     Route::delete('pricing/{id}', [PricingController::class, 'destroy']);
-    /* pricing related endpoints */
 
-    /* pricing related endpoints */
     Route::get('generate-export-pricing', [ExportRateController::class, 'generatePricing']);
     Route::get('export-rates/export-excel', [ExportRateController::class, 'exportExcel']);
     Route::apiResource('export-rates', ExportRateController::class);
     /* pricing related endpoints */
+
 
     /* voucher related endpoints */
     Route::post('approve-reject/voucher/{id}', [VoucherController::class, 'rejectApproveVoucher']);
