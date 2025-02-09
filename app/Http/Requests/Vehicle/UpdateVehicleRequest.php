@@ -35,6 +35,8 @@ class UpdateVehicleRequest extends FormRequest
             'license_number' => 'nullable|max:30',
             'check_number' => 'nullable|max:30',
             'purchase_date' => 'nullable|date',
+            'paid_date' => 'nullable|date',
+            'sub_lot_location' => 'nullable|max:200',
             'towed_from' => 'nullable',
             'country_id' => 'required|integer',
             'state_id' => 'required|integer',
