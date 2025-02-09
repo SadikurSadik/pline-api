@@ -25,7 +25,9 @@ class VehicleResource extends JsonResource
             'lot_number' => $this->lot_number,
             'vin_number' => $this->vin_number,
             'purchase_date' => $this->purchase_date,
+            'paid_date' => $this->paid_date,
             'location_name' => data_get($this, 'location.name'),
+            'sub_lot_location' => $this->sub_lot_location,
             'city_name' => data_get($this, 'city.name'),
             'auction_name' => $this->auction_name,
             'service_provider' => $this->service_provider,
@@ -43,7 +45,7 @@ class VehicleResource extends JsonResource
 
     private function getThumbnailPhoto($photo): Application|string|UrlGenerator
     {
-        if (empty($photo)) {
+        if (empty($photo)){
             return url('images/car-default-photo.png');
         }
 
