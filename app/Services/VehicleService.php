@@ -6,6 +6,7 @@ use App\Enums\VehicleDocumentType;
 use App\Enums\VehiclePhotoType;
 use App\Filters\FilterByAuctionName;
 use App\Filters\FilterByCustomerUser;
+use App\Filters\FilterByEtaDateOnContainerRelation;
 use App\Filters\FilterById;
 use App\Filters\FilterByLicenseNumber;
 use App\Filters\FilterByLocation;
@@ -30,7 +31,7 @@ class VehicleService
 {
     public function all(array $filters = []): LengthAwarePaginator|Builder
     {
-        $query = Vehicle::query()->with(['customer', 'location', 'city', 'title_type', 'yard_photos']);
+        $query = Vehicle::query()->with(['customer', 'location', 'city', 'title_type', 'yard_photos', 'container']);
 
         return app(FilterPipelineService::class)->apply($query, [
             FilterByStatus::class,
@@ -45,6 +46,7 @@ class VehicleService
             FilterByServiceProvider::class,
             FilterByYearMakeModel::class,
             FilterByPurchaseDate::class,
+            FilterByEtaDateOnContainerRelation::class,
         ], $filters);
     }
 
@@ -62,6 +64,7 @@ class VehicleService
             'vehicle_features',
             'documents',
             'invoices',
+            'container',
         ])->when($customerUserId, function ($q) use ($customerUserId) {
             $q->where('customer_user_id', $customerUserId);
         })->find($id);
