@@ -200,8 +200,8 @@ class SearchController extends Controller
             $query->whereNotIn('id', $filters['exclude_ids']);
         }
 
-        if (! empty($vehicle->vin)) {
-            $query->where('vin_number', 'like', "%{$vehicle->vin}%");
+        if (! empty($request->vin)) {
+            $query->where('vin_number', 'like', "%{$request->vin}%");
         }
 
         return $query->limit(20)->get();
