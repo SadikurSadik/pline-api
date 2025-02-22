@@ -108,8 +108,15 @@ class ContainerService
 
     private function save(array $data, ?int $id = null)
     {
+        if ($id) {
+            Vehicle::where('container_id', $id)
+                ->whereNotIn('id', $data['vehicle_ids'])
+                ->update(['container_id' => null, 'status' => VehicleStatus::ON_HAND]);
+        }
+
         $container = Container::findOrNew($id);
         $container->fill($data);
+        $container->status = $this->calculateStatus($container);
         $container->save();
 
         Vehicle::query()->whereIn('id', $data['vehicle_ids'])->update(['container_id' => $container->id]);
@@ -178,6 +185,23 @@ class ContainerService
         $container = Container::findOrFail($id);
 
         $container->delete();
+    }
+
+    /**
+     * Calculate container status based on current attributes
+     */
+    private function calculateStatus($container): ContainerStatus
+    {
+        $status = $container?->status;
+        if (! empty($container->arrival_date)) {
+            $status = ContainerStatus::ARRIVED;
+        } elseif (! empty($container->eta_date)) {
+            $status = ContainerStatus::ON_THE_WAY;
+        } elseif (! empty($container->container_number)) {
+            $status = ContainerStatus::LOADED;
+        }
+
+        return $status;
     }
 
     public function getPhotos($containerId, ?int $type = null)

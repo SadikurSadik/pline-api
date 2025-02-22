@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\VehicleDocumentType;
 use App\Enums\VehiclePhotoType;
+use App\Enums\VehicleStatus;
 use App\Filters\FilterByAuctionName;
 use App\Filters\FilterByCustomerUser;
 use App\Filters\FilterByEtaDateOnContainerRelation;
@@ -17,6 +18,7 @@ use App\Filters\FilterByStatus;
 use App\Filters\FilterByVehicleGlobalSearch;
 use App\Filters\FilterByVinNumber;
 use App\Filters\FilterByYearMakeModel;
+use App\Models\TowingRequest;
 use App\Models\Vehicle;
 use App\Models\VehicleCondition;
 use App\Models\VehicleDocument;
@@ -104,6 +106,31 @@ class VehicleService
     private function save(array $data, ?int $id = null)
     {
         $vehicle = Vehicle::findOrNew($id);
+
+        // NEW PURCHASED OR NEW REQUESTED -> PAID -> PAID TO AUCTION -> DISPATCHED -> PICKED_UP -> ON HAND
+        if (in_array($vehicle->status, [VehicleStatus::NEW_PURCHASED, VehicleStatus::NEW_REQUESTED, VehicleStatus::PAID,
+                VehicleStatus::DISPATCHED,
+                VehicleStatus::PICKED_UP]) && empty($vehicle->deliver_date) && ! empty($data['deliver_date'])) {
+            $data['status'] = VehicleStatus::ON_HAND;
+        } elseif (in_array($vehicle->status,
+                [VehicleStatus::NEW_PURCHASED, VehicleStatus::NEW_REQUESTED, VehicleStatus::PAID,
+                    VehicleStatus::DISPATCHED]) && empty($vehicle->pickup_date) && ! empty($data['pickup_date'])) {
+            $data['status'] = VehicleStatus::PICKED_UP;
+        } elseif (in_array($vehicle->status,
+                [VehicleStatus::NEW_PURCHASED, VehicleStatus::NEW_REQUESTED, VehicleStatus::PAID])
+                    && empty($vehicle->towing_request_date) && ! empty($data['towing_request_date'])) {
+            $data['status'] = VehicleStatus::DISPATCHED;
+        } elseif (in_array($vehicle->status, [VehicleStatus::NEW_PURCHASED,
+                VehicleStatus::NEW_REQUESTED]) && empty($vehicle->paid_date) && ! empty($data['paid_date'])) {
+            $data['status'] = VehicleStatus::PAID;
+        } elseif ($vehicle->status == VehicleStatus::ON_HAND && ! empty($vehicle->deliver_date) && empty($data['deliver_date'])) {
+            $data['status'] = VehicleStatus::PICKED_UP;
+        } elseif ($vehicle->status == VehicleStatus::PICKED_UP && ! empty($vehicle->pickup_date) && empty($data['pickup_date'])) {
+            $data['status'] = VehicleStatus::DISPATCHED;
+        } elseif ($vehicle->status == VehicleStatus::DISPATCHED && ! empty($vehicle->towing_request_date) && empty($data['towing_request_date'])) {
+            $data['status'] = VehicleStatus::NEW_PURCHASED;
+        }
+
         $vehicle->fill($data);
         $vehicle->save();
 

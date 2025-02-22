@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\ContainerPhotoType;
 use App\Enums\Role;
+use App\Enums\VehicleStatus;
 use App\Exports\ContainersExport;
 use App\Http\Requests\Container\StoreContainerRequest;
 use App\Http\Requests\Container\UpdateContainerRequest;
@@ -11,6 +12,7 @@ use App\Http\Resources\Container\ContainerDetailResource;
 use App\Http\Resources\Container\ContainerPhotosResource;
 use App\Http\Resources\Container\ContainerResource;
 use App\Models\Container;
+use App\Models\Vehicle;
 use App\Services\ContainerService;
 use App\Services\FileManagerService;
 use Illuminate\Http\JsonResponse;
@@ -78,6 +80,8 @@ class ContainerController extends Controller implements HasMiddleware
     {
         try {
             $this->service->destroy($id);
+
+            Vehicle::where('container_id', $id)->update(['status' => VehicleStatus::ON_HAND, 'container_id' => null]);
 
             return successResponse(__('Container Deleted Successfully.'));
         } catch (\Exception $e) {
